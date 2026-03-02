@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RehabSense - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header-nav">
+        <div class="container">
+            <button class="nav-btn" onclick="goHome()">Home</button>
+            <button class="nav-btn" onclick="showLoginModal()">Login</button>
+            <button class="nav-btn" onclick="showAboutModal()">About</button>
+            <button class="nav-btn" onclick="showContactModal()">Contact us</button>
+            <button class="nav-btn" onclick="showServicesModal()">Services</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-image-container">
+                <img src="{{ url_for('static', filename='images/ss.png') }}" alt="RehabSense" class="hero-image" onerror="this.style.display='none'">
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title">RehabSense</h1>
+                <p class="hero-tagline">Your smart Rehabilitation Assistant</p>
+                <button class="get-started-btn" onclick="showLoginModal()">Get Started</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('aboutModal')">&times;</span>
+            <h2>About RehabSense</h2>
+            <p>Rehabilitation patients often need continuous, multi-parameter monitoring to ensure steady recovery and to detect complications at an early stage. However, most existing solutions address only a single aspect of health such as heart rate, posture, or glucose levels, resulting in fragmented care. Patients are often forced to juggle multiple devices and applications, creating unnecessary complexity and reducing long-term engagement. This gap is especially critical for individuals recovering from cardiovascular, respiratory, musculoskeletal, metabolic, or stress-related conditions.</p>
+            
+            <p>RehabSense is designed to bridge this gap through a unified, intelligent, multi-modal health monitoring platform. It integrates analysis of key health indicators, including heartbeat irregularities, estimated blood glucose trends, breathing patterns, speech characteristics, emotional state, and posture, into a single cohesive system.</p>
+            
+            <p>A core feature of RehabSense is its real-time, video-based posture detection, which enables accurate tracking of body alignment and movement without need for specialized hardware. Each component is lightweight, modular, and scalable, allowing for phased development and seamless integration.</p>
+            
+            <p>The platform also provides a user-friendly web interface where patients can log health data, access historical records, and visualize progress through intuitive analytics. By consolidating multiple monitoring capabilities into one intelligent assistant, RehabSense enhances patient engagement, supports personalized rehabilitation plans, and delivers actionable insights for clinicians, making long-term recovery more structured, informed, and accessible.</p>
+        </div>
+    </div>
+
+    <!-- Services Modal -->
+    <div id="servicesModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('servicesModal')">&times;</span>
+            <h2>Our Services</h2>
+            
+            <div class="service-item">
+                <div class="service-icon">📊</div>
+                <div class="service-content">
+                    <h3>Get Real-time Diagnosis</h3>
+                    <p>Experience instant health analysis with interactive charts and comprehensive abnormality detection through our advanced AI-powered monitoring system.</p>
+                </div>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-icon">📈</div>
+                <div class="service-content">
+                    <h3>Great Visuals and Charts</h3>
+                    <p>Understand your health insights beautifully with intuitive visualizations and track your rehabilitation progress with comprehensive, easy-to-read charts.</p>
+                </div>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-icon">💡</div>
+                <div class="service-content">
+                    <h3>Real-time Recommendations</h3>
+                    <p>Receive personalized exercise routines, dietary guidance, and doctor suggestions tailored to your specific health condition and recovery goals.</p>
+                </div>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-icon">🌍</div>
+                <div class="service-content">
+                    <h3>Multilingual Support</h3>
+                    <p>Access our platform in your preferred language with comprehensive multilingual support, making healthcare accessible to everyone regardless of language barriers.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('contactModal')">&times;</span>
+            <h2>Contact Us</h2>
+            <div class="contact-info">
+                <p><strong>Drop a mail:</strong> diya13goswami@gmail.com</p>
+                <p><strong>Ring us:</strong> +91 6909371878</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login Options</h2>
+            <div class="login-options">
+                <button class="login-option-btn" onclick="showPatientLogin()">Login as Patient</button>
+                <button class="login-option-btn" onclick="showAdminLogin()">Login as Administrator</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Login Modal -->
+    <div id="patientLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('patientLoginModal')">&times;</span>
+            <h2>Patient Login</h2>
+            <form id="patientLoginForm">
+                <div class="form-group">
+                    <label for="patientId">Patient ID</label>
+                    <input type="text" id="patientId" name="patientId" placeholder="Enter your patient ID" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientPassword">Password</label>
+                    <input type="password" id="patientPassword" name="patientPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('adminLoginModal')">&times;</span>
+            <h2>Administrator Login</h2>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminId">Admin ID</label>
+                    <input type="text" id="adminId" name="adminId" placeholder="Enter your admin ID" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Password</label>
+                    <input type="password" id="adminPassword" name="adminPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function showAboutModal() {
+            document.getElementById('aboutModal').style.display = 'block';
+        }
+
+        function showServicesModal() {
+            document.getElementById('servicesModal').style.display = 'block';
+        }
+
+        function showContactModal() {
+            document.getElementById('contactModal').style.display = 'block';
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function showPatientLogin() {
+            closeModal('loginModal');
+            document.getElementById('patientLoginModal').style.display = 'block';
+        }
+
+        function showAdminLogin() {
+            closeModal('loginModal');
+            document.getElementById('adminLoginModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function goHome() {
+            // Close all modals
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.style.display = 'none';
+            });
+            // Scroll to top of page
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Patient login form submission
+        document.getElementById('patientLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const patientId = document.getElementById('patientId').value.toUpperCase();
+            const password = document.getElementById('patientPassword').value;
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ patient_id: patientId, password: password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = '/dashboard';
+                } else {
+                    alert(data.message || 'Login failed. Please try again.');
+                }
+            } catch (error) {
+                alert('Error logging in. Please try again.');
+            }
+        });
+
+        // Admin login form submission
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const adminId = document.getElementById('adminId').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            // For now, just show an alert (admin functionality to be implemented)
+            alert('Admin login functionality will be implemented soon.');
+        });
+    </script>
+</body>
+</html>

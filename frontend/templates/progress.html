@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+
+{% block title %}Progress Tracking - {{ patient.name }}{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Progress Tracking</h1>
+            <p class="subtitle">{{ patient.name }} - Monitoring your rehabilitation journey</p>
+        </div>
+        <a href="/dashboard" class="btn-secondary">← Back to Dashboard</a>
+    </div>
+
+    <div class="progress-info">
+        <div class="info-card">
+            <span class="info-icon"></span>
+            <div>
+                <h3>Total Reports</h3>
+                <p class="info-value">{{ patient.reports|length }}</p>
+            </div>
+        </div>
+        <div class="info-card">
+            <span class="info-icon"></span>
+            <div>
+                <h3>Tracking Period</h3>
+                <p class="info-value">{{ patient.reports|length }} weeks</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="charts-section">
+        <h2>Health Metrics Over Time</h2>
+        
+        <div class="chart-container">
+            <h3>Heart Rate Trend</h3>
+            <canvas id="heartRateChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>Posture Score Progression</h3>
+            <canvas id="postureChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>Emotional State Distribution</h3>
+            <canvas id="emotionChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>Breathing Pattern Status</h3>
+            <canvas id="breathingChart"></canvas>
+        </div>
+    </div>
+
+    <div id="loadingMessage" style="text-align: center; padding: 3rem;">
+        <p>Loading your progress data...</p>
+    </div>
+</div>
+
+<style>
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.page-header h1 {
+    margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+    color: #666;
+    margin: 0;
+}
+
+.progress-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.info-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.info-icon {
+    font-size: 3rem;
+}
+
+.info-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.info-value {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.charts-section {
+    margin-bottom: 3rem;
+}
+
+.charts-section h2 {
+    margin-bottom: 2rem;
+}
+
+.chart-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    margin-bottom: 2rem;
+}
+
+.chart-container h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+canvas {
+    max-height: 400px;
+}
+</style>
+
+<script>
+// Fetch patient history and create charts
+async function loadProgressData() {
+    try {
+        const response = await fetch('/api/patient/history');
+        const data = await response.json();
+        
+        if (data.success) {
+            createCharts(data.history);
+            document.getElementById('loadingMessage').style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error loading progress data:', error);
+    }
+}
+
+function createCharts(history) {
+    // Prepare data
+    const dates = history.map(h => h.date);
+    const heartRates = history.map(h => h.predictions.heartbeat?.heart_rate || null);
+    const postureScores = history.map(h => h.predictions.posture?.score || null);
+    
+    // Count emotion states
+    const emotionCounts = {
+        'Happy': 0,
+        'Neutral': 0,
+        'Stressed': 0,
+        'Sad': 0
+    };
+    history.forEach(h => {
+        const state = h.predictions.emotion?.state;
+        if (state && emotionCounts.hasOwnProperty(state)) {
+            emotionCounts[state]++;
+        }
+    });
+    
+    // Count breathing statuses
+    const breathingCounts = {
+        'Normal': 0,
+        'Shallow Breathing': 0,
+        'Irregular': 0,
+        'Apnea Risk': 0
+    };
+    history.forEach(h => {
+        const status = h.predictions.breathing?.status;
+        if (status && breathingCounts.hasOwnProperty(status)) {
+            breathingCounts[status]++;
+        }
+    });
+    
+    // Heart Rate Chart
+    new Chart(document.getElementById('heartRateChart'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Heart Rate (bpm)',
+                data: heartRates,
+                borderColor: '#667eea',
+                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: 'Heart Rate (bpm)'
+                    }
+                }
+            }
+        }
+    });
+    
+    // Posture Score Chart
+    new Chart(document.getElementById('postureChart'), {
+        type: 'bar',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Posture Score',
+                data: postureScores,
+                backgroundColor: dates.map((_, i) => {
+                    const score = postureScores[i];
+                    if (score >= 80) return '#4caf50';
+                    if (score >= 60) return '#ff9800';
+                    return '#f44336';
+                }),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Score (0-100)'
+                    }
+                }
+            }
+        }
+    });
+    
+    // Emotion Distribution Chart
+    new Chart(document.getElementById('emotionChart'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(emotionCounts),
+            datasets: [{
+                data: Object.values(emotionCounts),
+                backgroundColor: [
+                    '#4caf50',  // Happy
+                    '#2196f3',  // Neutral
+                    '#ff9800',  // Stressed
+                    '#f44336'   // Sad
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+    
+    // Breathing Status Chart
+    new Chart(document.getElementById('breathingChart'), {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(breathingCounts),
+            datasets: [{
+                data: Object.values(breathingCounts),
+                backgroundColor: [
+                    '#4caf50',  // Normal
+                    '#ff9800',  // Shallow
+                    '#f44336',  // Irregular
+                    '#9c27b0'   // Apnea
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
+
+// Load data when page loads
+window.addEventListener('load', loadProgressData);
+</script>
+{% endblock %}

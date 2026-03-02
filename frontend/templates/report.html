@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+
+{% block title %}Report - {{ report.report_id }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="report-header">
+        <div>
+            <h1>Health Report</h1>
+            <p class="report-meta">{{ patient.name }} | {{ report.date }} | {{ report.report_id }}</p>
+        </div>
+        <a href="/dashboard" class="btn-secondary">← Back to Dashboard</a>
+    </div>
+
+    <div class="summary-section">
+        <h2>Overall Summary</h2>
+        <div class="summary-card">
+            <p>{{ summary }}</p>
+        </div>
+    </div>
+
+    <div class="predictions-section">
+        <h2>AI Analysis Results</h2>
+        
+        <div class="predictions-grid">
+            <!-- Heartbeat -->
+            {% if predictions.heartbeat %}
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <span class="icon"></span>
+                    <h3>Heartbeat Analysis</h3>
+                </div>
+                <div class="prediction-result {{ 'status-good' if predictions.heartbeat.status == 'Normal' else 'status-warning' }}">
+                    {{ predictions.heartbeat.status }}
+                </div>
+                <div class="prediction-details">
+                    <p><strong>Heart Rate:</strong> {{ predictions.heartbeat.heart_rate|round(1) }} bpm</p>
+                    <p><strong>Confidence:</strong> {{ (predictions.heartbeat.confidence * 100)|round(1) }}%</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Glucose -->
+            {% if predictions.glucose %}
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <span class="icon"></span>
+                    <h3>Blood Glucose</h3>
+                </div>
+                <div class="prediction-result {{ 'status-good' if predictions.glucose.range == 'Normal' else 'status-warning' }}">
+                    {{ predictions.glucose.range }}
+                </div>
+                <div class="prediction-details">
+                    <p><strong>BMI:</strong> {{ predictions.glucose.bmi|round(1) }}</p>
+                    <p><strong>Confidence:</strong> {{ (predictions.glucose.confidence * 100)|round(1) }}%</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Breathing -->
+            {% if predictions.breathing %}
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <span class="icon"></span>
+                    <h3>Breathing Pattern</h3>
+                </div>
+                <div class="prediction-result {{ 'status-good' if predictions.breathing.status == 'Normal' else 'status-warning' }}">
+                    {{ predictions.breathing.status }}
+                </div>
+                <div class="prediction-details">
+                    <p><strong>Rate:</strong> {{ predictions.breathing.breathing_rate|round(1) }} breaths/min</p>
+                    <p><strong>Confidence:</strong> {{ (predictions.breathing.confidence * 100)|round(1) }}%</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Speech -->
+            {% if predictions.speech %}
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <span class="icon"></span>
+                    <h3>Speech Pattern</h3>
+                </div>
+                <div class="prediction-result {{ 'status-good' if predictions.speech.pattern == 'Normal Speech' else 'status-warning' }}">
+                    {{ predictions.speech.pattern }}
+                </div>
+                <div class="prediction-details">
+                    <p><strong>Rate:</strong> {{ predictions.speech.speech_rate|round(0) }} words/min</p>
+                    <p><strong>Confidence:</strong> {{ (predictions.speech.confidence * 100)|round(1) }}%</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Emotion -->
+            {% if predictions.emotion %}
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <span class="icon"></span>
+                    <h3>Emotional State</h3>
+                </div>
+                <div class="prediction-result {{ 'status-good' if predictions.emotion.state in ['Happy', 'Neutral'] else 'status-warning' }}">
+                    {{ predictions.emotion.state }}
+                </div>
+                <div class="prediction-details">
+                    <p><strong>Sentiment Score:</strong> {{ (predictions.emotion.text_sentiment * 100)|round(0) }}%</p>
+                    <p><strong>Confidence:</strong> {{ (predictions.emotion.confidence * 100)|round(1) }}%</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Posture -->
+            {% if predictions.posture %}
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <span class="icon">🧍</span>
+                    <h3>Posture Analysis</h3>
+                </div>
+                <div class="prediction-result {{ 'status-good' if predictions.posture.posture == 'Good Posture' else 'status-warning' }}">
+                    {{ predictions.posture.posture }}
+                </div>
+                <div class="prediction-details">
+                    <p><strong>Posture Score:</strong> {{ predictions.posture.score|round(0) }}/100</p>
+                    <p><strong>Confidence:</strong> {{ (predictions.posture.confidence * 100)|round(1) }}%</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="recommendations-section">
+        <h2>Personalized Recommendations</h2>
+        
+        {% for key, rec in recommendations.items() %}
+        <div class="recommendation-card">
+            <h3>{{ rec.title }}</h3>
+            
+            {% if rec.exercises %}
+            <div class="rec-category">
+                <h4>Exercises & Activities</h4>
+                <ul>
+                    {% for exercise in rec.exercises %}
+                    <li>{{ exercise }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if rec.lifestyle %}
+            <div class="rec-category">
+                <h4>Lifestyle Tips</h4>
+                <ul>
+                    {% for tip in rec.lifestyle %}
+                    <li>{{ tip }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if rec.tips %}
+            <div class="rec-category tips">
+                <h4>Important Notes</h4>
+                <ul>
+                    {% for tip in rec.tips %}
+                    <li>{{ tip }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.report-header h1 {
+    margin: 0 0 0.5rem 0;
+}
+
+.report-meta {
+    color: #666;
+    margin: 0;
+}
+
+.summary-section {
+    margin-bottom: 3rem;
+}
+
+.summary-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.predictions-section {
+    margin-bottom: 3rem;
+}
+
+.predictions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.prediction-card {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s;
+}
+
+.prediction-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.prediction-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.prediction-header .icon {
+    font-size: 1.5rem;
+}
+
+.prediction-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.prediction-result {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.status-good {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.prediction-details p {
+    margin: 0.5rem 0;
+    color: #666;
+}
+
+.recommendations-section {
+    margin-bottom: 3rem;
+}
+
+.recommendation-card {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.recommendation-card h3 {
+    color: #667eea;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.rec-category {
+    margin-bottom: 1.5rem;
+}
+
+.rec-category h4 {
+    color: #333;
+    margin-bottom: 0.75rem;
+}
+
+.rec-category ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.rec-category li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.rec-category.tips {
+    background: #e7f3ff;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+</style>
+{% endblock %}

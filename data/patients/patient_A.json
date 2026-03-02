@@ -1,0 +1,52 @@
+{
+  "patient_id": "1D55PL6",
+  "name": "Amy Walker",
+  "age": 41,
+  "gender": "F",
+  "address": "25 Jamnagar, 3rd street, Gujrat",
+  "consulting_doctor": "Dr. Pia Dwivedi",
+  "allergies": "Nuts, Dust",
+  "password": "newp@117789",
+  "reports": [
+    {
+      "report_id": "A_R001",
+      "date": "2026-01-24",
+      "heartbeat": {
+        "heart_rate": 60.58181818068553,
+        "rr_interval_variance": 0.048811165450646656,
+        "label": 0.0
+      },
+      "glucose": {
+        "age": 47.0,
+        "bmi": 18.0,
+        "meal_timing": 1.0,
+        "activity_level": 1.0,
+        "glucose_range": 1.0
+      },
+      "breathing": {
+        "breathing_rate": 11.852730318687325,
+        "breath_depth": 0.7806546890134303,
+        "rest_vs_exercise": 0.0,
+        "label": 0.0
+      },
+      "speech": {
+        "speech_rate": 178.6338953214714,
+        "pause_frequency": 0.22031540602658412,
+        "pitch_variability": 0.24964889480261188,
+        "label": 0.0
+      },
+      "emotion": {
+        "text_sentiment": 0.34741856422854545,
+        "voice_emotion": 0.40880401583060094,
+        "facial_emotion": 0.31320041764975326,
+        "label": 0.0
+      },
+      "posture": {
+        "head_tilt": 14.487825081390453,
+        "shoulder_alignment": -1.6360000390214942,
+        "spine_angle": 101.22813940875918,
+        "label": 1.0
+      }
+    }
+  ]
+}

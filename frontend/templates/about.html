@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+
+{% block title %}About RehabSense{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="about-header">
+        <h1>About RehabSense</h1>
+        <p class="subtitle">AI-Powered Rehabilitation Monitoring System</p>
+    </div>
+
+    <div class="about-section">
+        <h2>Project Overview</h2>
+        <p>
+            RehabSense is an educational prototype demonstrating how artificial intelligence can support 
+            rehabilitation patients through comprehensive health monitoring. This system integrates six 
+            specialized AI models to analyze different aspects of patient health and provide personalized 
+            rehabilitation recommendations.
+        </p>
+    </div>
+
+    <div class="models-section">
+        <h2>Six AI Models</h2>
+        
+        <div class="model-grid">
+            <div class="model-card">
+                <span class="model-icon"></span>
+                <h3>Heartbeat Abnormality Detector</h3>
+                <p><strong>Algorithm:</strong> Random Forest Classifier</p>
+                <p><strong>Input:</strong> Heart rate, RR interval variance</p>
+                <p><strong>Output:</strong> Normal, Bradycardia, Tachycardia, Irregular</p>
+            </div>
+
+            <div class="model-card">
+                <span class="model-icon"></span>
+                <h3>Blood Glucose Estimation</h3>
+                <p><strong>Algorithm:</strong> Gradient Boosting Classifier</p>
+                <p><strong>Input:</strong> Age, BMI, meal timing, activity level</p>
+                <p><strong>Output:</strong> Low, Normal, High glucose range</p>
+            </div>
+
+            <div class="model-card">
+                <span class="model-icon"></span>
+                <h3>Breathing Irregularity Detection</h3>
+                <p><strong>Algorithm:</strong> Support Vector Machine (SVM)</p>
+                <p><strong>Input:</strong> Breathing rate, breath depth, rest vs exercise</p>
+                <p><strong>Output:</strong> Normal, Shallow, Irregular, Apnea risk</p>
+            </div>
+
+            <div class="model-card">
+                <span class="model-icon"></span>
+                <h3>Speech Pattern Analysis</h3>
+                <p><strong>Algorithm:</strong> Logistic Regression</p>
+                <p><strong>Input:</strong> Speech rate, pause frequency, pitch variability</p>
+                <p><strong>Output:</strong> Normal, Slurred/Slow, Stressed speech</p>
+            </div>
+
+            <div class="model-card">
+                <span class="model-icon"></span>
+                <h3>Emotional State Detection</h3>
+                <p><strong>Algorithm:</strong> K-Nearest Neighbors (KNN)</p>
+                <p><strong>Input:</strong> Text sentiment, voice emotion, facial emotion</p>
+                <p><strong>Output:</strong> Happy, Neutral, Stressed, Sad</p>
+            </div>
+
+            <div class="model-card">
+                <span class="model-icon"></span>
+                <h3>Real-Time Posture Detection</h3>
+                <p><strong>Algorithm:</strong> Decision Tree Classifier</p>
+                <p><strong>Input:</strong> Head tilt, shoulder alignment, spine angle</p>
+                <p><strong>Output:</strong> Good posture, Forward head, Slouched + Score (0-100)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-section">
+        <h2>How It Works</h2>
+        <div class="workflow">
+            <div class="workflow-step">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                    <h3>Data Collection</h3>
+                    <p>Patient health metrics are collected through reports</p>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                    <h3>AI Analysis</h3>
+                    <p>Six trained machine learning models analyze the data</p>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <span class="step-number">3</span>
+                <div class="step-content">
+                    <h3>Insights Generation</h3>
+                    <p>System generates health status predictions</p>
+                </div>
+            </div>
+            <div class="workflow-step">
+                <span class="step-number">4</span>
+                <div class="step-content">
+                    <h3>Recommendations</h3>
+                    <p>Personalized exercises and lifestyle tips are provided</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-section">
+        <h2>Features</h2>
+        <ul class="features-list">
+            <li>Comprehensive health monitoring across six vital areas</li>
+            <li>Real-time AI-powered predictions and analysis</li>
+            <li>Personalized rehabilitation recommendations</li>
+            <li>Progress tracking over time with visual charts</li>
+            <li>Clear, accessible, non-medical language</li>
+            <li>Patient-centered design for dignity and inclusivity</li>
+        </ul>
+    </div>
+
+    <div class="about-section">
+        <h2>Educational Purpose</h2>
+        <div class="disclaimer-box">
+            <h3>Important Notice</h3>
+            <p>
+                <strong>This is an educational prototype designed to demonstrate AI/ML concepts in healthcare.</strong>
+            </p>
+            <ul>
+                <li>Not intended for actual medical diagnosis or treatment</li>
+                <li>Uses synthetic data for demonstration purposes</li>
+                <li>Models are simplified for educational clarity</li>
+                <li>Always consult qualified healthcare professionals for medical advice</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="about-section">
+        <h2>Future Extensions</h2>
+        <ul class="features-list">
+            <li>Integration with wearable devices (smartwatches, fitness trackers)</li>
+            <li>Real-time sensor data processing</li>
+            <li>Multi-language support for global accessibility</li>
+            <li>Mobile application for on-the-go monitoring</li>
+            <li>Advanced deep learning models for improved accuracy</li>
+            <li>Telemedicine integration for remote consultations</li>
+            <li>Voice-activated interface for accessibility</li>
+        </ul>
+    </div>
+
+    <div class="about-section">
+        <h2>Technology Stack</h2>
+        <div class="tech-grid">
+            <div class="tech-item">
+                <h4>Backend</h4>
+                <p>Python, Flask, scikit-learn</p>
+            </div>
+            <div class="tech-item">
+                <h4>Frontend</h4>
+                <p>HTML, CSS, JavaScript</p>
+            </div>
+            <div class="tech-item">
+                <h4>Visualization</h4>
+                <p>Chart.js</p>
+            </div>
+            <div class="tech-item">
+                <h4>Storage</h4>
+                <p>Local file system (JSON)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.about-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px;
+}
+
+.about-header h1 {
+    margin: 0 0 1rem 0;
+    font-size: 2.5rem;
+}
+
+.subtitle {
+    margin: 0;
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.about-section {
+    margin-bottom: 3rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+}
+
+.about-section h2 {
+    color: #667eea;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.about-section p {
+    line-height: 1.8;
+    color: #333;
+}
+
+.models-section {
+    margin-bottom: 3rem;
+}
+
+.model-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.model-card {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all 0.3s;
+}
+
+.model-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-color: #667eea;
+}
+
+.model-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.model-card h3 {
+    color: #333;
+    margin: 0 0 1rem 0;
+}
+
+.model-card p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.workflow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.workflow-step {
+    text-align: center;
+}
+
+.step-number {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    background: #667eea;
+    color: white;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.step-content h3 {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.step-content p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.features-list {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.features-list li {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.disclaimer-box {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.disclaimer-box h3 {
+    margin-top: 0;
+    color: #856404;
+}
+
+.disclaimer-box p {
+    color: #856404;
+}
+
+.disclaimer-box ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.disclaimer-box li {
+    margin-bottom: 0.5rem;
+    color: #856404;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.tech-item {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.tech-item h4 {
+    margin: 0 0 0.5rem 0;
+    color: #667eea;
+}
+
+.tech-item p {
+    margin: 0;
+    color: #666;
+}
+</style>
+{% endblock %}

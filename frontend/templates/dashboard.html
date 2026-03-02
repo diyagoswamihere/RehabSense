@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - {{ patient.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <div class="patient-info">
+            <h1>Welcome, {{ patient.name }}</h1>
+            <p class="patient-details">
+                Age: {{ patient.age }} | Gender: {{ patient.gender }} | Patient ID: {{ patient.patient_id }}
+            </p>
+        </div>
+        <div class="stats">
+            <div class="stat-card">
+                <span class="stat-value">{{ patient.reports|length }}</span>
+                <span class="stat-label">Total Reports</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="reports-section">
+        <h2>Your Health Reports</h2>
+        <div class="reports-grid">
+            {% for report in patient.reports %}
+            <div class="report-card">
+                <div class="report-header">
+                    <h3>Report {{ loop.index }}</h3>
+                    <span class="report-date">{{ report.date }}</span>
+                </div>
+                <div class="report-id">{{ report.report_id }}</div>
+                <a href="/report/{{ report.report_id }}" class="btn-secondary">View Details</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if patient.reports|length > 1 %}
+    <div class="quick-actions">
+        <a href="/progress" class="btn-primary">View Progress Over Time</a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    color: white;
+}
+
+.patient-info h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+}
+
+.patient-details {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-card {
+    /* Make dashboard cards fully opaque so only the background image looks translucent */
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 120px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.reports-section {
+    margin-bottom: 3rem;
+}
+
+.reports-section h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.report-card {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s;
+}
+
+.report-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-color: #667eea;
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.report-header h3 {
+    margin: 0;
+    color: #667eea;
+}
+
+.report-date {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.report-id {
+    font-family: monospace;
+    color: #999;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.quick-actions {
+    text-align: center;
+    margin: 3rem 0;
+}
+</style>
+{% endblock %}

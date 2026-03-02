@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - RehabSense</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: 'Microsoft YaHei UI', 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('{{ url_for("static", filename="images/back.png") }}') no-repeat center center fixed;
+            background-size: cover;
+            background-color: rgba(176, 224, 230, 0.3);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #FF8C00;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logout-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .patient-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: url('{{ url_for("static", filename="images/" + (patient.patient_id == "1D55PL6" ? "A.png" : "B.png")) }}') no-repeat center center;
+            background-size: cover;
+            border: 2px solid #FF8C00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .slabs-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .slab {
+            background: rgba(135, 206, 235, 1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slab:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-color: #FF8C00;
+        }
+
+        .slab h3 {
+            color: #FF8C00;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+        }
+
+        .slab p {
+            color: #333;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%);
+            margin: 5% auto;
+            padding: 2.5rem;
+            border: 3px solid #FF8C00;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .close {
+            color: #000000;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #FF8C00;
+        }
+
+        .modal h2 {
+            color: #000000;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #FF8C00;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #FF8C00;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .report-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #FF8C00;
+        }
+
+        .report-header {
+            font-weight: bold;
+            color: #FF8C00;
+            margin-bottom: 10px;
+        }
+
+        .health-metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(135, 206, 235, 0.3);
+            border-radius: 5px;
+        }
+
+        .metric-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .metric-value {
+            color: #FF8C00;
+            font-weight: bold;
+        }
+
+        .normal {
+            color: #28a745;
+        }
+
+        .warning {
+            color: #ffc107;
+        }
+
+        .danger {
+            color: #dc3545;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .service-card {
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            border-color: #FF8C00;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+        }
+
+        .service-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .service-title {
+            font-weight: bold;
+            color: #FF8C00;
+            margin-bottom: 10px;
+        }
+
+        .issue-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-group textarea {
+            padding: 10px;
+            border: 2px solid #FF8C00;
+            border-radius: 5px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            background: #FFFFFF;
+        }
+
+        .submit-btn {
+            background: #FF8C00;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #FFA500;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .slabs-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">RehabSense</div>
+            <div class="logout-section">
+                <div class="patient-circle" id="patientImage">{{ patient.name[0] }}</div>
+                <button class="logout-btn" onclick="logout()">Log out</button>
+            </div>
+        </div>
+
+        <!-- Slabs -->
+        <div class="slabs-container">
+            <div class="slab" onclick="showMyDetails()">
+                <h3>My Details</h3>
+                <p>View your personal information</p>
+            </div>
+            
+            <div class="slab" onclick="showMyReport()">
+                <h3>My Report</h3>
+                <p>View your health reports</p>
+            </div>
+            
+            <div class="slab" onclick="showMyDiagnosis()">
+                <h3>My Diagnosis</h3>
+                <p>Analyze your health data</p>
+            </div>
+            
+            <div class="slab" onclick="showServices()">
+                <h3>Services</h3>
+                <p>Access additional services</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Details Modal -->
+    <div id="myDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('myDetailsModal')">&times;</span>
+            <h2>My Details</h2>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Name</div>
+                    <div class="detail-value">{{ patient.name }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Age</div>
+                    <div class="detail-value">{{ patient.age }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Patient ID</div>
+                    <div class="detail-value">{{ patient.patient_id }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Address</div>
+                    <div class="detail-value">{{ patient.address }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Consulting Doctor</div>
+                    <div class="detail-value">{{ patient.consulting_doctor }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Allergies</div>
+                    <div class="detail-value">{{ patient.allergies }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Report Modal -->
+    <div id="myReportModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('myReportModal')">&times;</span>
+            <h2>My Health Reports</h2>
+            {% for report in patient.reports %}
+            <div class="report-item">
+                <div class="report-header">Report {{ loop.index }} - {{ report.date }}</div>
+                <div class="health-metric">
+                    <span class="metric-label">Heart Rate:</span>
+                    <span class="metric-value {{ 'normal' if report.heartbeat.label == 0 else 'warning' if report.heartbeat.label == 1 else 'danger' }}">
+                        {{ "%.1f"|format(report.heartbeat.heart_rate) }} bpm
+                    </span>
+                </div>
+                <div class="health-metric">
+                    <span class="metric-label">Glucose Level:</span>
+                    <span class="metric-value {{ 'normal' if report.glucose.glucose_range == 1 else 'warning' if report.glucose.glucose_range == 2 else 'danger' }}">
+                        {{ report.glucose.glucose_range == 1 and 'Normal' or report.glucose.glucose_range == 2 and 'Elevated' or 'High' }}
+                    </span>
+                </div>
+                <div class="health-metric">
+                    <span class="metric-label">Breathing Rate:</span>
+                    <span class="metric-value {{ 'normal' if report.breathing.label == 0 else 'warning' if report.breathing.label == 1 else 'danger' }}">
+                        {{ "%.1f"|format(report.breathing.breathing_rate) }} breaths/min
+                    </span>
+                </div>
+                <div class="health-metric">
+                    <span class="metric-label">Speech Analysis:</span>
+                    <span class="metric-value {{ 'normal' if report.speech.label == 0 else 'warning' if report.speech.label == 1 else 'danger' }}">
+                        {{ report.speech.label == 0 and 'Normal' or report.speech.label == 1 and 'Mild Issues' or 'Significant Issues' }}
+                    </span>
+                </div>
+                <div class="health-metric">
+                    <span class="metric-label">Emotional State:</span>
+                    <span class="metric-value {{ 'normal' if report.emotion.label == 0 else 'warning' if report.emotion.label == 1 else 'danger' }}">
+                        {{ report.emotion.label == 0 and 'Stable' or report.emotion.label == 1 and 'Moderate Stress' or 'High Stress' }}
+                    </span>
+                </div>
+                <div class="health-metric">
+                    <span class="metric-label">Posture:</span>
+                    <span class="metric-value {{ 'normal' if report.posture.label == 0 else 'warning' if report.posture.label == 1 else 'danger' }}">
+                        {{ report.posture.label == 0 and 'Good' or report.posture.label == 1 and 'Needs Improvement' or 'Poor' }}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- My Diagnosis Modal -->
+    <div id="myDiagnosisModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('myDiagnosisModal')">&times;</span>
+            <h2>My Diagnosis</h2>
+            <canvas id="healthChart" width="400" height="200"></canvas>
+            <div id="diagnosisResults"></div>
+        </div>
+    </div>
+
+    <!-- Services Modal -->
+    <div id="servicesModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('servicesModal')">&times;</span>
+            <h2>Services</h2>
+            <div class="service-grid">
+                <div class="service-card" onclick="showSuggestions()">
+                    <div class="service-icon">💡</div>
+                    <div class="service-title">Suggestions</div>
+                    <p>Get AI-powered health suggestions</p>
+                </div>
+                <div class="service-card" onclick="showPhysicalStrategies()">
+                    <div class="service-icon">🏃</div>
+                    <div class="service-title">Physical Strategies</div>
+                    <p>Personalized exercise plans</p>
+                </div>
+                <div class="service-card" onclick="showIssueForm()">
+                    <div class="service-icon">📝</div>
+                    <div class="service-title">Leave an Issue</div>
+                    <p>Report problems or feedback</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggestions Modal -->
+    <div id="suggestionsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('suggestionsModal')">&times;</span>
+            <h2>AI Health Suggestions</h2>
+            <div id="suggestionsContent">
+                <p>Analyzing your health data...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Physical Strategies Modal -->
+    <div id="physicalStrategiesModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('physicalStrategiesModal')">&times;</span>
+            <h2>Physical Strategies</h2>
+            <div id="strategiesContent">
+                <p>Generating personalized strategies...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Issue Form Modal -->
+    <div id="issueFormModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('issueFormModal')">&times;</span>
+            <h2>Report an Issue</h2>
+            <form id="issueForm" onsubmit="submitIssue(event)">
+                <div class="form-group">
+                    <label for="issueDescription">Describe your issue:</label>
+                    <textarea id="issueDescription" name="issueDescription" required placeholder="Please describe your issue or feedback..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Submit Issue</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Patient data from template
+        const patientData = {{ patient|tojson|safe }};
+        
+        // Modal functions
+        function showMyDetails() {
+            document.getElementById('myDetailsModal').style.display = 'block';
+        }
+
+        function showMyReport() {
+            document.getElementById('myReportModal').style.display = 'block';
+        }
+
+        function showMyDiagnosis() {
+            document.getElementById('myDiagnosisModal').style.display = 'block';
+            setTimeout(() => {
+                createHealthChart();
+                analyzeHealthData();
+            }, 100);
+        }
+
+        function showServices() {
+            document.getElementById('servicesModal').style.display = 'block';
+        }
+
+        function showSuggestions() {
+            document.getElementById('suggestionsModal').style.display = 'block';
+            generateSuggestions();
+        }
+
+        function showPhysicalStrategies() {
+            document.getElementById('physicalStrategiesModal').style.display = 'block';
+            generateStrategies();
+        }
+
+        function showIssueForm() {
+            document.getElementById('issueFormModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function logout() {
+            window.location.href = '/';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Generate AI suggestions
+        async function generateSuggestions() {
+            const content = document.getElementById('suggestionsContent');
+            content.innerHTML = '<p>Analyzing your health data...</p>';
+            
+            // Simulate AI analysis
+            setTimeout(() => {
+                const suggestions = analyzeHealthForSuggestions();
+                content.innerHTML = suggestions;
+            }, 2000);
+        }
+
+        // Generate physical strategies
+        async function generateStrategies() {
+            const content = document.getElementById('strategiesContent');
+            content.innerHTML = '<p>Generating personalized strategies...</p>';
+            
+            setTimeout(() => {
+                const strategies = analyzeHealthForStrategies();
+                content.innerHTML = strategies;
+            }, 2000);
+        }
+
+        // Analyze health data for suggestions
+        function analyzeHealthForSuggestions() {
+            const reports = patientData.reports;
+            const latestReport = reports[reports.length - 1];
+            
+            let suggestions = '<div class="suggestion-item">';
+            
+            if (latestReport.heartbeat.label > 0) {
+                suggestions += '<p><strong>⚠️ Heart Health:</strong> Your heart rate shows abnormalities. Consider consulting Dr. ' + patientData.consulting_doctor + ' for a cardiac evaluation.</p>';
+            }
+            
+            if (latestReport.glucose.glucose_range > 1) {
+                suggestions += '<p><strong>🩸 Glucose Management:</strong> Your glucose levels are elevated. Focus on low-carb meals and regular exercise.</p>';
+            }
+            
+            if (latestReport.emotion.label > 1) {
+                suggestions += '<p><strong>🧠 Mental Wellness:</strong> High stress detected. Consider meditation or speaking with a mental health professional.</p>';
+            }
+            
+            suggestions += '<p><strong>💊 Overall Health Plan:</strong> Your current healthcare plan needs adjustment based on recent trends. Schedule a follow-up with your doctor.</p>';
+            suggestions += '</div>';
+            
+            return suggestions;
+        }
+
+        // Analyze health data for physical strategies
+        function analyzeHealthForStrategies() {
+            const reports = patientData.reports;
+            const latestReport = reports[reports.length - 1];
+            
+            let strategies = '<div class="strategy-item">';
+            
+            if (latestReport.posture.label > 0) {
+                strategies += '<p><strong>🧘 Posture Exercises:</strong> Daily shoulder blade squeezes and chin tucks for 2 weeks.</p>';
+            }
+            
+            if (latestReport.breathing.label > 0) {
+                strategies += '<p><strong>🫁 Breathing Exercises:</strong> Practice diaphragmatic breathing 5 minutes, 3 times daily.</p>';
+            }
+            
+            if (latestReport.glucose.glucose_range > 1) {
+                strategies += '<p><strong>🏃 Physical Activity:</strong> 30-minute moderate walks after meals to help glucose management.</p>';
+            }
+            
+            if (latestReport.emotion.label > 0) {
+                strategies += '<p><strong>🧘 Mental Wellness:</strong> Try journaling for 10 minutes before bed to process emotions.</p>';
+            }
+            
+            strategies += '</div>';
+            
+            return strategies;
+        }
+
+        // Create health chart
+        function createHealthChart() {
+            const canvas = document.getElementById('healthChart');
+            const ctx = canvas.getContext('2d');
+            
+            const reports = patientData.reports;
+            const labels = reports.map(r => r.date);
+            const heartData = reports.map(r => r.heartbeat.heart_rate);
+            const glucoseData = reports.map(r => r.glucose.glucose_range);
+            
+            // Simple line chart
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#FF8C00';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            // Draw heart rate line
+            for (let i = 0; i < heartData.length; i++) {
+                const x = (i / (heartData.length - 1)) * (canvas.width - 40) + 20;
+                const y = canvas.height - ((heartData[i] - 60) / 50) * (canvas.height - 40) - 20;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Microsoft YaHei UI';
+            labels.forEach((label, i) => {
+                const x = (i / (labels.length - 1)) * (canvas.width - 40) + 20;
+                ctx.fillText(label, x - 20, canvas.height - 5);
+            });
+        }
+
+        // Analyze health data
+        function analyzeHealthData() {
+            const reports = patientData.reports;
+            const latestReport = reports[reports.length - 1];
+            
+            let diagnosis = '<div class="diagnosis-summary">';
+            diagnosis += '<h3>Latest Health Analysis</h3>';
+            
+            diagnosis += '<div class="health-status">';
+            if (latestReport.heartbeat.label === 0) diagnosis += '<p>✅ Heart Rate: Normal</p>';
+            else diagnosis += '<p>⚠️ Heart Rate: Abnormal - Consult doctor</p>';
+            
+            if (latestReport.glucose.glucose_range === 1) diagnosis += '<p>✅ Glucose: Normal</p>';
+            else diagnosis += '<p>⚠️ Glucose: Elevated - Monitor diet</p>';
+            
+            if (latestReport.breathing.label === 0) diagnosis += '<p>✅ Breathing: Normal</p>';
+            else diagnosis += '<p>⚠️ Breathing: Irregular - Practice breathing exercises</p>';
+            
+            diagnosis += '</div>';
+            diagnosis += '</div>';
+            
+            document.getElementById('diagnosisResults').innerHTML = diagnosis;
+        }
+
+        // Submit issue form
+        function submitIssue(event) {
+            event.preventDefault();
+            const description = document.getElementById('issueDescription').value;
+            
+            // Here you would normally send this to your backend
+            // For now, redirect to Google Form
+            window.open('https://forms.gle/eyvYJrvvSiqMZcYE6', '_blank');
+            
+            // Close modal
+            closeModal('issueFormModal');
+            
+            // Show confirmation
+            alert('Thank you for your feedback! You will be redirected to the form.');
+        }
+
+        // Set patient image
+        document.addEventListener('DOMContentLoaded', function() {
+            const patientImage = document.getElementById('patientImage');
+            if (patientData.patient_id === '1D55PL6') {
+                // Try to load A.png, fallback to letter A
+                const img = new Image();
+                img.onload = function() {
+                    patientImage.style.backgroundImage = 'url("{{ url_for("static", filename="images/A.png") }}")';
+                    patientImage.style.backgroundSize = 'cover';
+                    patientImage.style.backgroundPosition = 'center';
+                    patientImage.textContent = '';
+                };
+                img.onerror = function() {
+                    patientImage.textContent = 'A';
+                    patientImage.style.background = '#FF8C00';
+                };
+                img.src = '{{ url_for("static", filename="images/A.png") }}';
+            } else if (patientData.patient_id === '7D42PL2') {
+                // Try to load B.png, fallback to letter B
+                const img = new Image();
+                img.onload = function() {
+                    patientImage.style.backgroundImage = 'url("{{ url_for("static", filename="images/B.png") }}")';
+                    patientImage.style.backgroundSize = 'cover';
+                    patientImage.style.backgroundPosition = 'center';
+                    patientImage.textContent = '';
+                };
+                img.onerror = function() {
+                    patientImage.textContent = 'B';
+                    patientImage.style.background = '#FF8C00';
+                };
+                img.src = '{{ url_for("static", filename="images/B.png") }}';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,492 @@
+{
+  "patient_id": "7D42PL2",
+  "name": "Rajesh Kumar",
+  "age": 28,
+  "gender": "M",
+  "address": "Ramnagar, 7th road, Gujrat",
+  "consulting_doctor": "Dr. Neel Verma",
+  "allergies": "None",
+  "password": "neww@342217",
+  "reports": [
+    {
+      "report_id": "B_R001",
+      "date": "2025-11-08",
+      "heartbeat": {
+        "heart_rate": 102.08144055123981,
+        "rr_interval_variance": 0.04181365627811264,
+        "label": 1.0
+      },
+      "glucose": {
+        "age": 70.0,
+        "bmi": 28.30085058834645,
+        "meal_timing": 2.0,
+        "activity_level": 1.0,
+        "glucose_range": 2.0
+      },
+      "breathing": {
+        "breathing_rate": 18.73645649078442,
+        "breath_depth": 0.7372221073486392,
+        "rest_vs_exercise": 0.0,
+        "label": 2.0
+      },
+      "speech": {
+        "speech_rate": 182.1347081208316,
+        "pause_frequency": 0.15083392812559535,
+        "pitch_variability": 0.33958327671141086,
+        "label": 1.0
+      },
+      "emotion": {
+        "text_sentiment": 0.0,
+        "voice_emotion": 0.5649821294180053,
+        "facial_emotion": 0.7265914537391562,
+        "label": 2.0
+      },
+      "posture": {
+        "head_tilt": -5.751512907481123,
+        "shoulder_alignment": 1.2142496246555443,
+        "spine_angle": 84.79749647011455,
+        "label": 1.0
+      }
+    },
+    {
+      "report_id": "B_R002",
+      "date": "2025-11-15",
+      "heartbeat": {
+        "heart_rate": 98.5,
+        "rr_interval_variance": 0.045,
+        "label": 1.0
+      },
+      "glucose": {
+        "age": 70.0,
+        "bmi": 28.3,
+        "meal_timing": 1.5,
+        "activity_level": 1.2,
+        "glucose_range": 2.0
+      },
+      "breathing": {
+        "breathing_rate": 17.2,
+        "breath_depth": 0.75,
+        "rest_vs_exercise": 0.1,
+        "label": 1.0
+      },
+      "speech": {
+        "speech_rate": 180.5,
+        "pause_frequency": 0.16,
+        "pitch_variability": 0.31,
+        "label": 1.0
+      },
+      "emotion": {
+        "text_sentiment": 0.1,
+        "voice_emotion": 0.58,
+        "facial_emotion": 0.71,
+        "label": 1.0
+      },
+      "posture": {
+        "head_tilt": -4.2,
+        "shoulder_alignment": 1.1,
+        "spine_angle": 87.3,
+        "label": 1.0
+      }
+    },
+    {
+      "report_id": "B_R003",
+      "date": "2025-11-22",
+      "heartbeat": {
+        "heart_rate": 90.43629209207963,
+        "rr_interval_variance": 0.10890135772919997,
+        "label": 2.0
+      },
+      "glucose": {
+        "age": 73.0,
+        "bmi": 24.241118389850214,
+        "meal_timing": 0.0,
+        "activity_level": 2.0,
+        "glucose_range": 0.0
+      },
+      "breathing": {
+        "breathing_rate": 15.876312179806442,
+        "breath_depth": 0.5351446952055336,
+        "rest_vs_exercise": 0.0,
+        "label": 1.0
+      },
+      "speech": {
+        "speech_rate": 184.93794342373505,
+        "pause_frequency": 0.1708172694618983,
+        "pitch_variability": 0.1,
+        "label": 0.0
+      },
+      "emotion": {
+        "text_sentiment": 0.10626467203974721,
+        "voice_emotion": 0.2954890656547182,
+        "facial_emotion": 0.4244432483484347,
+        "label": 2.0
+      },
+      "posture": {
+        "head_tilt": -0.909768399003754,
+        "shoulder_alignment": 5.090979899688795,
+        "spine_angle": 86.59034119748088,
+        "label": 2.0
+      }
+    },
+    {
+      "report_id": "B_R004",
+      "date": "2025-11-29",
+      "heartbeat": {
+        "heart_rate": 87.68398520823214,
+        "rr_interval_variance": 0.04988026958012414,
+        "label": 1.0
+      },
+      "glucose": {
+        "age": 32.0,
+        "bmi": 24.32205730760755,
+        "meal_timing": 2.0,
+        "activity_level": 2.0,
+        "glucose_range": 0.0
+      },
+      "breathing": {
+        "breathing_rate": 14.454400478389106,
+        "breath_depth": 0.6259525382332568,
+        "rest_vs_exercise": 0.0,
+        "label": 3.0
+      },
+      "speech": {
+        "speech_rate": 140.88745143632536,
+        "pause_frequency": 0.17755088256756632,
+        "pitch_variability": 0.2723891183775509,
+        "label": 2.0
+      },
+      "emotion": {
+        "text_sentiment": 0.9234718600615412,
+        "voice_emotion": 0.9273487872250278,
+        "facial_emotion": 0.8837110287974398,
+        "label": 0.0
+      },
+      "posture": {
+        "head_tilt": 12.581629932418911,
+        "shoulder_alignment": -15.907694385144653,
+        "spine_angle": 83.72081379562368,
+        "label": 0.0
+      }
+    },
+    {
+      "report_id": "B_R005",
+      "date": "2025-12-06",
+      "heartbeat": {
+        "heart_rate": 82.17205245613256,
+        "rr_interval_variance": 0.07298503428880748,
+        "label": 1.0
+      },
+      "glucose": {
+        "age": 41.0,
+        "bmi": 27.238928156713634,
+        "meal_timing": 0.0,
+        "activity_level": 1.0,
+        "glucose_range": 0.0
+      },
+      "breathing": {
+        "breathing_rate": 8.00031806708413,
+        "breath_depth": 0.6630746525506594,
+        "rest_vs_exercise": 0.0,
+        "label": 0.0
+      },
+      "speech": {
+        "speech_rate": 160.76279149051604,
+        "pause_frequency": 0.08624952637803729,
+        "pitch_variability": 0.3472175930864224,
+        "label": 2.0
+      },
+      "emotion": {
+        "text_sentiment": 0.672215446709741,
+        "voice_emotion": 0.6034923206445231,
+        "facial_emotion": 0.655292186690811,
+        "label": 2.0
+      },
+      "posture": {
+        "head_tilt": -6.935581648154606,
+        "shoulder_alignment": 2.694335343088738,
+        "spine_angle": 113.77698077237048,
+        "label": 1.0
+      }
+    },
+    {
+      "report_id": "B_R006",
+      "date": "2025-12-13",
+      "heartbeat": {
+        "heart_rate": 104.25765426196142,
+        "rr_interval_variance": 0.03752137187208161,
+        "label": 3.0
+      },
+      "glucose": {
+        "age": 37.0,
+        "bmi": 23.862594001038435,
+        "meal_timing": 0.0,
+        "activity_level": 1.0,
+        "glucose_range": 2.0
+      },
+      "breathing": {
+        "breathing_rate": 16.33216668140879,
+        "breath_depth": 0.4783221308620836,
+        "rest_vs_exercise": 1.0,
+        "label": 0.0
+      },
+      "speech": {
+        "speech_rate": 158.79203120136967,
+        "pause_frequency": 0.12201946539488115,
+        "pitch_variability": 0.3264756767178059,
+        "label": 1.0
+      },
+      "emotion": {
+        "text_sentiment": 0.7391024632442458,
+        "voice_emotion": 0.7330500088001118,
+        "facial_emotion": 0.3795811211331562,
+        "label": 2.0
+      },
+      "posture": {
+        "head_tilt": 7.530565694111213,
+        "shoulder_alignment": 12.719645424745005,
+        "spine_angle": 96.62427110876487,
+        "label": 2.0
+      }
+    },
+    {
+      "report_id": "B_R007",
+      "date": "2025-12-20",
+      "heartbeat": {
+        "heart_rate": 102.30748709259149,
+        "rr_interval_variance": 0.08015893560877574,
+        "label": 3.0
+      },
+      "glucose": {
+        "age": 43.0,
+        "bmi": 30.356931944956475,
+        "meal_timing": 2.0,
+        "activity_level": 0.0,
+        "glucose_range": 1.0
+      },
+      "breathing": {
+        "breathing_rate": 19.408721858384176,
+        "breath_depth": 0.5979070447682833,
+        "rest_vs_exercise": 0.0,
+        "label": 0.0
+      },
+      "speech": {
+        "speech_rate": 135.14378174565448,
+        "pause_frequency": 0.20911427358749662,
+        "pitch_variability": 0.31990200222809856,
+        "label": 1.0
+      },
+      "emotion": {
+        "text_sentiment": 0.39774414896854704,
+        "voice_emotion": 0.6216169623588341,
+        "facial_emotion": 0.7330535447036239,
+        "label": 3.0
+      },
+      "posture": {
+        "head_tilt": 7.115434509774574,
+        "shoulder_alignment": -3.179738555395114,
+        "spine_angle": 91.33931433532325,
+        "label": 2.0
+      }
+    },
+    {
+      "report_id": "B_R008",
+      "date": "2025-12-27",
+      "heartbeat": {
+        "heart_rate": 92.21708309532505,
+        "rr_interval_variance": 0.08932349193258593,
+        "label": 1.0
+      },
+      "glucose": {
+        "age": 65.0,
+        "bmi": 23.38397029674301,
+        "meal_timing": 0.0,
+        "activity_level": 2.0,
+        "glucose_range": 2.0
+      },
+      "breathing": {
+        "breathing_rate": 13.169244853932124,
+        "breath_depth": 0.5180860142604228,
+        "rest_vs_exercise": 0.0,
+        "label": 0.0
+      },
+      "speech": {
+        "speech_rate": 159.96402374451128,
+        "pause_frequency": 0.09013995320699134,
+        "pitch_variability": 0.27412340382892963,
+        "label": 0.0
+      },
+      "emotion": {
+        "text_sentiment": 0.4842028772333605,
+        "voice_emotion": 0.35223017088026953,
+        "facial_emotion": 0.18359747148898392,
+        "label": 2.0
+      },
+      "posture": {
+        "head_tilt": -2.814506437700997,
+        "shoulder_alignment": 4.908400487456989,
+        "spine_angle": 83.77978555555019,
+        "label": 0.0
+      }
+    },
+    {
+      "report_id": "B_R009",
+      "date": "2026-01-03",
+      "heartbeat": {
+        "heart_rate": 74.75734586793159,
+        "rr_interval_variance": 0.08766951484659213,
+        "label": 1.0
+      },
+      "glucose": {
+        "age": 59.0,
+        "bmi": 24.875803859596438,
+        "meal_timing": 3.0,
+        "activity_level": 1.0,
+        "glucose_range": 2.0
+      },
+      "breathing": {
+        "breathing_rate": 13.529561913010554,
+        "breath_depth": 0.5210071887638981,
+        "rest_vs_exercise": 1.0,
+        "label": 2.0
+      },
+      "speech": {
+        "speech_rate": 130.92746476552628,
+        "pause_frequency": 0.1083360122288727,
+        "pitch_variability": 0.40745537796334924,
+        "label": 0.0
+      },
+      "emotion": {
+        "text_sentiment": 0.24029238622703242,
+        "voice_emotion": 0.3886757074588011,
+        "facial_emotion": 0.5661865192820391,
+        "label": 1.0
+      },
+      "posture": {
+        "head_tilt": -2.548805915759969,
+        "shoulder_alignment": -9.819080312430202,
+        "spine_angle": 71.18137962057975,
+        "label": 2.0
+      }
+    },
+    {
+      "report_id": "B_R010",
+      "date": "2026-01-10",
+      "heartbeat": {
+        "heart_rate": 99.72083953041539,
+        "rr_interval_variance": 0.0679626385050439,
+        "label": 1.0
+      },
+      "glucose": {
+        "age": 74.0,
+        "bmi": 19.230222316403037,
+        "meal_timing": 3.0,
+        "activity_level": 1.0,
+        "glucose_range": 1.0
+      },
+      "breathing": {
+        "breathing_rate": 16.311669706961002,
+        "breath_depth": 0.5815966672526132,
+        "rest_vs_exercise": 0.0,
+        "label": 1.0
+      },
+      "speech": {
+        "speech_rate": 111.68062686717543,
+        "pause_frequency": 0.1817386859413687,
+        "pitch_variability": 0.31671200902161667,
+        "label": 0.0
+      },
+      "emotion": {
+        "text_sentiment": 0.26927637755459866,
+        "voice_emotion": 0.500616469113584,
+        "facial_emotion": 0.39404473558026515,
+        "label": 2.0
+      },
+      "posture": {
+        "head_tilt": 4.873975215999536,
+        "shoulder_alignment": -4.804497665638115,
+        "spine_angle": 80.58145129558386,
+        "label": 0.0
+      }
+    },
+    {
+      "report_id": "B_R011",
+      "date": "2026-01-17",
+      "heartbeat": {
+        "heart_rate": 85.95222920125117,
+        "rr_interval_variance": 0.03711660452495468,
+        "label": 2.0
+      },
+      "glucose": {
+        "age": 57.0,
+        "bmi": 24.05766593351108,
+        "meal_timing": 2.0,
+        "activity_level": 0.0,
+        "glucose_range": 1.0
+      },
+      "breathing": {
+        "breathing_rate": 12.202134873448514,
+        "breath_depth": 0.6767978722578031,
+        "rest_vs_exercise": 0.0,
+        "label": 2.0
+      },
+      "speech": {
+        "speech_rate": 170.1368262263055,
+        "pause_frequency": 0.05899131589008878,
+        "pitch_variability": 0.41316076838562804,
+        "label": 1.0
+      },
+      "emotion": {
+        "text_sentiment": 0.44708799381514774,
+        "voice_emotion": 0.19522235222011108,
+        "facial_emotion": 0.48645001824078726,
+        "label": 1.0
+      },
+      "posture": {
+        "head_tilt": -6.922169709318417,
+        "shoulder_alignment": -7.022996829210313,
+        "spine_angle": 89.6546356190017,
+        "label": 2.0
+      }
+    },
+    {
+      "report_id": "B_R012",
+      "date": "2026-01-24",
+      "heartbeat": {
+        "heart_rate": 96.43882373495315,
+        "rr_interval_variance": 0.05516882241889698,
+        "label": 2.0
+      },
+      "glucose": {
+        "age": 69.0,
+        "bmi": 20.96968136226097,
+        "meal_timing": 1.0,
+        "activity_level": 0.0,
+        "glucose_range": 1.0
+      },
+      "breathing": {
+        "breathing_rate": 13.80732610730102,
+        "breath_depth": 0.5565102845923,
+        "rest_vs_exercise": 0.0,
+        "label": 1.0
+      },
+      "speech": {
+        "speech_rate": 171.25521673661046,
+        "pause_frequency": 0.10023662604198341,
+        "pitch_variability": 0.3044021855203075,
+        "label": 0.0
+      },
+      "emotion": {
+        "text_sentiment": 0.3890104862674689,
+        "voice_emotion": 0.17387490695255226,
+        "facial_emotion": 0.6210166571731291,
+        "label": 2.0
+      },
+      "posture": {
+        "head_tilt": -3.6370295177230583,
+        "shoulder_alignment": 12.262717071639768,
+        "spine_angle": 89.0711417601312,
+        "label": 0.0
+      }
+    }
+  ]
+}

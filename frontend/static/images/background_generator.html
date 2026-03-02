@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Background</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 50%, #ADD8E6 100%);
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        // Create abstract medical background pattern
+        function drawBackground() {
+            // Clear canvas
+            ctx.fillStyle = 'rgba(135, 206, 235, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw abstract circles (medical theme)
+            for (let i = 0; i < 15; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const radius = Math.random() * 50 + 20;
+                const opacity = Math.random() * 0.1 + 0.05;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 140, 0, ${opacity})`;
+                ctx.fill();
+            }
+            
+            // Draw connecting lines
+            ctx.strokeStyle = 'rgba(255, 140, 0, 0.1)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 8; i++) {
+                ctx.beginPath();
+                ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                ctx.stroke();
+            }
+            
+            // Add "RehabSense" watermark
+            ctx.font = 'bold 48px Microsoft YaHei UI';
+            ctx.fillStyle = 'rgba(255, 140, 0, 0.05)';
+            ctx.textAlign = 'center';
+            ctx.fillText('RehabSense', canvas.width / 2, canvas.height / 2);
+        }
+        
+        drawBackground();
+        
+        // Save as image (you'll need to take screenshot)
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            drawBackground();
+        });
+    </script>
+</body>
+</html>
