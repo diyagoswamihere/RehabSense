@@ -106,7 +106,8 @@ def dashboard():
     if not patient_data:
         return "Patient data not found", 404
     
-    return render_template('dashboard_new.html', patient=patient_data)
+    # Use the existing dashboard template
+    return render_template('dashboard.html', patient=patient_data)
 
 @app.route('/api/predict', methods=['POST'])
 def predict():
