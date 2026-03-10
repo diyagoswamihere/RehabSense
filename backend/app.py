@@ -3,7 +3,7 @@ RehabSense Backend Server
 Flask application serving the rehabilitation monitoring portal
 """
 
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import json
 import os
 import sys
@@ -37,21 +37,58 @@ except Exception as e:
     sys.exit(1)
 
 
-def load_patient_data(patient_id):
-    """Load patient data from JSON file"""
-    # Map new patient IDs to old file names
+def _get_patient_filename(patient_id: str) -> str:
+    """Resolve patient JSON filename from patient_id."""
     file_mapping = {
         '1D55PL6': 'patient_A.json',
         '7D42PL2': 'patient_B.json'
     }
-    
-    filename = file_mapping.get(patient_id, f'patient_{patient_id}.json')
+    return file_mapping.get(patient_id, f'patient_{patient_id}.json')
+
+
+def load_patient_data(patient_id):
+    """Load patient data from JSON file."""
+    filename = _get_patient_filename(patient_id)
     filepath = os.path.join(DATA_DIR, 'patients', filename)
-    
+
     if os.path.exists(filepath):
         with open(filepath, 'r') as f:
             return json.load(f)
     return None
+
+
+def save_patient_data(patient):
+    """Persist patient JSON to disk."""
+    patient_id = patient.get('patient_id')
+    if not patient_id:
+        raise ValueError("patient_id is required to save patient data")
+
+    filename = _get_patient_filename(patient_id)
+    filepath = os.path.join(DATA_DIR, 'patients', filename)
+
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    with open(filepath, 'w') as f:
+        json.dump(patient, f, indent=2)
+
+
+def load_all_patients():
+    """Load all patients for admin dashboard."""
+    patients_dir = os.path.join(DATA_DIR, 'patients')
+    if not os.path.exists(patients_dir):
+        return []
+
+    patients = []
+    for fname in os.listdir(patients_dir):
+        if not fname.endswith('.json'):
+            continue
+        fpath = os.path.join(patients_dir, fname)
+        with open(fpath, 'r') as f:
+            try:
+                patient = json.load(f)
+                patients.append(patient)
+            except json.JSONDecodeError:
+                continue
+    return patients
 
 @app.route('/')
 def index():
@@ -92,7 +129,176 @@ def login():
 def logout():
     """Logout"""
     session.pop('patient_id', None)
-    return jsonify({'success': True})
+    session.pop('is_admin', None)
+    # After logout, send the user back to the main portal page
+    return redirect(url_for('index'))
+
+
+@app.route('/admin/login', methods=['POST'])
+def admin_login():
+    """Simple admin login with fixed credentials."""
+    data = request.json
+    email = data.get('email', '')
+    password = data.get('password', '')
+
+    if email == 'capstoneg_4@gmail.com' and password == 'lastreview@3451':
+        session['is_admin'] = True
+        return jsonify({'success': True})
+
+    return jsonify({'success': False, 'message': 'Invalid admin credentials.'})
+
+
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    """Admin dashboard showing all patients."""
+    if not session.get('is_admin'):
+        return redirect(url_for('index'))
+
+    patients = load_all_patients()
+    # Do not expose passwords in templates
+    for p in patients:
+        p.pop('password', None)
+
+    return render_template('admin_dashboard.html', patients=patients)
+
+
+@app.route('/admin/patients/add', methods=['POST'])
+def admin_add_patient():
+    """Add a new patient record (basic demographic details)."""
+    if not session.get('is_admin'):
+        return jsonify({'success': False, 'message': 'Not authorized'}), 403
+
+    data = request.json or {}
+    required_fields = ['patient_id', 'name', 'age']
+    for field in required_fields:
+        if not data.get(field):
+            return jsonify({'success': False, 'message': f'Missing field: {field}'}), 400
+
+    patient_id = data['patient_id'].upper()
+    existing = load_patient_data(patient_id)
+    if existing:
+        return jsonify({'success': False, 'message': 'Patient ID already exists'}), 400
+
+    new_patient = {
+        'patient_id': patient_id,
+        'name': data['name'],
+        'age': data.get('age'),
+        'gender': data.get('gender'),
+        'address': data.get('address'),
+        'phone': data.get('phone'),
+        'email': data.get('email'),
+        'consulting_doctor': data.get('consulting_doctor'),
+        'allergies': data.get('allergies'),
+        'image': data.get('image'),  # optional URL or filename
+        'password': data.get('password', ''),
+        'reports': []
+    }
+
+    save_patient_data(new_patient)
+    return jsonify({'success': True, 'patient': new_patient})
+
+
+@app.route('/admin/patient/<patient_id>/reports/add-data', methods=['POST'])
+def admin_add_report_data(patient_id):
+    """Admin manually enters structured report data."""
+    if not session.get('is_admin'):
+        return jsonify({'success': False, 'message': 'Not authorized'}), 403
+
+    patient = load_patient_data(patient_id)
+    if not patient:
+        return jsonify({'success': False, 'message': 'Patient not found'}), 404
+
+    data = request.json or {}
+
+    reports = patient.get('reports', [])
+    next_index = len(reports) + 1
+    report_id = f"{patient_id}_R{next_index:03d}"
+
+    new_report = {
+        'report_id': report_id,
+        'date': datetime.today().strftime('%Y-%m-%d'),
+        'heartbeat': {
+            'heart_rate': float(data.get('heart_rate', 0)),
+            'rr_interval_variance': float(data.get('rr_interval_variance', 0)),
+            'label': float(data.get('heartbeat_label', 0)),
+        },
+        'glucose': {
+            'age': float(data.get('glucose_age', 0)),
+            'bmi': float(data.get('bmi', 0)),
+            'meal_timing': float(data.get('meal_timing', 0)),
+            'activity_level': float(data.get('activity_level', 0)),
+            'glucose_range': float(data.get('glucose_range', 0)),
+        },
+        'breathing': {
+            'breathing_rate': float(data.get('breathing_rate', 0)),
+            'breath_depth': float(data.get('breath_depth', 0)),
+            'rest_vs_exercise': float(data.get('rest_vs_exercise', 0)),
+            'label': float(data.get('breathing_label', 0)),
+        },
+        'speech': {
+            'speech_rate': float(data.get('speech_rate', 0)),
+            'pause_frequency': float(data.get('pause_frequency', 0)),
+            'pitch_variability': float(data.get('pitch_variability', 0)),
+            'label': float(data.get('speech_label', 0)),
+        },
+        'emotion': {
+            'text_sentiment': float(data.get('text_sentiment', 0)),
+            'voice_emotion': float(data.get('voice_emotion', 0)),
+            'facial_emotion': float(data.get('facial_emotion', 0)),
+            'label': float(data.get('emotion_label', 0)),
+        },
+        'posture': {
+            'head_tilt': float(data.get('head_tilt', 0)),
+            'shoulder_alignment': float(data.get('shoulder_alignment', 0)),
+            'spine_angle': float(data.get('spine_angle', 0)),
+            'label': float(data.get('posture_label', 0)),
+        },
+    }
+
+    reports.append(new_report)
+    patient['reports'] = reports
+    save_patient_data(patient)
+
+    return jsonify({'success': True, 'report': new_report})
+
+
+@app.route('/admin/patient/<patient_id>/reports/upload', methods=['POST'])
+def admin_upload_report(patient_id):
+    """Admin uploads a report file (CSV, DOCX, etc.)."""
+    if not session.get('is_admin'):
+        return jsonify({'success': False, 'message': 'Not authorized'}), 403
+
+    patient = load_patient_data(patient_id)
+    if not patient:
+        return jsonify({'success': False, 'message': 'Patient not found'}), 404
+
+    if 'file' not in request.files:
+        return jsonify({'success': False, 'message': 'No file provided'}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'success': False, 'message': 'Empty filename'}), 400
+
+    uploads_dir = os.path.join(DATA_DIR, 'uploads', patient_id)
+    os.makedirs(uploads_dir, exist_ok=True)
+    filepath = os.path.join(uploads_dir, file.filename)
+    file.save(filepath)
+
+    reports = patient.get('reports', [])
+    next_index = len(reports) + 1
+    report_id = f"{patient_id}_U{next_index:03d}"
+
+    new_report = {
+        'report_id': report_id,
+        'date': datetime.today().strftime('%Y-%m-%d'),
+        'uploaded_file': filepath,
+    }
+
+    reports.append(new_report)
+    patient['reports'] = reports
+    save_patient_data(patient)
+
+    return jsonify({'success': True, 'report': new_report})
 
 @app.route('/dashboard')
 def dashboard():
@@ -219,6 +425,17 @@ def view_report(report_id):
                          recommendations=recommendations,
                          summary=summary)
 
+
+@app.route('/admin/patient/<patient_id>/report/<report_id>')
+def admin_view_report(patient_id, report_id):
+    """Admin view of a specific patient report (opens in new tab)."""
+    if not session.get('is_admin'):
+        return redirect(url_for('index'))
+
+    # Reuse existing report view logic by setting the session patient_id
+    session['patient_id'] = patient_id
+    return redirect(url_for('view_report', report_id=report_id))
+
 @app.route('/progress')
 def progress():
     """Progress tracking page"""
@@ -233,10 +450,28 @@ def progress():
     
     return render_template('progress.html', patient=patient_data)
 
+
+@app.route('/admin/patient/<patient_id>/analysis')
+def admin_patient_analysis(patient_id):
+    """Admin view of patient's progress/analysis (opens in new tab)."""
+    if not session.get('is_admin'):
+        return redirect(url_for('index'))
+
+    # Point existing progress machinery at the selected patient
+    session['patient_id'] = patient_id
+    return redirect(url_for('progress'))
+
 @app.route('/about')
 def about():
     """About page"""
     return render_template('about.html')
+
+
+@app.route('/contact')
+def contact_page():
+    """Simple contact redirect to home where contact modal exists."""
+    # For now just send users back to the home page; contact info is in the portal modal
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     print("\n" + "=" * 60)

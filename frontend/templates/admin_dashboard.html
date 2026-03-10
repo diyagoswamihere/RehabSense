@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - RehabSense{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-header-card">
+        <div class="admin-header-text">
+            <h1 class="admin-portal-name">RehabSense</h1>
+            <p class="admin-welcome">Welcome Admin</p>
+        </div>
+        <div class="admin-avatar-wrapper">
+            <img src="{{ url_for('static', filename='images/ad.png') }}" alt="Admin" class="admin-avatar">
+        </div>
+    </div>
+
+    <div class="admin-main-layout">
+        <div class="admin-patient-list">
+            <div class="admin-section-title">Patients</div>
+            <button class="admin-add-btn" onclick="openAddPatientModal()">+ Add Patient</button>
+            <div id="patientList">
+                {% for p in patients %}
+                <button class="patient-list-item" onclick="selectPatient('{{ p.patient_id }}')">
+                    <span class="patient-name">{{ p.name }}</span>
+                    <span class="patient-id">ID: {{ p.patient_id }}</span>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="admin-patient-details" id="patientDetailsPanel">
+            <p class="admin-hint">Select a patient from the left to view details and reports.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Add Patient Modal -->
+<div id="addPatientModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('addPatientModal')">&times;</span>
+        <h2>Add New Patient</h2>
+        <form id="addPatientForm">
+            <div class="form-group">
+                <label for="newPatientId">Patient ID</label>
+                <input type="text" id="newPatientId" required>
+            </div>
+            <div class="form-group">
+                <label for="newPatientName">Name</label>
+                <input type="text" id="newPatientName" required>
+            </div>
+            <div class="form-group">
+                <label for="newPatientAge">Age</label>
+                <input type="number" id="newPatientAge" required>
+            </div>
+            <div class="form-group">
+                <label for="newPatientGender">Gender</label>
+                <input type="text" id="newPatientGender">
+            </div>
+            <div class="form-group">
+                <label for="newPatientAddress">Address</label>
+                <input type="text" id="newPatientAddress">
+            </div>
+            <div class="form-group">
+                <label for="newPatientPhone">Phone</label>
+                <input type="text" id="newPatientPhone">
+            </div>
+            <div class="form-group">
+                <label for="newPatientEmail">Email</label>
+                <input type="email" id="newPatientEmail">
+            </div>
+            <button type="submit" class="submit-btn">Save Patient</button>
+        </form>
+    </div>
+</div>
+
+<!-- Add Report Modal -->
+<div id="addReportModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('addReportModal')">&times;</span>
+        <h2>Add Report</h2>
+        <div class="admin-add-report-actions">
+            <div class="admin-add-report-block">
+                <h3>Upload Report</h3>
+                <p>You can upload files like CSV, DOCX, etc.</p>
+                <form id="uploadReportForm">
+                    <input type="file" id="reportFile" name="file" accept=".csv,.doc,.docx,.pdf,.txt" required>
+                    <button type="submit" class="submit-btn mt-2">Upload File</button>
+                </form>
+            </div>
+            <div class="admin-add-report-block">
+                <h3>Enter Data Manually</h3>
+                <form id="enterDataForm">
+                    <div class="admin-parameters-grid">
+                        <!-- Heartbeat -->
+                        <div>
+                            <label>Heart Rate</label>
+                            <input type="number" step="0.01" name="heart_rate">
+                        </div>
+                        <div>
+                            <label>RR Interval Variance</label>
+                            <input type="number" step="0.0001" name="rr_interval_variance">
+                        </div>
+                        <!-- Glucose -->
+                        <div>
+                            <label>Glucose Age</label>
+                            <input type="number" step="0.1" name="glucose_age">
+                        </div>
+                        <div>
+                            <label>BMI</label>
+                            <input type="number" step="0.01" name="bmi">
+                        </div>
+                        <div>
+                            <label>Meal Timing</label>
+                            <input type="number" step="0.1" name="meal_timing">
+                        </div>
+                        <div>
+                            <label>Activity Level</label>
+                            <input type="number" step="0.1" name="activity_level">
+                        </div>
+                        <div>
+                            <label>Glucose Range</label>
+                            <input type="number" step="0.1" name="glucose_range">
+                        </div>
+                        <!-- Breathing -->
+                        <div>
+                            <label>Breathing Rate</label>
+                            <input type="number" step="0.01" name="breathing_rate">
+                        </div>
+                        <div>
+                            <label>Breath Depth</label>
+                            <input type="number" step="0.0001" name="breath_depth">
+                        </div>
+                        <div>
+                            <label>Rest vs Exercise</label>
+                            <input type="number" step="0.1" name="rest_vs_exercise">
+                        </div>
+                        <!-- Speech -->
+                        <div>
+                            <label>Speech Rate</label>
+                            <input type="number" step="0.01" name="speech_rate">
+                        </div>
+                        <div>
+                            <label>Pause Frequency</label>
+                            <input type="number" step="0.0001" name="pause_frequency">
+                        </div>
+                        <div>
+                            <label>Pitch Variability</label>
+                            <input type="number" step="0.0001" name="pitch_variability">
+                        </div>
+                        <!-- Emotion -->
+                        <div>
+                            <label>Text Sentiment</label>
+                            <input type="number" step="0.0001" name="text_sentiment">
+                        </div>
+                        <div>
+                            <label>Voice Emotion</label>
+                            <input type="number" step="0.0001" name="voice_emotion">
+                        </div>
+                        <div>
+                            <label>Facial Emotion</label>
+                            <input type="number" step="0.0001" name="facial_emotion">
+                        </div>
+                        <!-- Posture -->
+                        <div>
+                            <label>Head Tilt</label>
+                            <input type="number" step="0.01" name="head_tilt">
+                        </div>
+                        <div>
+                            <label>Shoulder Alignment</label>
+                            <input type="number" step="0.01" name="shoulder_alignment">
+                        </div>
+                        <div>
+                            <label>Spine Angle</label>
+                            <input type="number" step="0.01" name="spine_angle">
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn mt-3">Save Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentPatientId = null;
+
+    function selectPatient(patientId) {
+        currentPatientId = patientId;
+        const patients = {{ patients | tojson }};
+        const patient = patients.find(p => p.patient_id === patientId);
+        if (!patient) return;
+
+        const panel = document.getElementById('patientDetailsPanel');
+        let reportsHtml = '';
+        if (patient.reports && patient.reports.length) {
+            reportsHtml = '<ul class="admin-report-list">' +
+                patient.reports.map(r =>
+                    `<li>
+                        <a href="/admin/patient/${patient.patient_id}/report/${r.report_id}" target="_blank">
+                            <strong>${r.report_id}</strong> - ${r.date || ''}
+                        </a>
+                    </li>`
+                ).join('') + '</ul>';
+        } else {
+            reportsHtml = '<p class="admin-hint">No reports yet for this patient.</p>';
+        }
+
+        panel.innerHTML = `
+            <div class="admin-patient-summary">
+                <h2>${patient.name}</h2>
+                <p>ID: ${patient.patient_id}</p>
+                <p>Age: ${patient.age || '—'} | Gender: ${patient.gender || '—'}</p>
+                <p>Address: ${patient.address || '—'}</p>
+                <p>Phone: ${patient.phone || '—'} | Email: ${patient.email || '—'}</p>
+            </div>
+            <div class="admin-patient-actions">
+                <button class="admin-add-btn" onclick="openAddReportModal()">+ Add Report</button>
+                <button class="admin-add-btn" onclick="openAnalysis('${patient.patient_id}')">View Analysis</button>
+            </div>
+            <div class="admin-reports-section">
+                <h3>Reports</h3>
+                ${reportsHtml}
+            </div>
+        `;
+    }
+
+    function openAddPatientModal() {
+        document.getElementById('addPatientModal').style.display = 'block';
+    }
+
+    function openAddReportModal() {
+        if (!currentPatientId) {
+            alert('Please select a patient first.');
+            return;
+        }
+        document.getElementById('addReportModal').style.display = 'block';
+    }
+
+    function openAnalysis(patientId) {
+        const id = patientId || currentPatientId;
+        if (!id) {
+            alert('Please select a patient first.');
+            return;
+        }
+        window.open(`/admin/patient/${id}/analysis`, '_blank');
+    }
+
+    document.getElementById('addPatientForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+            patient_id: document.getElementById('newPatientId').value,
+            name: document.getElementById('newPatientName').value,
+            age: document.getElementById('newPatientAge').value,
+            gender: document.getElementById('newPatientGender').value,
+            address: document.getElementById('newPatientAddress').value,
+            phone: document.getElementById('newPatientPhone').value,
+            email: document.getElementById('newPatientEmail').value,
+        };
+
+        const resp = await fetch('/admin/patients/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        const data = await resp.json();
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || 'Failed to add patient');
+        }
+    });
+
+    document.getElementById('uploadReportForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentPatientId) {
+            alert('Please select a patient first.');
+            return;
+        }
+        const formData = new FormData();
+        const fileInput = document.getElementById('reportFile');
+        if (!fileInput.files.length) {
+            alert('Please choose a file');
+            return;
+        }
+        formData.append('file', fileInput.files[0]);
+
+        const resp = await fetch(`/admin/patient/${currentPatientId}/reports/upload`, {
+            method: 'POST',
+            body: formData,
+        });
+        const data = await resp.json();
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || 'Failed to upload report');
+        }
+    });
+
+    document.getElementById('enterDataForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentPatientId) {
+            alert('Please select a patient first.');
+            return;
+        }
+        const form = e.target;
+        const formData = new FormData(form);
+        const payload = {};
+        formData.forEach((value, key) => { payload[key] = value; });
+
+        const resp = await fetch(`/admin/patient/${currentPatientId}/reports/add-data`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        const data = await resp.json();
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || 'Failed to save report');
+        }
+    });
+</script>
+{% endblock %}
+

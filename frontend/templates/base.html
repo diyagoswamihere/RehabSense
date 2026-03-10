@@ -15,14 +15,16 @@
                 <p class="tagline">AI-Powered Rehabilitation Monitoring</p>
             </div>
             <div class="nav-links">
-                {% if session.patient_id %}
-                <a href="/dashboard">Dashboard</a>
-                <a href="/progress">Progress</a>
-                <a href="/about">About</a>
-                <a href="/logout" class="btn-logout">Logout</a>
+                {% if session.is_admin %}
+                <button class="nav-btn" onclick="window.location.href='/admin/dashboard'">Dashboard</button>
+                <button class="nav-btn" onclick="window.location.href='/contact'">Contact</button>
+                <button class="nav-btn" onclick="window.location.href='/logout'">Logout</button>
+                {% elif session.patient_id %}
+                <button class="nav-btn" onclick="window.location.href='/dashboard'">Dashboard</button>
+                <button class="nav-btn" onclick="window.location.href='/progress'">Progress</button>
+                <button class="nav-btn" onclick="window.location.href='/logout'">Logout</button>
                 {% else %}
-                <a href="/">Home</a>
-                <a href="/about">About</a>
+                <button class="nav-btn" onclick="window.location.href='/'">Home</button>
                 {% endif %}
             </div>
         </div>

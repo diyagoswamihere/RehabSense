@@ -11,11 +11,12 @@
                 Age: {{ patient.age }} | Gender: {{ patient.gender }} | Patient ID: {{ patient.patient_id }}
             </p>
         </div>
-        <div class="stats">
-            <div class="stat-card">
-                <span class="stat-value">{{ patient.reports|length }}</span>
-                <span class="stat-label">Total Reports</span>
-            </div>
+        <div class="patient-avatar-wrapper">
+            {% if patient.patient_id == '1D55PL6' %}
+                <img src="{{ url_for('static', filename='images/A.png') }}" alt="{{ patient.name }}" class="patient-avatar">
+            {% else %}
+                <img src="{{ url_for('static', filename='images/B.png') }}" alt="{{ patient.name }}" class="patient-avatar">
+            {% endif %}
         </div>
     </div>
 
@@ -64,31 +65,20 @@
     opacity: 0.9;
 }
 
-.stats {
+.patient-avatar-wrapper {
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    justify-content: center;
 }
 
-.stat-card {
-    /* Make dashboard cards fully opaque so only the background image looks translucent */
-    background: #ffffff;
-    padding: 1.5rem;
-    border-radius: 8px;
-    text-align: center;
-    min-width: 120px;
+.patient-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
-
-.stat-value {
-    display: block;
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.stat-label {
-    display: block;
-    font-size: 0.9rem;
-    opacity: 0.9;
 }
 
 .reports-section {

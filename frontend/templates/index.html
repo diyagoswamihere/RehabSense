@@ -233,8 +233,24 @@
             const adminId = document.getElementById('adminId').value;
             const password = document.getElementById('adminPassword').value;
             
-            // For now, just show an alert (admin functionality to be implemented)
-            alert('Admin login functionality will be implemented soon.');
+            try {
+                const response = await fetch('/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: adminId, password: password })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    window.location.href = '/admin/dashboard';
+                } else {
+                    alert(data.message || 'Admin login failed. Please try again.');
+                }
+            } catch (error) {
+                alert('Error logging in as admin. Please try again.');
+            }
         });
     </script>
 </body>
