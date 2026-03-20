@@ -5,12 +5,12 @@
 {% block content %}
 <div class="container">
     <div class="about-header">
-        <h1>About RehabSense</h1>
-        <p class="subtitle">AI-Powered Rehabilitation Monitoring System</p>
+        <h1>{{ t('about_heading') }}</h1>
+        <p class="subtitle">{{ t('ai_powered_rehab_system') }}</p>
     </div>
 
     <div class="about-section">
-        <h2>Project Overview</h2>
+        <h2>{{ t('project_overview') }}</h2>
         <p>
             RehabSense is an educational prototype demonstrating how artificial intelligence can support 
             rehabilitation patients through comprehensive health monitoring. This system integrates six 
@@ -20,12 +20,12 @@
     </div>
 
     <div class="models-section">
-        <h2>Six AI Models</h2>
+        <h2>{{ t('six_ai_models') }}</h2>
         
         <div class="model-grid">
             <div class="model-card">
                 <span class="model-icon"></span>
-                <h3>Heartbeat Abnormality Detector</h3>
+                <h3>{{ t('heartbeat_abnormality_detector') }}</h3>
                 <p><strong>Algorithm:</strong> Random Forest Classifier</p>
                 <p><strong>Input:</strong> Heart rate, RR interval variance</p>
                 <p><strong>Output:</strong> Normal, Bradycardia, Tachycardia, Irregular</p>
@@ -79,29 +79,29 @@
             <div class="workflow-step">
                 <span class="step-number">1</span>
                 <div class="step-content">
-                    <h3>Data Collection</h3>
-                    <p>Patient health metrics are collected through reports</p>
+                    <h3>{{ t('data_collection') }}</h3>
+                    <p>{{ t('patient_metrics_collected') }}</p>
                 </div>
             </div>
             <div class="workflow-step">
                 <span class="step-number">2</span>
                 <div class="step-content">
-                    <h3>AI Analysis</h3>
-                    <p>Six trained machine learning models analyze the data</p>
+                    <h3>{{ t('ai_analysis') }}</h3>
+                    <p>{{ t('six_models_analyze') }}</p>
                 </div>
             </div>
             <div class="workflow-step">
                 <span class="step-number">3</span>
                 <div class="step-content">
-                    <h3>Insights Generation</h3>
-                    <p>System generates health status predictions</p>
+                    <h3>{{ t('insights_generation') }}</h3>
+                    <p>{{ t('health_status_predictions') }}</p>
                 </div>
             </div>
             <div class="workflow-step">
                 <span class="step-number">4</span>
                 <div class="step-content">
-                    <h3>Recommendations</h3>
-                    <p>Personalized exercises and lifestyle tips are provided</p>
+                    <h3>{{ t('recommendations_heading') }}</h3>
+                    <p>{{ t('personalized_exercise_tips') }}</p>
                 </div>
             </div>
         </div>

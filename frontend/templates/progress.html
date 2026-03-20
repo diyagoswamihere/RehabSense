@@ -10,55 +10,55 @@
 <div class="container">
     <div class="page-header">
         <div>
-            <h1>Progress Tracking</h1>
-            <p class="subtitle">{{ patient.name }} - Monitoring your rehabilitation journey</p>
+            <h1>{{ t('view_progress') }}</h1>
+            <p class="subtitle">{{ patient.name }} - {{ t('hero_tagline') }}</p>
         </div>
-        <a href="/dashboard" class="btn-secondary">← Back to Dashboard</a>
+        <a href="/dashboard" class="btn-secondary">← {{ t('nav_dashboard') }}</a>
     </div>
 
     <div class="progress-info">
         <div class="info-card">
             <span class="info-icon"></span>
             <div>
-                <h3>Total Reports</h3>
+                <h3>{{ t('total_reports') }}</h3>
                 <p class="info-value">{{ patient.reports|length }}</p>
             </div>
         </div>
         <div class="info-card">
             <span class="info-icon"></span>
             <div>
-                <h3>Tracking Period</h3>
-                <p class="info-value">{{ patient.reports|length }} weeks</p>
+                <h3>{{ t('tracking_period') }}</h3>
+                <p class="info-value">{{ patient.reports|length }} {{ t('weeks') }}</p>
             </div>
         </div>
     </div>
 
     <div class="charts-section">
-        <h2>Health Metrics Over Time</h2>
+        <h2>{{ t('health_metrics_over_time') }}</h2>
         
         <div class="chart-container">
-            <h3>Heart Rate Trend</h3>
+            <h3>{{ t('heart_rate_trend') }}</h3>
             <canvas id="heartRateChart"></canvas>
         </div>
 
         <div class="chart-container">
-            <h3>Posture Score Progression</h3>
+            <h3>{{ t('posture_score_progression') }}</h3>
             <canvas id="postureChart"></canvas>
         </div>
 
         <div class="chart-container">
-            <h3>Emotional State Distribution</h3>
+            <h3>{{ t('emotional_state_distribution') }}</h3>
             <canvas id="emotionChart"></canvas>
         </div>
 
         <div class="chart-container">
-            <h3>Breathing Pattern Status</h3>
+            <h3>{{ t('breathing_pattern_status') }}</h3>
             <canvas id="breathingChart"></canvas>
         </div>
     </div>
 
     <div id="loadingMessage" style="text-align: center; padding: 3rem;">
-        <p>Loading your progress data...</p>
+        <p>{{ t('loading_progress_data') }}</p>
     </div>
 </div>
 

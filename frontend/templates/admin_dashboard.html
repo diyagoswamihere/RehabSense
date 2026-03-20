@@ -6,8 +6,8 @@
 <div class="container">
     <div class="admin-header-card">
         <div class="admin-header-text">
-            <h1 class="admin-portal-name">RehabSense</h1>
-            <p class="admin-welcome">Welcome Admin</p>
+            <h1 class="admin-portal-name">{{ t('app_name') }}</h1>
+            <p class="admin-welcome">{{ t('welcome_admin') }}</p>
         </div>
         <div class="admin-avatar-wrapper">
             <img src="{{ url_for('static', filename='images/ad.png') }}" alt="Admin" class="admin-avatar">
@@ -16,20 +16,20 @@
 
     <div class="admin-main-layout">
         <div class="admin-patient-list">
-            <div class="admin-section-title">Patients</div>
-            <button class="admin-add-btn" onclick="openAddPatientModal()">+ Add Patient</button>
+            <div class="admin-section-title">{{ t('patients') }}</div>
+            <button class="admin-add-btn" onclick="openAddPatientModal()">+ {{ t('add_patient') }}</button>
             <div id="patientList">
                 {% for p in patients %}
                 <button class="patient-list-item" onclick="selectPatient('{{ p.patient_id }}')">
                     <span class="patient-name">{{ p.name }}</span>
-                    <span class="patient-id">ID: {{ p.patient_id }}</span>
+                    <span class="patient-id">{{ t('id') }}: {{ p.patient_id }}</span>
                 </button>
                 {% endfor %}
             </div>
         </div>
 
         <div class="admin-patient-details" id="patientDetailsPanel">
-            <p class="admin-hint">Select a patient from the left to view details and reports.</p>
+            <p class="admin-hint">{{ t('select_patient_hint') }}</p>
         </div>
     </div>
 </div>
@@ -38,37 +38,37 @@
 <div id="addPatientModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('addPatientModal')">&times;</span>
-        <h2>Add New Patient</h2>
+        <h2>{{ t('add_new_patient') }}</h2>
         <form id="addPatientForm">
             <div class="form-group">
-                <label for="newPatientId">Patient ID</label>
+                <label for="newPatientId">{{ t('patient_id') }}</label>
                 <input type="text" id="newPatientId" required>
             </div>
             <div class="form-group">
-                <label for="newPatientName">Name</label>
+                <label for="newPatientName">{{ t('name') }}</label>
                 <input type="text" id="newPatientName" required>
             </div>
             <div class="form-group">
-                <label for="newPatientAge">Age</label>
+                <label for="newPatientAge">{{ t('age') }}</label>
                 <input type="number" id="newPatientAge" required>
             </div>
             <div class="form-group">
-                <label for="newPatientGender">Gender</label>
+                <label for="newPatientGender">{{ t('gender') }}</label>
                 <input type="text" id="newPatientGender">
             </div>
             <div class="form-group">
-                <label for="newPatientAddress">Address</label>
+                <label for="newPatientAddress">{{ t('address') }}</label>
                 <input type="text" id="newPatientAddress">
             </div>
             <div class="form-group">
-                <label for="newPatientPhone">Phone</label>
+                <label for="newPatientPhone">{{ t('phone') }}</label>
                 <input type="text" id="newPatientPhone">
             </div>
             <div class="form-group">
-                <label for="newPatientEmail">Email</label>
+                <label for="newPatientEmail">{{ t('email') }}</label>
                 <input type="email" id="newPatientEmail">
             </div>
-            <button type="submit" class="submit-btn">Save Patient</button>
+            <button type="submit" class="submit-btn">{{ t('save_patient') }}</button>
         </form>
     </div>
 </div>
@@ -77,104 +77,98 @@
 <div id="addReportModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('addReportModal')">&times;</span>
-        <h2>Add Report</h2>
+        <h2>{{ t('add_report') }}</h2>
         <div class="admin-add-report-actions">
             <div class="admin-add-report-block">
-                <h3>Upload Report</h3>
-                <p>You can upload files like CSV, DOCX, etc.</p>
+                <h3>{{ t('upload_report') }}</h3>
+                <p>{{ t('upload_files_hint') }}</p>
                 <form id="uploadReportForm">
                     <input type="file" id="reportFile" name="file" accept=".csv,.doc,.docx,.pdf,.txt" required>
-                    <button type="submit" class="submit-btn mt-2">Upload File</button>
+                    <button type="submit" class="submit-btn mt-2">{{ t('upload_file') }}</button>
                 </form>
             </div>
             <div class="admin-add-report-block">
-                <h3>Enter Data Manually</h3>
+                <h3>{{ t('enter_data_manually') }}</h3>
                 <form id="enterDataForm">
                     <div class="admin-parameters-grid">
-                        <!-- Heartbeat -->
                         <div>
-                            <label>Heart Rate</label>
+                            <label>{{ t('heart_rate') }}</label>
                             <input type="number" step="0.01" name="heart_rate">
                         </div>
                         <div>
-                            <label>RR Interval Variance</label>
+                            <label>{{ t('rr_variance') }}</label>
                             <input type="number" step="0.0001" name="rr_interval_variance">
                         </div>
-                        <!-- Glucose -->
                         <div>
-                            <label>Glucose Age</label>
+                            <label>{{ t('glucose_age') }}</label>
                             <input type="number" step="0.1" name="glucose_age">
                         </div>
                         <div>
-                            <label>BMI</label>
+                            <label>{{ t('bmi') }}</label>
                             <input type="number" step="0.01" name="bmi">
                         </div>
                         <div>
-                            <label>Meal Timing</label>
+                            <label>{{ t('meal_timing') }}</label>
                             <input type="number" step="0.1" name="meal_timing">
                         </div>
                         <div>
-                            <label>Activity Level</label>
+                            <label>{{ t('activity_level') }}</label>
                             <input type="number" step="0.1" name="activity_level">
                         </div>
                         <div>
-                            <label>Glucose Range</label>
+                            <label>{{ t('glucose_range') }}</label>
                             <input type="number" step="0.1" name="glucose_range">
                         </div>
-                        <!-- Breathing -->
                         <div>
-                            <label>Breathing Rate</label>
+                            <label>{{ t('breathing_rate') }}</label>
                             <input type="number" step="0.01" name="breathing_rate">
                         </div>
                         <div>
-                            <label>Breath Depth</label>
+                            <label>{{ t('breath_depth') }}</label>
                             <input type="number" step="0.0001" name="breath_depth">
                         </div>
                         <div>
-                            <label>Rest vs Exercise</label>
+                            <label>{{ t('rest_vs_exercise') }}</label>
                             <input type="number" step="0.1" name="rest_vs_exercise">
                         </div>
-                        <!-- Speech -->
                         <div>
-                            <label>Speech Rate</label>
+                            <label>{{ t('speech_rate') }}</label>
                             <input type="number" step="0.01" name="speech_rate">
                         </div>
                         <div>
-                            <label>Pause Frequency</label>
+                            <label>{{ t('pause_frequency') }}</label>
                             <input type="number" step="0.0001" name="pause_frequency">
                         </div>
                         <div>
-                            <label>Pitch Variability</label>
+                            <label>{{ t('pitch_variability') }}</label>
                             <input type="number" step="0.0001" name="pitch_variability">
                         </div>
-                        <!-- Emotion -->
                         <div>
-                            <label>Text Sentiment</label>
+                            <label>{{ t('text_sentiment') }}</label>
                             <input type="number" step="0.0001" name="text_sentiment">
                         </div>
                         <div>
-                            <label>Voice Emotion</label>
+                            <label>{{ t('voice_emotion') }}</label>
                             <input type="number" step="0.0001" name="voice_emotion">
                         </div>
                         <div>
-                            <label>Facial Emotion</label>
+                            <label>{{ t('facial_emotion') }}</label>
                             <input type="number" step="0.0001" name="facial_emotion">
                         </div>
-                        <!-- Posture -->
                         <div>
-                            <label>Head Tilt</label>
+                            <label>{{ t('head_tilt') }}</label>
                             <input type="number" step="0.01" name="head_tilt">
                         </div>
                         <div>
-                            <label>Shoulder Alignment</label>
+                            <label>{{ t('shoulder_alignment') }}</label>
                             <input type="number" step="0.01" name="shoulder_alignment">
                         </div>
                         <div>
-                            <label>Spine Angle</label>
+                            <label>{{ t('spine_angle') }}</label>
                             <input type="number" step="0.01" name="spine_angle">
                         </div>
                     </div>
-                    <button type="submit" class="submit-btn mt-3">Save Report</button>
+                    <button type="submit" class="submit-btn mt-3">{{ t('save_report') }}</button>
                 </form>
             </div>
         </div>

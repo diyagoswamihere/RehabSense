@@ -6,21 +6,21 @@
 <div class="container">
     <div class="report-header">
         <div>
-            <h1>Health Report</h1>
+            <h1>{{ t('your_health_reports') }}</h1>
             <p class="report-meta">{{ patient.name }} | {{ report.date }} | {{ report.report_id }}</p>
         </div>
-        <a href="/dashboard" class="btn-secondary">← Back to Dashboard</a>
+        <a href="/dashboard" class="btn-secondary">← {{ t('nav_dashboard') }}</a>
     </div>
 
     <div class="summary-section">
-        <h2>Overall Summary</h2>
+        <h2>{{ t('summary_heading') }}</h2>
         <div class="summary-card">
             <p>{{ summary }}</p>
         </div>
     </div>
 
     <div class="predictions-section">
-        <h2>AI Analysis Results</h2>
+        <h2>{{ t('ai_analysis_results') }}</h2>
         
         <div class="predictions-grid">
             <!-- Heartbeat -->
@@ -28,14 +28,14 @@
             <div class="prediction-card">
                 <div class="prediction-header">
                     <span class="icon"></span>
-                    <h3>Heartbeat Analysis</h3>
+                    <h3>{{ t('heartbeat_analysis') }}</h3>
                 </div>
                 <div class="prediction-result {{ 'status-good' if predictions.heartbeat.status == 'Normal' else 'status-warning' }}">
                     {{ predictions.heartbeat.status }}
                 </div>
                 <div class="prediction-details">
-                    <p><strong>Heart Rate:</strong> {{ predictions.heartbeat.heart_rate|round(1) }} bpm</p>
-                    <p><strong>Confidence:</strong> {{ (predictions.heartbeat.confidence * 100)|round(1) }}%</p>
+                    <p><strong>{{ t('heart_rate') }}:</strong> {{ predictions.heartbeat.heart_rate|round(1) }} bpm</p>
+                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.heartbeat.confidence * 100)|round(1) }}%</p>
                 </div>
             </div>
             {% endif %}
@@ -45,14 +45,14 @@
             <div class="prediction-card">
                 <div class="prediction-header">
                     <span class="icon"></span>
-                    <h3>Blood Glucose</h3>
+                    <h3>{{ t('blood_glucose') }}</h3>
                 </div>
                 <div class="prediction-result {{ 'status-good' if predictions.glucose.range == 'Normal' else 'status-warning' }}">
                     {{ predictions.glucose.range }}
                 </div>
                 <div class="prediction-details">
-                    <p><strong>BMI:</strong> {{ predictions.glucose.bmi|round(1) }}</p>
-                    <p><strong>Confidence:</strong> {{ (predictions.glucose.confidence * 100)|round(1) }}%</p>
+                    <p><strong>{{ t('bmi') }}:</strong> {{ predictions.glucose.bmi|round(1) }}</p>
+                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.glucose.confidence * 100)|round(1) }}%</p>
                 </div>
             </div>
             {% endif %}
@@ -62,14 +62,14 @@
             <div class="prediction-card">
                 <div class="prediction-header">
                     <span class="icon"></span>
-                    <h3>Breathing Pattern</h3>
+                    <h3>{{ t('breathing_pattern') }}</h3>
                 </div>
                 <div class="prediction-result {{ 'status-good' if predictions.breathing.status == 'Normal' else 'status-warning' }}">
                     {{ predictions.breathing.status }}
                 </div>
                 <div class="prediction-details">
-                    <p><strong>Rate:</strong> {{ predictions.breathing.breathing_rate|round(1) }} breaths/min</p>
-                    <p><strong>Confidence:</strong> {{ (predictions.breathing.confidence * 100)|round(1) }}%</p>
+                    <p><strong>{{ t('rate') }}:</strong> {{ predictions.breathing.breathing_rate|round(1) }} breaths/min</p>
+                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.breathing.confidence * 100)|round(1) }}%</p>
                 </div>
             </div>
             {% endif %}
@@ -79,14 +79,14 @@
             <div class="prediction-card">
                 <div class="prediction-header">
                     <span class="icon"></span>
-                    <h3>Speech Pattern</h3>
+                    <h3>{{ t('speech_pattern') }}</h3>
                 </div>
                 <div class="prediction-result {{ 'status-good' if predictions.speech.pattern == 'Normal Speech' else 'status-warning' }}">
                     {{ predictions.speech.pattern }}
                 </div>
                 <div class="prediction-details">
-                    <p><strong>Rate:</strong> {{ predictions.speech.speech_rate|round(0) }} words/min</p>
-                    <p><strong>Confidence:</strong> {{ (predictions.speech.confidence * 100)|round(1) }}%</p>
+                    <p><strong>{{ t('rate') }}:</strong> {{ predictions.speech.speech_rate|round(0) }} words/min</p>
+                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.speech.confidence * 100)|round(1) }}%</p>
                 </div>
             </div>
             {% endif %}
@@ -96,14 +96,14 @@
             <div class="prediction-card">
                 <div class="prediction-header">
                     <span class="icon"></span>
-                    <h3>Emotional State</h3>
+                    <h3>{{ t('emotional_state') }}</h3>
                 </div>
                 <div class="prediction-result {{ 'status-good' if predictions.emotion.state in ['Happy', 'Neutral'] else 'status-warning' }}">
                     {{ predictions.emotion.state }}
                 </div>
                 <div class="prediction-details">
-                    <p><strong>Sentiment Score:</strong> {{ (predictions.emotion.text_sentiment * 100)|round(0) }}%</p>
-                    <p><strong>Confidence:</strong> {{ (predictions.emotion.confidence * 100)|round(1) }}%</p>
+                    <p><strong>{{ t('sentiment_score') }}:</strong> {{ (predictions.emotion.text_sentiment * 100)|round(0) }}%</p>
+                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.emotion.confidence * 100)|round(1) }}%</p>
                 </div>
             </div>
             {% endif %}
@@ -113,14 +113,14 @@
             <div class="prediction-card">
                 <div class="prediction-header">
                     <span class="icon">🧍</span>
-                    <h3>Posture Analysis</h3>
+                    <h3>{{ t('posture_analysis') }}</h3>
                 </div>
                 <div class="prediction-result {{ 'status-good' if predictions.posture.posture == 'Good Posture' else 'status-warning' }}">
                     {{ predictions.posture.posture }}
                 </div>
                 <div class="prediction-details">
-                    <p><strong>Posture Score:</strong> {{ predictions.posture.score|round(0) }}/100</p>
-                    <p><strong>Confidence:</strong> {{ (predictions.posture.confidence * 100)|round(1) }}%</p>
+                    <p><strong>{{ t('posture_score') }}:</strong> {{ predictions.posture.score|round(0) }}/100</p>
+                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.posture.confidence * 100)|round(1) }}%</p>
                 </div>
             </div>
             {% endif %}
@@ -128,7 +128,7 @@
     </div>
 
     <div class="recommendations-section">
-        <h2>Personalized Recommendations</h2>
+        <h2>{{ t('personalized_recommendations') }}</h2>
         
         {% for key, rec in recommendations.items() %}
         <div class="recommendation-card">
@@ -136,7 +136,7 @@
             
             {% if rec.exercises %}
             <div class="rec-category">
-                <h4>Exercises & Activities</h4>
+                <h4>{{ t('exercises_activities') }}</h4>
                 <ul>
                     {% for exercise in rec.exercises %}
                     <li>{{ exercise }}</li>
@@ -147,7 +147,7 @@
 
             {% if rec.lifestyle %}
             <div class="rec-category">
-                <h4>Lifestyle Tips</h4>
+                <h4>{{ t('lifestyle_tips') }}</h4>
                 <ul>
                     {% for tip in rec.lifestyle %}
                     <li>{{ tip }}</li>
@@ -158,7 +158,7 @@
 
             {% if rec.tips %}
             <div class="rec-category tips">
-                <h4>Important Notes</h4>
+                <h4>{{ t('important_notes') }}</h4>
                 <ul>
                     {% for tip in rec.tips %}
                     <li>{{ tip }}</li>

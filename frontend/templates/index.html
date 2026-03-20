@@ -9,12 +9,22 @@
 <body>
     <!-- Header Navigation -->
     <header class="header-nav">
-        <div class="container">
-            <button class="nav-btn" onclick="goHome()">Home</button>
-            <button class="nav-btn" onclick="showLoginModal()">Login</button>
-            <button class="nav-btn" onclick="showAboutModal()">About</button>
-            <button class="nav-btn" onclick="showContactModal()">Contact us</button>
-            <button class="nav-btn" onclick="showServicesModal()">Services</button>
+        <div class="container" style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+            <div>
+                <button class="nav-btn" onclick="goHome()">{{ t('nav_home') }}</button>
+                <button class="nav-btn" onclick="showLoginModal()">{{ t('nav_login') }}</button>
+                <button class="nav-btn" onclick="showAboutModal()">{{ t('about_heading') }}</button>
+                <button class="nav-btn" onclick="showContactModal()">{{ t('nav_contact') }}</button>
+                <button class="nav-btn" onclick="showServicesModal()">{{ t('services') }}</button>
+            </div>
+            <div>
+                <label for="langSelect" style="font-weight:600; margin-right:0.4rem;">{{ t('language') }}:</label>
+                <select id="langSelect" onchange="window.location.href='/set_language/'+this.value" style="border-radius:4px; padding:.35rem .5rem;">
+                    {% for lang in supported_languages %}
+                    <option value="{{ lang }}" {% if current_lang == lang %}selected{% endif %}>{{ language_labels.get(lang, lang) }}</option>
+                    {% endfor %}
+                </select>
+            </div>
         </div>
     </header>
 
@@ -25,9 +35,9 @@
                 <img src="{{ url_for('static', filename='images/ss.png') }}" alt="RehabSense" class="hero-image" onerror="this.style.display='none'">
             </div>
             <div class="hero-content">
-                <h1 class="hero-title">RehabSense</h1>
-                <p class="hero-tagline">Your smart Rehabilitation Assistant</p>
-                <button class="get-started-btn" onclick="showLoginModal()">Get Started</button>
+                <h1 class="hero-title">{{ t('hero_title') }}</h1>
+                <p class="hero-tagline">{{ t('hero_tagline') }}</p>
+                <button class="get-started-btn" onclick="showLoginModal()">{{ t('get_started') }}</button>
             </div>
         </div>
     </section>
@@ -91,10 +101,10 @@
     <div id="contactModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('contactModal')">&times;</span>
-            <h2>Contact Us</h2>
+            <h2>{{ t('nav_contact') }}</h2>
             <div class="contact-info">
-                <p><strong>Drop a mail:</strong> diya13goswami@gmail.com</p>
-                <p><strong>Ring us:</strong> +91 6909371878</p>
+                <p><strong>{{ t('drop_mail') }}:</strong> diya13goswami@gmail.com</p>
+                <p><strong>{{ t('ring_us') }}:</strong> +91 6909371878</p>
             </div>
         </div>
     </div>
@@ -103,10 +113,10 @@
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('loginModal')">&times;</span>
-            <h2>Login Options</h2>
+            <h2>{{ t('login_options') }}</h2>
             <div class="login-options">
-                <button class="login-option-btn" onclick="showPatientLogin()">Login as Patient</button>
-                <button class="login-option-btn" onclick="showAdminLogin()">Login as Administrator</button>
+                <button class="login-option-btn" onclick="showPatientLogin()">{{ t('login_as_patient') }}</button>
+                <button class="login-option-btn" onclick="showAdminLogin()">{{ t('login_as_admin') }}</button>
             </div>
         </div>
     </div>
@@ -115,17 +125,17 @@
     <div id="patientLoginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('patientLoginModal')">&times;</span>
-            <h2>Patient Login</h2>
+            <h2>{{ t('patient_login') }}</h2>
             <form id="patientLoginForm">
                 <div class="form-group">
-                    <label for="patientId">Patient ID</label>
-                    <input type="text" id="patientId" name="patientId" placeholder="Enter your patient ID" required>
+                    <label for="patientId">{{ t('patient_id') }}</label>
+                    <input type="text" id="patientId" name="patientId" placeholder="{{ t('enter_patient_id') }}" required>
                 </div>
                 <div class="form-group">
-                    <label for="patientPassword">Password</label>
-                    <input type="password" id="patientPassword" name="patientPassword" placeholder="Enter your password" required>
+                    <label for="patientPassword">{{ t('password') }}</label>
+                    <input type="password" id="patientPassword" name="patientPassword" placeholder="{{ t('enter_password') }}" required>
                 </div>
-                <button type="submit" class="submit-btn">Login</button>
+                <button type="submit" class="submit-btn">{{ t('submit') }}</button>
             </form>
         </div>
     </div>
@@ -134,17 +144,17 @@
     <div id="adminLoginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('adminLoginModal')">&times;</span>
-            <h2>Administrator Login</h2>
+            <h2>{{ t('admin_login') }}</h2>
             <form id="adminLoginForm">
                 <div class="form-group">
-                    <label for="adminId">Admin ID</label>
-                    <input type="text" id="adminId" name="adminId" placeholder="Enter your admin ID" required>
+                    <label for="adminId">{{ t('admin_id') }}</label>
+                    <input type="text" id="adminId" name="adminId" placeholder="{{ t('enter_admin_id') }}" required>
                 </div>
                 <div class="form-group">
-                    <label for="adminPassword">Password</label>
-                    <input type="password" id="adminPassword" name="adminPassword" placeholder="Enter your password" required>
+                    <label for="adminPassword">{{ t('password') }}</label>
+                    <input type="password" id="adminPassword" name="adminPassword" placeholder="{{ t('enter_password') }}" required>
                 </div>
-                <button type="submit" class="submit-btn">Login</button>
+                <button type="submit" class="submit-btn">{{ t('submit') }}</button>
             </form>
         </div>
     </div>

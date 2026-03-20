@@ -11,20 +11,20 @@
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
-                <h1>RehabSense</h1>
-                <p class="tagline">AI-Powered Rehabilitation Monitoring</p>
+                <h1>{{ t('app_name') }}</h1>
+                <p class="tagline">{{ t('hero_tagline') }}</p>
             </div>
             <div class="nav-links">
                 {% if session.is_admin %}
-                <button class="nav-btn" onclick="window.location.href='/admin/dashboard'">Dashboard</button>
-                <button class="nav-btn" onclick="window.location.href='/contact'">Contact</button>
-                <button class="nav-btn" onclick="window.location.href='/logout'">Logout</button>
+                <button class="nav-btn" onclick="window.location.href='/admin/dashboard'">{{ t('admin_dashboard') }}</button>
+                <button class="nav-btn" onclick="window.location.href='/contact'">{{ t('nav_contact') }}</button>
+                <button class="nav-btn" onclick="window.location.href='/logout'">{{ t('nav_logout') }}</button>
                 {% elif session.patient_id %}
-                <button class="nav-btn" onclick="window.location.href='/dashboard'">Dashboard</button>
-                <button class="nav-btn" onclick="window.location.href='/progress'">Progress</button>
-                <button class="nav-btn" onclick="window.location.href='/logout'">Logout</button>
+                <button class="nav-btn" onclick="window.location.href='/dashboard'">{{ t('nav_dashboard') }}</button>
+                <button class="nav-btn" onclick="window.location.href='/progress'">{{ t('nav_progress') }}</button>
+                <button class="nav-btn" onclick="window.location.href='/logout'">{{ t('nav_logout') }}</button>
                 {% else %}
-                <button class="nav-btn" onclick="window.location.href='/'">Home</button>
+                <button class="nav-btn" onclick="window.location.href='/'">{{ t('nav_home') }}</button>
                 {% endif %}
             </div>
         </div>

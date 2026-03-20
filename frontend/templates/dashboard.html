@@ -6,9 +6,9 @@
 <div class="container">
     <div class="dashboard-header">
         <div class="patient-info">
-            <h1>Welcome, {{ patient.name }}</h1>
+            <h1>{{ t('welcome') }}, {{ patient.name }}</h1>
             <p class="patient-details">
-                Age: {{ patient.age }} | Gender: {{ patient.gender }} | Patient ID: {{ patient.patient_id }}
+                {{ t('patient_id') }}: {{ patient.patient_id }} | Age: {{ patient.age }} | Gender: {{ patient.gender }}
             </p>
         </div>
         <div class="patient-avatar-wrapper">
@@ -21,16 +21,16 @@
     </div>
 
     <div class="reports-section">
-        <h2>Your Health Reports</h2>
+        <h2>{{ t('your_health_reports') }}</h2>
         <div class="reports-grid">
             {% for report in patient.reports %}
             <div class="report-card">
                 <div class="report-header">
-                    <h3>Report {{ loop.index }}</h3>
+                    <h3>{{ t('view_details') }} {{ loop.index }}</h3>
                     <span class="report-date">{{ report.date }}</span>
                 </div>
                 <div class="report-id">{{ report.report_id }}</div>
-                <a href="/report/{{ report.report_id }}" class="btn-secondary">View Details</a>
+                <a href="/report/{{ report.report_id }}" class="btn-secondary">{{ t('view_details') }}</a>
             </div>
             {% endfor %}
         </div>
@@ -38,7 +38,7 @@
 
     {% if patient.reports|length > 1 %}
     <div class="quick-actions">
-        <a href="/progress" class="btn-primary">View Progress Over Time</a>
+        <a href="/progress" class="btn-primary">{{ t('view_progress') }}</a>
     </div>
     {% endif %}
 </div>

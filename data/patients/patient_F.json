@@ -1,0 +1,132 @@
+{
+  "patient_id": "06C06PL42",
+  "name": "Amit Reddy",
+  "age": 51,
+  "gender": "M",
+  "address": "109 Jamnagar, Karnataka",
+  "consulting_doctor": "Dr. Rahul Kapoor",
+  "allergies": "Nuts",
+  "password": "pass6#2026",
+  "reports": [
+    {
+      "report_id": "F_R001",
+      "date": "2025-08-10",
+      "heartbeat": {
+        "heart_rate": 79.9964,
+        "rr_interval_variance": 0.144878116903,
+        "label": 3.0
+      },
+      "glucose": {
+        "age": 51.0,
+        "bmi": 19.0124,
+        "meal_timing": 1.0,
+        "activity_level": 0.0,
+        "glucose_range": 0.0
+      },
+      "breathing": {
+        "breathing_rate": 15.791802908163,
+        "breath_depth": 0.693987840618,
+        "rest_vs_exercise": 1.0,
+        "label": 0.0
+      },
+      "speech": {
+        "speech_rate": 133.008540235837,
+        "pause_frequency": 0.184893473764,
+        "pitch_variability": 0.467754852333,
+        "label": 2.0
+      },
+      "emotion": {
+        "text_sentiment": 0.157432727939,
+        "voice_emotion": 0.872545232292,
+        "facial_emotion": 0.256078025668,
+        "label": 0.0
+      },
+      "posture": {
+        "head_tilt": -17.259146691848,
+        "shoulder_alignment": -4.320391366242,
+        "spine_angle": 113.090960098506,
+        "label": 1.0
+      }
+    },
+    {
+      "report_id": "F_R002",
+      "date": "2025-02-19",
+      "heartbeat": {
+        "heart_rate": 70.8032,
+        "rr_interval_variance": 0.101342298424,
+        "label": 0.0
+      },
+      "glucose": {
+        "age": 51.0,
+        "bmi": 22.4499,
+        "meal_timing": 2.0,
+        "activity_level": 2.0,
+        "glucose_range": 2.0
+      },
+      "breathing": {
+        "breathing_rate": 13.163698459767,
+        "breath_depth": 0.567344563022,
+        "rest_vs_exercise": 1.0,
+        "label": 1.0
+      },
+      "speech": {
+        "speech_rate": 145.936870751881,
+        "pause_frequency": 0.108793222068,
+        "pitch_variability": 0.358200315535,
+        "label": 1.0
+      },
+      "emotion": {
+        "text_sentiment": 0.316177196272,
+        "voice_emotion": 0.72630514469,
+        "facial_emotion": 0.250780180145,
+        "label": 1.0
+      },
+      "posture": {
+        "head_tilt": 4.846370219724,
+        "shoulder_alignment": 0.629936456389,
+        "spine_angle": 74.999062446229,
+        "label": 2.0
+      }
+    },
+    {
+      "report_id": "F_R003",
+      "date": "2025-04-17",
+      "heartbeat": {
+        "heart_rate": 71.7904,
+        "rr_interval_variance": 0.141991125359,
+        "label": 0.0
+      },
+      "glucose": {
+        "age": 51.0,
+        "bmi": 28.4305,
+        "meal_timing": 1.0,
+        "activity_level": 1.0,
+        "glucose_range": 0.0
+      },
+      "breathing": {
+        "breathing_rate": 14.381845730077,
+        "breath_depth": 0.694448083018,
+        "rest_vs_exercise": 1.0,
+        "label": 0.0
+      },
+      "speech": {
+        "speech_rate": 170.071792222755,
+        "pause_frequency": 0.202012502148,
+        "pitch_variability": 0.472702415774,
+        "label": 0.0
+      },
+      "emotion": {
+        "text_sentiment": 0.938930003927,
+        "voice_emotion": 0.294003780075,
+        "facial_emotion": 0.280800069293,
+        "label": 0.0
+      },
+      "posture": {
+        "head_tilt": 9.69666735924,
+        "shoulder_alignment": -3.44552090225,
+        "spine_angle": 84.087813572895,
+        "label": 0.0
+      }
+    }
+  ]
+}
