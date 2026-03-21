@@ -959,6 +959,13 @@ for lang_code in ['en', 'es', 'hi', 'bn', 'mr', 'ta', 'kn', 'te', 'or', 'pa', 'h
         # Create a copy of English dictionary as fallback for missing languages
         RECOMMENDATIONS_TRANSLATIONS[lang_code] = RECOMMENDATIONS_TRANSLATIONS['en'].copy()
 
+# Quality fallback: where selected regional dictionaries still equal English,
+# prefer Hindi text while preserving explicit native entries.
+for lang_code in ['mr', 'ta', 'kn', 'te', 'or', 'pa', 'hry', 'gu', 'bho', 'ur']:
+    for key, en_value in RECOMMENDATIONS_TRANSLATIONS['en'].items():
+        if RECOMMENDATIONS_TRANSLATIONS.get(lang_code, {}).get(key) == en_value and key in RECOMMENDATIONS_TRANSLATIONS['hi']:
+            RECOMMENDATIONS_TRANSLATIONS[lang_code][key] = RECOMMENDATIONS_TRANSLATIONS['hi'][key]
+
 def get_heartbeat_recommendations(prediction, lang='en'):
     """Get recommendations for heartbeat abnormalities"""
     status = prediction['status']

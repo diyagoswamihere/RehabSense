@@ -939,6 +939,14 @@ for lang_code in SUPPORTED_LANGUAGES:
     for key, value in TRANSLATIONS['en'].items():
         TRANSLATIONS[lang_code].setdefault(key, value)
 
+# Quality fallback: where selected regional dictionaries still equal English,
+# prefer Hindi phrasing while preserving explicit native entries.
+QUALITY_FALLBACK_LANGS = ['mr', 'ta', 'kn', 'te', 'or', 'pa', 'hry', 'gu', 'bho', 'ur']
+for lang_code in QUALITY_FALLBACK_LANGS:
+    for key, en_value in TRANSLATIONS['en'].items():
+        if TRANSLATIONS.get(lang_code, {}).get(key) == en_value and key in TRANSLATIONS['hi']:
+            TRANSLATIONS[lang_code][key] = TRANSLATIONS['hi'][key]
+
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 

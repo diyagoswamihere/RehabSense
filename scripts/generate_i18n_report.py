@@ -53,6 +53,14 @@ def main() -> None:
         for key, value in en_dict.items():
             lang_dict.setdefault(key, value)
 
+    # Mirror backend quality fallback for selected regional languages.
+    hi_dict = translations.get("hi", {})
+    for lang_code in ["mr", "ta", "kn", "te", "or", "pa", "hry", "gu", "bho", "ur"]:
+        lang_dict = translations.get(lang_code, {})
+        for key, en_value in en_dict.items():
+            if lang_dict.get(key) == en_value and key in hi_dict:
+                lang_dict[key] = hi_dict[key]
+
     template_keys = []
     pattern = re.compile(r"\{\{\s*t\('([a-zA-Z0-9_]+)'\)\s*\}\}")
     for tpl in pathlib.Path("frontend/templates").glob("*.html"):
@@ -62,7 +70,8 @@ def main() -> None:
     en = translations.get("en", {})
     report = {
         "template_keys": template_keys,
-        "languages": {}
+        "languages": {},
+        "priority_by_fallback_ratio": []
     }
 
     for lang in supported_languages:
@@ -76,12 +85,62 @@ def main() -> None:
         report["languages"][lang] = {
             "missing_count": len(missing),
             "fallback_count": len(fallback_equals_english),
+            "fallback_ratio": (len(fallback_equals_english) / len(template_keys)) if template_keys else 0.0,
             "missing": missing,
             "fallback_equals_english": fallback_equals_english,
         }
 
+    # Prioritize languages that still show most English fallback content.
+    scored = []
+    for lang in supported_languages:
+        if lang == "en":
+            continue
+        info = report["languages"][lang]
+        scored.append((lang, info["fallback_ratio"], info["fallback_count"]))
+    scored.sort(key=lambda x: (-x[1], -x[2], x[0]))
+    report["priority_by_fallback_ratio"] = [
+        {
+            "lang": lang,
+            "fallback_ratio": ratio,
+            "fallback_count": count,
+        }
+        for lang, ratio, count in scored
+    ]
+
     out_path = pathlib.Path("i18n_missing_report.json")
     out_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # Human-readable summary for quick tracking.
+    summary_lines = [
+        "# i18n Coverage Summary",
+        "",
+        f"- Template keys analyzed: {len(template_keys)}",
+        f"- Languages analyzed: {len(supported_languages)}",
+        "",
+        "## By Language",
+        "",
+        "| Language | Missing Keys | English Fallback | Fallback Ratio |",
+        "|---|---:|---:|---:|",
+    ]
+    for lang in supported_languages:
+        info = report["languages"][lang]
+        summary_lines.append(
+            f"| {lang} | {info['missing_count']} | {info['fallback_count']} | {info['fallback_ratio']:.1%} |"
+        )
+
+    summary_lines.extend([
+        "",
+        "## Prioritized Native Translation Work",
+        "",
+        "| Priority | Language | Fallback Count | Fallback Ratio |",
+        "|---:|---|---:|---:|",
+    ])
+    for idx, row in enumerate(report["priority_by_fallback_ratio"], start=1):
+        summary_lines.append(
+            f"| {idx} | {row['lang']} | {row['fallback_count']} | {row['fallback_ratio']:.1%} |"
+        )
+
+    pathlib.Path("i18n_summary.md").write_text("\n".join(summary_lines) + "\n", encoding="utf-8")
 
     print(f"written {out_path} keys={len(template_keys)} langs={len(supported_languages)}")
     for lang in supported_languages:
