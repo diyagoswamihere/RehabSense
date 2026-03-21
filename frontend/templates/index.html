@@ -46,14 +46,11 @@
     <div id="aboutModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('aboutModal')">&times;</span>
-            <h2>About RehabSense</h2>
-            <p>Rehabilitation patients often need continuous, multi-parameter monitoring to ensure steady recovery and to detect complications at an early stage. However, most existing solutions address only a single aspect of health such as heart rate, posture, or glucose levels, resulting in fragmented care. Patients are often forced to juggle multiple devices and applications, creating unnecessary complexity and reducing long-term engagement. This gap is especially critical for individuals recovering from cardiovascular, respiratory, musculoskeletal, metabolic, or stress-related conditions.</p>
-            
-            <p>RehabSense is designed to bridge this gap through a unified, intelligent, multi-modal health monitoring platform. It integrates analysis of key health indicators, including heartbeat irregularities, estimated blood glucose trends, breathing patterns, speech characteristics, emotional state, and posture, into a single cohesive system.</p>
-            
-            <p>A core feature of RehabSense is its real-time, video-based posture detection, which enables accurate tracking of body alignment and movement without need for specialized hardware. Each component is lightweight, modular, and scalable, allowing for phased development and seamless integration.</p>
-            
-            <p>The platform also provides a user-friendly web interface where patients can log health data, access historical records, and visualize progress through intuitive analytics. By consolidating multiple monitoring capabilities into one intelligent assistant, RehabSense enhances patient engagement, supports personalized rehabilitation plans, and delivers actionable insights for clinicians, making long-term recovery more structured, informed, and accessible.</p>
+            <h2>{{ t('about_heading') }}</h2>
+            <p>{{ t('about_para1') }}</p>
+            <p>{{ t('about_para2') }}</p>
+            <p>{{ t('about_para3') }}</p>
+            <p>{{ t('about_para4') }}</p>
         </div>
     </div>
 
@@ -61,37 +58,37 @@
     <div id="servicesModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('servicesModal')">&times;</span>
-            <h2>Our Services</h2>
+            <h2>{{ t('our_services') }}</h2>
             
             <div class="service-item">
                 <div class="service-icon">📊</div>
                 <div class="service-content">
-                    <h3>Get Real-time Diagnosis</h3>
-                    <p>Experience instant health analysis with interactive charts and comprehensive abnormality detection through our advanced AI-powered monitoring system.</p>
+                    <h3>{{ t('service1_title') }}</h3>
+                    <p>{{ t('service1_desc') }}</p>
                 </div>
             </div>
             
             <div class="service-item">
                 <div class="service-icon">📈</div>
                 <div class="service-content">
-                    <h3>Great Visuals and Charts</h3>
-                    <p>Understand your health insights beautifully with intuitive visualizations and track your rehabilitation progress with comprehensive, easy-to-read charts.</p>
+                    <h3>{{ t('service2_title') }}</h3>
+                    <p>{{ t('service2_desc') }}</p>
                 </div>
             </div>
             
             <div class="service-item">
                 <div class="service-icon">💡</div>
                 <div class="service-content">
-                    <h3>Real-time Recommendations</h3>
-                    <p>Receive personalized exercise routines, dietary guidance, and doctor suggestions tailored to your specific health condition and recovery goals.</p>
+                    <h3>{{ t('service3_title') }}</h3>
+                    <p>{{ t('service3_desc') }}</p>
                 </div>
             </div>
             
             <div class="service-item">
                 <div class="service-icon">🌍</div>
                 <div class="service-content">
-                    <h3>Multilingual Support</h3>
-                    <p>Access our platform in your preferred language with comprehensive multilingual support, making healthcare accessible to everyone regardless of language barriers.</p>
+                    <h3>{{ t('service4_title') }}</h3>
+                    <p>{{ t('service4_desc') }}</p>
                 </div>
             </div>
         </div>

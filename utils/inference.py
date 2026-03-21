@@ -39,7 +39,7 @@ class ModelInference:
         X = np.array([[heart_rate, rr_interval_variance]])
         prediction = self.models['heartbeat'].predict(X)[0]
         
-        labels = ['Normal', 'Bradycardia', 'Tachycardia', 'Irregular']
+        labels = ['status_normal', 'status_bradycardia', 'status_tachycardia', 'status_irregular']
         status = labels[prediction]
         
         # Calculate confidence/score
@@ -62,7 +62,7 @@ class ModelInference:
         X = np.array([[age, bmi, meal_timing, activity_level]])
         prediction = self.models['glucose'].predict(X)[0]
         
-        labels = ['Low', 'Normal', 'High']
+        labels = ['status_low', 'status_normal', 'status_high']
         range_label = labels[prediction]
         
         if hasattr(self.models['glucose'], 'predict_proba'):
@@ -86,7 +86,7 @@ class ModelInference:
         X = np.array([[breathing_rate, breath_depth, rest_vs_exercise]])
         prediction = self.models['breathing'].predict(X)[0]
         
-        labels = ['Normal', 'Shallow Breathing', 'Irregular', 'Apnea Risk']
+        labels = ['status_normal', 'status_shallow_breathing', 'status_irregular', 'status_apnea_risk']
         status = labels[prediction]
         
         confidence = 0.85
@@ -104,7 +104,7 @@ class ModelInference:
         X = np.array([[speech_rate, pause_frequency, pitch_variability]])
         prediction = self.models['speech'].predict(X)[0]
         
-        labels = ['Normal Speech', 'Slurred/Slow', 'Stressed Speech']
+        labels = ['status_normal_speech', 'status_slurred_speech', 'status_stressed_speech']
         pattern = labels[prediction]
         
         confidence = 0.85
@@ -122,7 +122,7 @@ class ModelInference:
         X = np.array([[text_sentiment, voice_emotion, facial_emotion]])
         prediction = self.models['emotion'].predict(X)[0]
         
-        labels = ['Happy', 'Neutral', 'Stressed', 'Sad']
+        labels = ['status_happy', 'status_neutral', 'status_stressed', 'status_sad']
         state = labels[prediction]
         
         confidence = 0.85
@@ -141,7 +141,7 @@ class ModelInference:
         X = np.array([[head_tilt, shoulder_alignment, spine_angle]])
         prediction = self.models['posture'].predict(X)[0]
         
-        labels = ['Good Posture', 'Forward Head Posture', 'Slouched Sitting']
+        labels = ['status_good_posture', 'status_forward_head', 'status_slouched']
         posture_type = labels[prediction]
         
         # Calculate posture score (0-100)

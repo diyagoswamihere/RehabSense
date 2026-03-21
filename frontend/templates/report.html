@@ -30,8 +30,8 @@
                     <span class="icon"></span>
                     <h3>{{ t('heartbeat_analysis') }}</h3>
                 </div>
-                <div class="prediction-result {{ 'status-good' if predictions.heartbeat.status == 'Normal' else 'status-warning' }}">
-                    {{ predictions.heartbeat.status }}
+                <div class="prediction-result {{ 'status-good' if predictions.heartbeat.status == 'status_normal' else 'status-warning' }}">
+                    {{ t(predictions.heartbeat.status) }}
                 </div>
                 <div class="prediction-details">
                     <p><strong>{{ t('heart_rate') }}:</strong> {{ predictions.heartbeat.heart_rate|round(1) }} bpm</p>
@@ -47,8 +47,8 @@
                     <span class="icon"></span>
                     <h3>{{ t('blood_glucose') }}</h3>
                 </div>
-                <div class="prediction-result {{ 'status-good' if predictions.glucose.range == 'Normal' else 'status-warning' }}">
-                    {{ predictions.glucose.range }}
+                <div class="prediction-result {{ 'status-good' if predictions.glucose.range == 'status_normal' else 'status-warning' }}">
+                    {{ t(predictions.glucose.range) }}
                 </div>
                 <div class="prediction-details">
                     <p><strong>{{ t('bmi') }}:</strong> {{ predictions.glucose.bmi|round(1) }}</p>
@@ -64,8 +64,8 @@
                     <span class="icon"></span>
                     <h3>{{ t('breathing_pattern') }}</h3>
                 </div>
-                <div class="prediction-result {{ 'status-good' if predictions.breathing.status == 'Normal' else 'status-warning' }}">
-                    {{ predictions.breathing.status }}
+                <div class="prediction-result {{ 'status-good' if predictions.breathing.status == 'status_normal' else 'status-warning' }}">
+                    {{ t(predictions.breathing.status) }}
                 </div>
                 <div class="prediction-details">
                     <p><strong>{{ t('rate') }}:</strong> {{ predictions.breathing.breathing_rate|round(1) }} breaths/min</p>
@@ -81,8 +81,8 @@
                     <span class="icon"></span>
                     <h3>{{ t('speech_pattern') }}</h3>
                 </div>
-                <div class="prediction-result {{ 'status-good' if predictions.speech.pattern == 'Normal Speech' else 'status-warning' }}">
-                    {{ predictions.speech.pattern }}
+                <div class="prediction-result {{ 'status-good' if predictions.speech.pattern == 'status_normal_speech' else 'status-warning' }}">
+                    {{ t(predictions.speech.pattern) }}
                 </div>
                 <div class="prediction-details">
                     <p><strong>{{ t('rate') }}:</strong> {{ predictions.speech.speech_rate|round(0) }} words/min</p>
@@ -98,8 +98,8 @@
                     <span class="icon"></span>
                     <h3>{{ t('emotional_state') }}</h3>
                 </div>
-                <div class="prediction-result {{ 'status-good' if predictions.emotion.state in ['Happy', 'Neutral'] else 'status-warning' }}">
-                    {{ predictions.emotion.state }}
+                <div class="prediction-result {{ 'status-good' if predictions.emotion.state in ['status_happy', 'status_neutral'] else 'status-warning' }}">
+                    {{ t(predictions.emotion.state) }}
                 </div>
                 <div class="prediction-details">
                     <p><strong>{{ t('sentiment_score') }}:</strong> {{ (predictions.emotion.text_sentiment * 100)|round(0) }}%</p>
@@ -115,8 +115,8 @@
                     <span class="icon">🧍</span>
                     <h3>{{ t('posture_analysis') }}</h3>
                 </div>
-                <div class="prediction-result {{ 'status-good' if predictions.posture.posture == 'Good Posture' else 'status-warning' }}">
-                    {{ predictions.posture.posture }}
+                <div class="prediction-result {{ 'status-good' if predictions.posture.posture == 'status_good_posture' else 'status-warning' }}">
+                    {{ t(predictions.posture.posture) }}
                 </div>
                 <div class="prediction-details">
                     <p><strong>{{ t('posture_score') }}:</strong> {{ predictions.posture.score|round(0) }}/100</p>

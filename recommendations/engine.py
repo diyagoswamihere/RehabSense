@@ -455,7 +455,7 @@ def get_heartbeat_recommendations(prediction, lang='en'):
         'tips': []
     }
     
-    if status == 'Normal':
+    if status == 'status_normal':
         recommendations['exercises'] = [
             t('continue_moderate_aerobic'),
             t('walking_swimming_cycling')
@@ -469,7 +469,7 @@ def get_heartbeat_recommendations(prediction, lang='en'):
             t('keep_up_good_work')
         ]
     
-    elif status == 'Bradycardia':
+    elif status == 'status_bradycardia':
         recommendations['exercises'] = [
             t('light_aerobic_activities'),
             t('gentle_walking_15_20'),
@@ -485,7 +485,7 @@ def get_heartbeat_recommendations(prediction, lang='en'):
             t('gradual_increase_activity')
         ]
     
-    elif status == 'Tachycardia':
+    elif status == 'status_tachycardia':
         recommendations['exercises'] = [
             t('gentle_breathing_exercises'),
             t('slow_paced_yoga_tai_chi'),
@@ -501,7 +501,7 @@ def get_heartbeat_recommendations(prediction, lang='en'):
             t('focus_relaxation_calm')
         ]
     
-    elif status == 'Irregular':
+    elif status == 'status_irregular':
         recommendations['exercises'] = [
             t('low_impact_activities'),
             t('seated_exercises_gentle'),
@@ -534,7 +534,7 @@ def get_glucose_recommendations(prediction, lang='en'):
         'tips': []
     }
     
-    if range_label == 'Normal':
+    if range_label == 'status_normal':
         recommendations['exercises'] = [
             t('regular_physical_activity'),
             t('mix_cardio_strength')
@@ -548,7 +548,7 @@ def get_glucose_recommendations(prediction, lang='en'):
             t('keep_monitoring_active')
         ]
     
-    elif range_label == 'Low':
+    elif range_label == 'status_low':
         recommendations['exercises'] = [
             t('light_activity_after'),
             t('avoid_empty_stomach')
@@ -563,7 +563,7 @@ def get_glucose_recommendations(prediction, lang='en'):
             t('carry_quick_carbs')
         ]
     
-    elif range_label == 'High':
+    elif range_label == 'status_high':
         recommendations['exercises'] = [
             t('post_meal_walking'),
             t('regular_physical_activity'),
@@ -596,7 +596,7 @@ def get_breathing_recommendations(prediction, lang='en'):
         'tips': []
     }
     
-    if status == 'Normal':
+    if status == 'status_normal':
         recommendations['exercises'] = [
             t('deep_breathing_5_min'),
             t('continue_current_activity')
@@ -610,7 +610,7 @@ def get_breathing_recommendations(prediction, lang='en'):
             t('keep_practicing_breathing')
         ]
     
-    elif status == 'Shallow Breathing':
+    elif status == 'status_shallow_breathing':
         recommendations['exercises'] = [
             t('diaphragmatic_breathing'),
             t('box_breathing'),
@@ -626,7 +626,7 @@ def get_breathing_recommendations(prediction, lang='en'):
             t('lungs_hold_more_air')
         ]
     
-    elif status == 'Irregular':
+    elif status == 'status_irregular':
         recommendations['exercises'] = [
             t('paced_breathing'),
             t('relaxed_breathing_exercises'),
@@ -642,7 +642,7 @@ def get_breathing_recommendations(prediction, lang='en'):
             t('regular_practice_improves')
         ]
     
-    elif status == 'Apnea Risk':
+    elif status == 'status_apnea_risk':
         recommendations['exercises'] = [
             t('breathing_awareness'),
             t('gentle_aerobic_activity'),
@@ -675,7 +675,7 @@ def get_speech_recommendations(prediction, lang='en'):
         'tips': []
     }
     
-    if pattern == 'Normal Speech':
+    if pattern == 'status_normal_speech':
         recommendations['exercises'] = [
             t('continue_conversation'),
             t('reading_aloud_10')
@@ -689,7 +689,7 @@ def get_speech_recommendations(prediction, lang='en'):
             t('keep_practicing_communication')
         ]
     
-    elif pattern == 'Slurred/Slow':
+    elif pattern == 'status_slurred_speech':
         recommendations['exercises'] = [
             t('tongue_twisters_5'),
             t('exaggerate_mouth'),
@@ -706,7 +706,7 @@ def get_speech_recommendations(prediction, lang='en'):
             t('practice_makes_perfect')
         ]
     
-    elif pattern == 'Stressed Speech':
+    elif pattern == 'status_stressed_speech':
         recommendations['exercises'] = [
             t('breathing_before_speaking'),
             t('speak_slower_pace'),
@@ -740,7 +740,7 @@ def get_emotion_recommendations(prediction, lang='en'):
         'tips': []
     }
     
-    if state == 'Happy':
+    if state == 'status_happy':
         recommendations['exercises'] = [
             t('engage_enjoyable_activities'),
             t('physical_exercise_mood')
@@ -754,7 +754,7 @@ def get_emotion_recommendations(prediction, lang='en'):
             t('positive_energy_valuable')
         ]
     
-    elif state == 'Neutral':
+    elif state == 'status_neutral':
         recommendations['exercises'] = [
             t('engage_enjoyable_activities'),
             t('try_something_new'),
@@ -770,7 +770,7 @@ def get_emotion_recommendations(prediction, lang='en'):
             t('small_activities_boost')
         ]
     
-    elif state == 'Stressed':
+    elif state == 'status_stressed':
         recommendations['exercises'] = [
             t('deep_breathing_10'),
             t('progressive_muscle'),
@@ -788,7 +788,7 @@ def get_emotion_recommendations(prediction, lang='en'):
             t('be_kind_yourself')
         ]
     
-    elif state == 'Sad':
+    elif state == 'status_sad':
         recommendations['exercises'] = [
             t('light_physical_walks'),
             t('breathing_before_speaking'),
@@ -823,7 +823,7 @@ def get_posture_recommendations(prediction, lang='en'):
         'tips': []
     }
     
-    if posture_type == 'Good Posture':
+    if posture_type == 'status_good_posture':
         recommendations['exercises'] = [
             t('core_strengthening'),
             t('maintain_flexibility')
@@ -837,7 +837,7 @@ def get_posture_recommendations(prediction, lang='en'):
             t('maintaining_prevents')
         ]
     
-    elif posture_type == 'Forward Head Posture':
+    elif posture_type == 'status_forward_head':
         recommendations['exercises'] = [
             t('chin_tucks_10'),
             t('neck_stretches'),
@@ -855,7 +855,7 @@ def get_posture_recommendations(prediction, lang='en'):
             t('small_adjustments_big')
         ]
     
-    elif posture_type == 'Slouched Sitting':
+    elif posture_type == 'status_slouched':
         recommendations['exercises'] = [
             t('core_exercises_planks'),
             t('back_extensions_superman'),
