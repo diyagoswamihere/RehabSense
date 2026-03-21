@@ -8,7 +8,7 @@
         <div class="patient-info">
             <h1>{{ t('welcome') }}, {{ patient.name }}</h1>
             <p class="patient-details">
-                {{ t('patient_id') }}: {{ patient.patient_id }} | Age: {{ patient.age }} | Gender: {{ patient.gender }}
+                {{ t('patient_id') }}: {{ patient.patient_id }} | {{ t('age') }}: {{ patient.age }} | {{ t('gender') }}: {{ patient.gender }}
             </p>
         </div>
         <div class="patient-avatar-wrapper">
@@ -78,7 +78,6 @@
     object-fit: cover;
     border: 3px solid #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-}
 }
 
 .reports-section {

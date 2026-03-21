@@ -180,6 +180,23 @@
 {% block extra_js %}
 <script>
     let currentPatientId = null;
+    const i18n = {
+        id: {{ t('id') | tojson }},
+        age: {{ t('age') | tojson }},
+        gender: {{ t('gender') | tojson }},
+        address: {{ t('address') | tojson }},
+        phone: {{ t('phone') | tojson }},
+        email: {{ t('email') | tojson }},
+        addReport: {{ t('add_report') | tojson }},
+        viewAnalysis: {{ t('view_analysis') | tojson }},
+        reportsHeading: {{ t('reports_heading') | tojson }},
+        noReportsYet: {{ t('no_reports_yet_patient') | tojson }},
+        pleaseSelectPatientFirst: {{ t('please_select_patient_first') | tojson }},
+        pleaseChooseFile: {{ t('please_choose_file') | tojson }},
+        failedAddPatient: {{ t('failed_add_patient') | tojson }},
+        failedUploadReport: {{ t('failed_upload_report') | tojson }},
+        failedSaveReport: {{ t('failed_save_report') | tojson }}
+    };
 
     function selectPatient(patientId) {
         currentPatientId = patientId;
@@ -199,23 +216,23 @@
                     </li>`
                 ).join('') + '</ul>';
         } else {
-            reportsHtml = '<p class="admin-hint">No reports yet for this patient.</p>';
+            reportsHtml = `<p class="admin-hint">${i18n.noReportsYet}</p>`;
         }
 
         panel.innerHTML = `
             <div class="admin-patient-summary">
                 <h2>${patient.name}</h2>
-                <p>ID: ${patient.patient_id}</p>
-                <p>Age: ${patient.age || '—'} | Gender: ${patient.gender || '—'}</p>
-                <p>Address: ${patient.address || '—'}</p>
-                <p>Phone: ${patient.phone || '—'} | Email: ${patient.email || '—'}</p>
+                <p>${i18n.id}: ${patient.patient_id}</p>
+                <p>${i18n.age}: ${patient.age || '—'} | ${i18n.gender}: ${patient.gender || '—'}</p>
+                <p>${i18n.address}: ${patient.address || '—'}</p>
+                <p>${i18n.phone}: ${patient.phone || '—'} | ${i18n.email}: ${patient.email || '—'}</p>
             </div>
             <div class="admin-patient-actions">
-                <button class="admin-add-btn" onclick="openAddReportModal()">+ Add Report</button>
-                <button class="admin-add-btn" onclick="openAnalysis('${patient.patient_id}')">View Analysis</button>
+                <button class="admin-add-btn" onclick="openAddReportModal()">+ ${i18n.addReport}</button>
+                <button class="admin-add-btn" onclick="openAnalysis('${patient.patient_id}')">${i18n.viewAnalysis}</button>
             </div>
             <div class="admin-reports-section">
-                <h3>Reports</h3>
+                <h3>${i18n.reportsHeading}</h3>
                 ${reportsHtml}
             </div>
         `;
@@ -227,7 +244,7 @@
 
     function openAddReportModal() {
         if (!currentPatientId) {
-            alert('Please select a patient first.');
+            alert(i18n.pleaseSelectPatientFirst);
             return;
         }
         document.getElementById('addReportModal').style.display = 'block';
@@ -236,7 +253,7 @@
     function openAnalysis(patientId) {
         const id = patientId || currentPatientId;
         if (!id) {
-            alert('Please select a patient first.');
+            alert(i18n.pleaseSelectPatientFirst);
             return;
         }
         window.open(`/admin/patient/${id}/analysis`, '_blank');
@@ -263,20 +280,20 @@
         if (data.success) {
             window.location.reload();
         } else {
-            alert(data.message || 'Failed to add patient');
+            alert(data.message || i18n.failedAddPatient);
         }
     });
 
     document.getElementById('uploadReportForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!currentPatientId) {
-            alert('Please select a patient first.');
+            alert(i18n.pleaseSelectPatientFirst);
             return;
         }
         const formData = new FormData();
         const fileInput = document.getElementById('reportFile');
         if (!fileInput.files.length) {
-            alert('Please choose a file');
+            alert(i18n.pleaseChooseFile);
             return;
         }
         formData.append('file', fileInput.files[0]);
@@ -289,14 +306,14 @@
         if (data.success) {
             window.location.reload();
         } else {
-            alert(data.message || 'Failed to upload report');
+            alert(data.message || i18n.failedUploadReport);
         }
     });
 
     document.getElementById('enterDataForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!currentPatientId) {
-            alert('Please select a patient first.');
+            alert(i18n.pleaseSelectPatientFirst);
             return;
         }
         const form = e.target;
@@ -313,7 +330,7 @@
         if (data.success) {
             window.location.reload();
         } else {
-            alert(data.message || 'Failed to save report');
+            alert(data.message || i18n.failedSaveReport);
         }
     });
 </script>

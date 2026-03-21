@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RehabSense - Home</title>
+    <title>{{ t('app_name') }} - {{ t('nav_home') }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -157,6 +157,13 @@
     </div>
 
     <script>
+        const i18n = {
+            loginFailedTryAgain: {{ t('login_failed_try_again') | tojson }},
+            errorLoggingIn: {{ t('error_logging_in') | tojson }},
+            adminLoginFailedTryAgain: {{ t('admin_login_failed_try_again') | tojson }},
+            errorLoggingInAdmin: {{ t('error_logging_in_admin') | tojson }}
+        };
+
         // Modal functions
         function showAboutModal() {
             document.getElementById('aboutModal').style.display = 'block';
@@ -226,10 +233,10 @@
                 if (data.success) {
                     window.location.href = '/dashboard';
                 } else {
-                    alert(data.message || 'Login failed. Please try again.');
+                    alert(data.message || i18n.loginFailedTryAgain);
                 }
             } catch (error) {
-                alert('Error logging in. Please try again.');
+                alert(i18n.errorLoggingIn);
             }
         });
 
@@ -253,10 +260,10 @@
                 if (data.success) {
                     window.location.href = '/admin/dashboard';
                 } else {
-                    alert(data.message || 'Admin login failed. Please try again.');
+                    alert(data.message || i18n.adminLoginFailedTryAgain);
                 }
             } catch (error) {
-                alert('Error logging in as admin. Please try again.');
+                alert(i18n.errorLoggingInAdmin);
             }
         });
     </script>

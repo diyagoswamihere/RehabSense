@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Progress Tracking - {{ patient.name }}{% endblock %}
+{% block title %}{{ t('view_progress') }} - {{ patient.name }}{% endblock %}
 
 {% block extra_css %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -165,10 +165,10 @@ function createCharts(history) {
     
     // Count emotion states
     const emotionCounts = {
-        'Happy': 0,
-        'Neutral': 0,
-        'Stressed': 0,
-        'Sad': 0
+        status_happy: 0,
+        status_neutral: 0,
+        status_stressed: 0,
+        status_sad: 0
     };
     history.forEach(h => {
         const state = h.predictions.emotion?.state;
@@ -179,10 +179,10 @@ function createCharts(history) {
     
     // Count breathing statuses
     const breathingCounts = {
-        'Normal': 0,
-        'Shallow Breathing': 0,
-        'Irregular': 0,
-        'Apnea Risk': 0
+        status_normal: 0,
+        status_shallow_breathing: 0,
+        status_irregular: 0,
+        status_apnea_risk: 0
     };
     history.forEach(h => {
         const status = h.predictions.breathing?.status;
@@ -219,7 +219,7 @@ function createCharts(history) {
                     beginAtZero: false,
                     title: {
                         display: true,
-                        text: 'Heart Rate (bpm)'
+                        text: '{{ t("heart_rate") }} ({{ t("bpm") }})'
                     }
                 }
             }
@@ -232,7 +232,7 @@ function createCharts(history) {
         data: {
             labels: dates,
             datasets: [{
-                label: 'Posture Score',
+                label: '{{ t("posture_score") }}',
                 data: postureScores,
                 backgroundColor: dates.map((_, i) => {
                     const score = postureScores[i];
@@ -257,7 +257,7 @@ function createCharts(history) {
                     max: 100,
                     title: {
                         display: true,
-                        text: 'Score (0-100)'
+                        text: '{{ t("score_0_100") }}'
                     }
                 }
             }
@@ -268,7 +268,7 @@ function createCharts(history) {
     new Chart(document.getElementById('emotionChart'), {
         type: 'pie',
         data: {
-            labels: Object.keys(emotionCounts),
+            labels: ['{{ t("status_happy") }}', '{{ t("status_neutral") }}', '{{ t("status_stressed") }}', '{{ t("status_sad") }}'],
             datasets: [{
                 data: Object.values(emotionCounts),
                 backgroundColor: [
@@ -295,7 +295,7 @@ function createCharts(history) {
     new Chart(document.getElementById('breathingChart'), {
         type: 'doughnut',
         data: {
-            labels: Object.keys(breathingCounts),
+            labels: ['{{ t("status_normal") }}', '{{ t("status_shallow_breathing") }}', '{{ t("status_irregular") }}', '{{ t("status_apnea_risk") }}'],
             datasets: [{
                 data: Object.values(breathingCounts),
                 backgroundColor: [

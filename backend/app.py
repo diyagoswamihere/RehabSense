@@ -119,6 +119,19 @@ TRANSLATIONS = {
         'upload_report': 'Upload Report',
         'upload_files_hint': 'You can upload files like CSV, DOCX, etc.',
         'upload_file': 'Upload File',
+        'please_select_patient_first': 'Please select a patient first.',
+        'please_choose_file': 'Please choose a file.',
+        'failed_add_patient': 'Failed to add patient.',
+        'failed_upload_report': 'Failed to upload report.',
+        'failed_save_report': 'Failed to save report.',
+        'view_analysis': 'View Analysis',
+        'reports_heading': 'Reports',
+        'no_reports_yet_patient': 'No reports yet for this patient.',
+        'login_failed_try_again': 'Login failed. Please try again.',
+        'error_logging_in': 'Error logging in. Please try again.',
+        'admin_login_failed_try_again': 'Admin login failed. Please try again.',
+        'error_logging_in_admin': 'Error logging in as admin. Please try again.',
+        'score_0_100': 'Score (0-100)',
         'enter_data_manually': 'Enter Data Manually',
         'save_report': 'Save Report',
         'rr_variance': 'RR Interval Variance',
@@ -176,6 +189,12 @@ TRANSLATIONS = {
         'status_good_posture': 'Good Posture',
         'status_forward_head': 'Forward Head Posture',
         'status_slouched': 'Slouched Sitting',
+        'bpm': 'bpm',
+        'breathing_rate': 'Breathing Rate',
+        'breaths_per_min': 'breaths/min',
+        'words_per_min': 'words/min',
+        'out_of_100': '/100',
+        'report_title': 'Report',
     },
     'es': {
         'app_name': 'RehabSense',
@@ -236,6 +255,13 @@ TRANSLATIONS = {
         'status_good_posture': 'Buena Postura',
         'status_forward_head': 'Postura con Cabeza Adelante',
         'status_slouched': 'Sentado Encorvado',
+        'exercises_activities': 'Ejercicios y Actividades',
+        'lifestyle_tips': 'Consejos de Estilo de Vida',
+        'important_notes': 'Notas Importantes',
+        'bpm': 'ppm',
+        'breaths_per_min': 'respiraciones/min',
+        'words_per_min': 'palabras/min',
+        'out_of_100': '/100',
     },
     'hi': {
         'app_name': 'RehabSense',
@@ -262,6 +288,24 @@ TRANSLATIONS = {
         'view_progress': 'समय के साथ प्रगति दिखाएं',
         'admin_dashboard': 'एडमिन डैशबोर्ड',
         'language': 'भाषा',
+        'summary_heading': 'समग्र सारांश',
+        'ai_analysis_results': 'एआई विश्लेषण परिणाम',
+        'heartbeat_analysis': 'हृदय धड़कन विश्लेषण',
+        'blood_glucose': 'रक्त शर्करा',
+        'breathing_pattern': 'श्वसन पैटर्न',
+        'speech_pattern': 'भाषण पैटर्न',
+        'emotional_state': 'भावनात्मक स्थिति',
+        'posture_analysis': 'मुद्रा विश्लेषण',
+        'heart_rate': 'हृदय गति',
+        'confidence': 'विश्वसनीयता',
+        'bmi': 'बीएमआई',
+        'rate': 'दर',
+        'sentiment_score': 'भावना स्कोर',
+        'posture_score': 'मुद्रा स्कोर',
+        'personalized_recommendations': 'व्यक्तिगत सिफारिशें',
+        'exercises_activities': 'व्यायाम और गतिविधियां',
+        'lifestyle_tips': 'जीवनशैली सुझाव',
+        'important_notes': 'महत्वपूर्ण नोट्स',
         'about_para1': 'पुनर्वास रोगियों को अक्सर निरंतर, बहु-पैरामीटर निगरानी की आवश्यकता होती है ताकि स्थिर रिकवरी सुनिश्चित हो सके और जल्दी स्टेज में जटिलताओं का पता चल सके। हालांकि, अधिकांश मौजूदा समाधान स्वास्थ्य के केवल एक पहलू को संबोधित करते हैं जैसे हृदय गति, मुद्रा, या ग्लूकोज स्तर, जिससे विखंडित देखभाल होती है।',
         'about_para2': 'RehabSense एक एकीकृत, बुद्धिमान, बहु-मोडल स्वास्थ्य निगरानी प्लेटफॉर्म के माध्यम से इस अंतर को पाटने के लिए डिज़ाइन किया गया है। यह हृदय गति अनियमितताओं, अनुमानित रक्त शर्करा के रुझानों, श्वसन पैटर्न, भाषण विशेषताओं, भावनात्मक स्थिति और मुद्रा सहित मुख्य स्वास्थ्य संकेतकों का विश्लेषण एकीकृत करता है।',
         'about_para3': 'RehabSense की मुख्य विशेषता इसकी रीयल-टाइम, वीडियो-आधारित मुद्रा पहचान है, जो विशेष हार्डवेयर की आवश्यकता के बिना शरीर के संरेखण और गति की सटीक ट्रैकिंग सक्षम करती है।',
@@ -296,9 +340,163 @@ TRANSLATIONS = {
         'status_good_posture': 'अच्छी मुद्रा',
         'status_forward_head': 'आगे की ओर सिर की मुद्रा',
         'status_slouched': 'झुकी हुई बैठक',
+        'exercises_activities': 'व्यायाम और गतिविधियां',
+        'lifestyle_tips': 'जीवनशैली टिप्स',
+        'important_notes': 'महत्वपूर्ण नोट्स',
+        'bpm': 'bpm',
+        'breaths_per_min': 'साँसें/मिनिट',
+        'words_per_min': 'शब्द/मिनिट',
+        'out_of_100': '/100',
     },
     'bn': {
-        'app_name': 'RehabSense', 'nav_home': 'হোম', 'nav_dashboard': 'ড্যাশবোর্ড', 'nav_progress': 'উন্নতি', 'nav_contact': 'যোগাযোগ', 'nav_logout': 'লগ আউট', 'nav_login': 'লগইন', 'hero_title': 'RehabSense', 'hero_tagline': 'আপনার স্মার্ট পুনর্বাসন সহায়ক', 'get_started': 'শুরু করুন', 'about_heading': 'RehabSense সম্পর্কে', 'login_options': 'লগইন অপশন', 'login_as_patient': 'রোগী হিসেবে লগইন', 'login_as_admin': 'অ্যাডমিন হিসেবে লগইন', 'patient_id': 'রোগীর আইডি', 'password': 'পাসওয়ার্ড', 'submit': 'লগইন', 'invalid_credentials': 'অবৈধ রোগী আইডি অথবা পাসওয়ার্ড।', 'welcome': 'স্বাগতম', 'your_health_reports': 'আপনার স্বাস্থ্য রিপোর্ট', 'view_details': 'বিস্তারিত দেখুন', 'view_progress': 'সময়ের সাথে উন্নতি দেখুন', 'admin_dashboard': 'অ্যাডমিন ড্যাশবোর্ড', 'language': 'ভাষা', 'about_para1': 'পুনর্বাসন রোগীদের প্রায়ই ক্রমাগত, বহু-প্যারামিটার পর্যবেক্ষণের প্রয়োজন স্থিতিশীল পুনরুদ্ধার নিশ্চিত করতে এবং জটিলতা প্রাথমিকভাবে সনাক্ত করতে। তবে বেশিরভাগ বিদ্যমান সমাধান শুধুমাত্র হৃদস্পন্দন, মুদ্রা বা গ্লুকোজ স্তরের মতো স্বাস্থ্যের একটি দিক সম্বোধন করে, যার ফলে খণ্ডিত যত্ন হয়।', 'about_para2': 'RehabSense একটি ইউনিফাইড, বুদ্ধিমান, মাল্টি-মোডাল স্বাস্থ্য পর্যবেক্ষণ প্ল্যাটফর্মের মাধ্যমে এই ব্যবধান পূরণ করার জন্য ডিজাইন করা হয়েছে। এটি প্রধান স্বাস্থ্য সূচকগুলির বিশ্লেষণকে একীভূত করে, যার মধ্যে হৃদস্পন্দনের অনিয়ম, অনুমানিত রক্ত গ্লুকোজ প্রবণতা, শ্বাসপ্রশ্বাসের প্যাটার্ন, বক্তৃতা বৈশিষ্ট্য, আবেগের স্থিতি এবং মুদ্রা রয়েছে একটি সমন্বিত সিস্টেমে।', 'about_para3': 'RehabSense-এর একটি মূল বৈশিষ্ট্য হল এর রিয়েল-টাইম, ভিডিও-ভিত্তিক মুদ্রা সনাক্তকরণ, যা বিশেষায়িত হার্ডওয়্যারের প্রয়োজন ছাড়াই শরীরের সারিবদ্ধতা এবং আন্দোলনের নির্ভুল ট্র্যাকিং সক্ষম করে।', 'about_para4': 'প্ল্যাটফর্মটি একটি ব্যবহারকারী-বান্ধব ওয়েব ইন্টারফেসও প্রদান করে যেখানে রোগীরা স্বাস্থ্য ডেটা লগ করতে, ঐতিহাসিক রেকর্ড অ্যাক্সেস করতে এবং স্বজ্ঞাত বিশ্লেষণের মাধ্যমে অগ্রগতি দেখাতে পারেন।', 'service1_title': 'রিয়েল-টাইম ডায়াগনসিস পান', 'service1_desc': 'আমাদের উন্নত এআই-চালিত পর্যবেক্ষণ সিস্টেমের মাধ্যমে ইন্টারেক্টিভ চার্ট এবং সম্পূর্ণ অস্বাভাবিকতা সনাক্তকরণ সহ তাৎক্ষণিক স্বাস্থ্য বিশ্লেষণ অনুভব করুন।', 'service2_title': 'দুর্দান্ত ভিজ্যুয়াল এবং চার্ট', 'service2_desc': 'স্বজ্ঞাত ভিজ্যুয়ালাইজেশন সহ আপনার স্বাস্থ্য অন্তর্দৃষ্টি সুন্দরভাবে বুঝুন এবং সম্পূর্ণ, সহজ-পাঠযোগ্য চার্টের সাথে আপনার পুনর্বাসন অগ্রগতি ট্র্যাক করুন।', 'service3_title': 'রিয়েল-টাইম সুপারিশ', 'service3_desc': 'আপনার নির্দিষ্ট স্বাস্থ্য অবস্থা এবং পুনরুদ্ধার লক্ষ্যের জন্য কাস্টমাইজ করা ব্যক্তিগত ব্যায়াম রুটিন, খাদ্যতালিকাগত নির্দেশনা এবং ডাক্তারের পরামর্শ পান।', 'service4_title': 'বহুভাষিক সমর্থন', 'service4_desc': 'আপনার পছন্দের ভাষায় আমাদের প্ল্যাটফর্মে অ্যাক্সেস করুন সম্পূর্ণ বহুভাষিক সমর্থনের সাথে, যা ভাষার বাধা নির্বিশেষে সবার জন্য স্বাস্থ্যসেবা প্রবেশযোগ্য করে তোলে।', 'our_services': 'আমাদের সেবা', 'educational_prototype': 'শিক্ষামূলক প্রোটোটাইপ শুধুমাত্র', 'disclaimer': 'এই সিস্টেম প্রদর্শনের উদ্দেশ্যে এবং চিকিৎসাগত পরামর্শ প্রদান করে না। চিকিৎসাগত সিদ্ধান্তের জন্য সর্বদা যোগ্য স্বাস্থ্যসেবা পেশাদারদের পরামর্শ করুন।', 'copyright': '© 2026 RehabSense - এআই পুনর্বাসন পর্যবেক্ষণ সিস্টেম', 'status_normal': 'সাধারণ', 'status_bradycardia': 'ব্র্যাডিকার্ডিয়া', 'status_tachycardia': 'ট্যাকিকার্ডিয়া', 'status_irregular': 'অনিয়মিত', 'status_low': 'কম', 'status_high': 'উচ্চ', 'status_shallow_breathing': 'অগভীর শ্বাস', 'status_apnea_risk': 'অ্যাপনিয়া ঝুঁকি', 'status_normal_speech': 'সাধারণ বক্তৃতা', 'status_slurred_speech': 'অস্পষ্ট/ধীর', 'status_stressed_speech': 'চাপপূর্ণ বক্তৃতা', 'status_happy': 'খুশি', 'status_neutral': 'নিরপেক্ষ', 'status_stressed': 'চাপপূর্ণ', 'status_sad': 'দুঃখী', 'status_good_posture': 'ভাল মুদ্রা', 'status_forward_head': 'এগিয়ে যাওয়া মাথার মুদ্রা', 'status_slouched': 'খোঁড়া বসা'
+        'app_name': 'RehabSense',
+        'nav_home': 'হোম',
+        'nav_dashboard': 'ড্যাশবোর্ড',
+        'nav_progress': 'উন্নতি',
+        'nav_contact': 'যোগাযোগ',
+        'nav_logout': 'লগ আউট',
+        'nav_login': 'লগইন',
+        'hero_title': 'RehabSense',
+        'hero_tagline': 'আপনার স্মার্ট পুনর্বাসন সহায়ক',
+        'get_started': 'শুরু করুন',
+        'about_heading': 'RehabSense সম্পর্কে',
+        'login_options': 'লগইন অপশন',
+        'login_as_patient': 'রোগী হিসেবে লগইন',
+        'login_as_admin': 'অ্যাডমিন হিসেবে লগইন',
+        'patient_id': 'রোগীর আইডি',
+        'password': 'পাসওয়ার্ড',
+        'submit': 'লগইন',
+        'invalid_credentials': 'অবৈধ রোগী আইডি অথবা পাসওয়ার্ড।',
+        'welcome': 'স্বাগতম',
+        'your_health_reports': 'আপনার স্বাস্থ্য রিপোর্ট',
+        'view_details': 'বিস্তারিত দেখুন',
+        'view_progress': 'সময়ের সাথে উন্নতি দেখুন',
+        'admin_dashboard': 'অ্যাডমিন ড্যাশবোর্ড',
+        'language': 'ভাষা',
+        'summary_heading': 'সামগ্রিক সারসংক্ষেপ',
+        'ai_analysis_results': 'এআই বিশ্লেষণ ফলাফল',
+        'heartbeat_analysis': 'হৃদস্পন্দন বিশ্লেষণ',
+        'blood_glucose': 'রক্ত গ্লুকোজ',
+        'breathing_pattern': 'শ্বাসের প্যাটার্ন',
+        'speech_pattern': 'কথার প্যাটার্ন',
+        'emotional_state': 'আবেগের অবস্থা',
+        'posture_analysis': 'মুদ্রা বিশ্লেষণ',
+        'heart_rate': 'হৃদস্পন্দন',
+        'confidence': 'আত্মবিশ্বাস',
+        'bmi': 'বিএমআই',
+        'rate': 'হার',
+        'sentiment_score': 'অনুভূতি স্কোর',
+        'posture_score': 'মুদ্রা স্কোর',
+        'personalized_recommendations': 'ব্যক্তিগতকৃত সুপারিশ',
+        'exercises_activities': 'ব্যায়াম ও কার্যক্রম',
+        'lifestyle_tips': 'জীবনধারার টিপস',
+        'important_notes': 'গুরুত্বপূর্ণ নোট',
+        'services': 'সেবা',
+        'drop_mail': 'ইমেইল পাঠান',
+        'ring_us': 'আমাদের যোগাযোগ করুন',
+        'patient_login': 'রোগী লগইন',
+        'admin_login': 'অ্যাডমিন লগইন',
+        'enter_patient_id': 'রোগী আইডি প্রবেश করুন',
+        'enter_admin_id': 'অ্যাডমিন আইডি প্রবেश করুন',
+        'enter_password': 'পাসওয়ার্ড প্রবেশ করুন',
+        'admin_id': 'অ্যাডমিন আইডি',
+        'invalid_admin_credentials': 'অবৈধ অ্যাডমিন শংসাপত্র।',
+        'total_reports': 'মোট রিপোর্ট',
+        'tracking_period': 'ট্র্যাকিং সময়কাল',
+        'weeks': 'সপ্তাহ',
+        'health_metrics_over_time': 'সময়ের সাথে স্বাস্থ্য মেট্রিক্স',
+        'heart_rate_trend': 'হৃদস্পন্দন প্রবণতা',
+        'posture_score_progression': 'মুদ্রা স্কোর অগ্রগতি',
+        'emotional_state_distribution': 'আবেগের অবস্থা বিতরণ',
+        'breathing_pattern_status': 'শ্বাসের প্যাটার্ন স্ট্যাটাস',
+        'loading_progress_data': 'আপনার অগ্রগতি ডেটা লোড হচ্ছে...',
+        'ai_powered_rehab_system': 'এআই-চালিত পুনর্বাসন পর্যবেক্ষণ সিস্টেম',
+        'project_overview': 'প্রকল্প সংক্ষিপ্তসার',
+        'six_ai_models': 'ছয়টি এআই মডেল',
+        'heartbeat_abnormality_detector': 'হৃদস্পন্দন অস্বাভাবিকতা সনাক্তকরণ',
+        'data_collection': 'ডেটা সংগ্রহ',
+        'patient_metrics_collected': 'রোগীর স্বাস্থ্য মেট্রিক্স রিপোর্টের মাধ্যমে সংগ্রহ করা হয়',
+        'ai_analysis': 'এআই বিশ্লেষণ',
+        'six_models_analyze': 'ছয়টি প্রশিক্ষিত মেশিন লার্নিং মডেল ডেটা বিশ্লেষণ করে',
+        'insights_generation': 'অন্তর্দৃষ্টি উৎপাদন',
+        'health_status_predictions': 'সিস্টেম স্বাস্থ্য অবস্থার পূর্বাভাস তৈরি করে',
+        'recommendations_heading': 'সুপারিশ',
+        'personalized_exercise_tips': 'ব্যক্তিগত ব্যায়াম এবং জীবনধারা টিপস প্রদান করা হয়',
+        'welcome_admin': 'অ্যাডমিনকে স্বাগতম',
+        'patients': 'রোগী',
+        'add_patient': 'রোগী যোগ করুন',
+        'add_new_patient': 'নতুন রোগী যোগ করুন',
+        'select_patient_hint': 'বিস্তারিত এবং রিপোর্ট দেখতে বাম থেকে একটি রোগী নির্বাচন করুন।',
+        'name': 'নাম',
+        'age': 'বয়স',
+        'gender': 'লিঙ্গ',
+        'address': 'ঠিকানা',
+        'phone': 'ফোন',
+        'email': 'ইমেইল',
+        'save_patient': 'রোগী সংরক্ষণ করুন',
+        'add_report': 'রিপোর্ট যোগ করুন',
+        'upload_report': 'রিপোর্ট আপলোড করুন',
+        'upload_files_hint': 'আপনি সিএসভি, ডক্স ইত্যাদির মতো ফাইল আপলোড করতে পারেন।',
+        'upload_file': 'ফাইল আপলোড করুন',
+        'enter_data_manually': 'ডেটা ম্যানুয়ালি প্রবেশ করুন',
+        'save_report': 'রিপোর্ট সংরক্ষণ করুন',
+        'rr_variance': 'আরআর ইন্টারভাল বৈভব',
+        'glucose_age': 'গ্লুকোজ বয়স',
+        'meal_timing': 'খাবারের সময়',
+        'activity_level': 'কার্যকলাপের স্তর',
+        'glucose_range': 'গ্লুকোজ পরিসীমা',
+        'breath_depth': 'শ্বাসের গভীরতা',
+        'rest_vs_exercise': 'বিশ্রাম বনাম ব্যায়াম',
+        'speech_rate': 'কথার হার',
+        'pause_frequency': 'বিরাম ফ্রিকোয়েন্সি',
+        'pitch_variability': 'পিচ পরিবর্তনশীলতা',
+        'text_sentiment': 'পাঠ্য অনুভূতি',
+        'voice_emotion': 'ভয়েস আবেগ',
+        'facial_emotion': 'মুখের আবেগ',
+        'head_tilt': 'মাথার কাত',
+        'shoulder_alignment': 'কাঁধের সংযোগ',
+        'spine_angle': 'মেরুদণ্ড কোণ',
+        'id': 'আইডি',
+        'about_para1': 'পুনর্বাসন রোগীদের প্রায়ই ক্রমাগত, বহু-প্যারামিটার পর্যবেক্ষণের প্রয়োজন স্থিতিশীল পুনরুদ্ধার নিশ্চিত করতে এবং জটিলতা প্রাথমিকভাবে সনাক্ত করতে। তবে বেশিরভাগ বিদ্যমান সমাধান শুধুমাত্র হৃদস্পন্দন, মুদ্রা বা গ্লুকোজ স্তরের মতো স্বাস্থ্যের একটি দিক সম্বোধন করে, যার ফলে খণ্ডিত যত্ন হয়।',
+        'about_para2': 'RehabSense একটি ইউনিফাইড, বুদ্ধিমান, মাল্টি-মোডাল স্বাস্থ্য পর্যবেক্ষণ প্ল্যাটফর্মের মাধ্যমে এই ব্যবধান পূরণ করার জন্য ডিজাইন করা হয়েছে। এটি প্রধান স্বাস্থ্য সূচকগুলির বিশ্লেষণকে একীভূত করে, যার মধ্যে হৃদস্পন্দনের অনিয়ম, অনুমানিত রক্ত গ্লুকোজ প্রবণতা, শ্বাসপ্রশ্বাসের প্যাটার্ন, বক্তৃতা বৈশিষ্ট্য, আবেগের স্থিতি এবং মুদ্রা রয়েছে একটি সমন্বিত সিস্টেমে।',
+        'about_para3': 'RehabSense-এর একটি মূল বৈশিষ্ট্য হল এর রিয়েল-টাইম, ভিডিও-ভিত্তিক মুদ্রা সনাক্তকরণ, যা বিশেষায়িত হার্ডওয়্যারের প্রয়োজন ছাড়াই শরীরের সারিবদ্ধতা এবং আন্দোলনের নির্ভুল ট্র্যাকিং সক্ষম করে।',
+        'about_para4': 'প্ল্যাটফর্মটি একটি ব্যবহারকারী-বান্ধব ওয়েব ইন্টারফেসও প্রদান করে যেখানে রোগীরা স্বাস্থ্য ডেটা লগ করতে, ঐতিহাসিক রেকর্ড অ্যাক্সেস করতে এবং স্বজ্ঞাত বিশ্লেষণের মাধ্যমে অগ্রগতি দেখাতে পারেন।',
+        'service1_title': 'রিয়েল-টাইম ডায়াগনসিস পান',
+        'service1_desc': 'আমাদের উন্নত এআই-চালিত পর্যবেক্ষণ সিস্টেমের মাধ্যমে ইন্টারেক্টিভ চার্ট এবং সম্পূর্ণ অস্বাভাবিকতা সনাক্তকরণ সহ তাৎক্ষণিক স্বাস্থ্য বিশ্লেষণ অনুভব করুন।',
+        'service2_title': 'দুর্দান্ত ভিজ্যুয়াল এবং চার্ট',
+        'service2_desc': 'স্বজ্ঞাত ভিজ্যুয়ালাইজেশন সহ আপনার স্বাস্থ্য অন্তর্দৃষ্টি সুন্দরভাবে বুঝুন এবং সম্পূর্ণ, সহজ-পাঠযোগ্য চার্টের সাথে আপনার পুনর্বাসন অগ্রগতি ট্র্যাক করুন।',
+        'service3_title': 'রিয়েল-টাইম সুপারিশ',
+        'service3_desc': 'আপনার নির্দিষ্ট স্বাস্থ্য অবস্থা এবং পুনরুদ্ধার লক্ষ্যের জন্য কাস্টমাইজ করা ব্যক্তিগত ব্যায়াম রুটিন, খাদ্যতালিকাগত নির্দেশনা এবং ডাক্তারের পরামর্শ পান।',
+        'service4_title': 'বহুভাষিক সমর্থন',
+        'service4_desc': 'আপনার পছন্দের ভাষায় আমাদের প্ল্যাটফর্মে অ্যাক্সেস করুন সম্পূর্ণ বহুভাষিক সমর্থনের সাথে, যা ভাষার বাধা নির্বিশেষে সবার জন্য স্বাস্থ্যসেবা প্রবেশযোগ্য করে তোলে।',
+        'our_services': 'আমাদের সেবা',
+        'educational_prototype': 'শিক্ষামূলক প্রোটোটাইপ শুধুমাত্র',
+        'disclaimer': 'এই সিস্টেম প্রদর্শনের উদ্দেশ্যে এবং চিকিৎসাগত পরামর্শ প্রদান করে না। চিকিৎসাগত সিদ্ধান্তের জন্য সর্বদা যোগ্য স্বাস্থ্যসেবা পেশাদারদের পরামর্শ করুন।',
+        'copyright': '© 2026 RehabSense - এআই পুনর্বাসন পর্যবেক্ষণ সিস্টেম',
+        'status_normal': 'সাধারণ',
+        'status_bradycardia': 'ব্র্যাডিকার্ডিয়া',
+        'status_tachycardia': 'ট্যাকিকার্ডিয়া',
+        'status_irregular': 'অনিয়মিত',
+        'status_low': 'কম',
+        'status_high': 'উচ্চ',
+        'status_shallow_breathing': 'অগভীর শ্বাস',
+        'status_apnea_risk': 'অ্যাপনিয়া ঝুঁকি',
+        'status_normal_speech': 'সাধারণ বক্তৃতা',
+        'status_slurred_speech': 'অস্পষ্ট/ধীর',
+        'status_stressed_speech': 'চাপপূর্ণ বক্তৃতা',
+        'status_happy': 'খুশি',
+        'status_neutral': 'নিরপেক্ষ',
+        'status_stressed': 'চাপপূর্ণ',
+        'status_sad': 'দুঃখী',
+        'status_good_posture': 'ভাল মুদ্রা',
+        'status_forward_head': 'এগিয়ে যাওয়া মাথার মুদ্রা',
+        'status_slouched': 'খোঁড়া বসা',
+        'bpm': 'bpm',
+        'breathing_rate': 'শ্বাসের হার',
+        'breaths_per_min': 'শ্বাস/মিনিট',
+        'words_per_min': 'শব্দ/মিনিট',
+        'out_of_100': '/100',
+        'report_title': 'রিপোর্ট',
     },
     'mr': {
         'app_name': 'RehabSense', 'nav_home': 'होम', 'nav_dashboard': 'डॅशबोर्ड', 'nav_progress': 'प्रगती', 'nav_contact': 'संपर्क', 'nav_logout': 'बाहेर विचलित', 'nav_login': 'लॉगिन', 'hero_title': 'RehabSense', 'hero_tagline': 'तुमचा स्मार्ट पुनर्वसन सहाय्यक', 'get_started': 'सुरू करा', 'about_heading': 'RehabSense विषयी', 'login_options': 'लॉगिन पर्याय', 'login_as_patient': 'रुग्ण म्हणून लॉगिन', 'login_as_admin': 'प्रशासक म्हणून लॉगिन', 'patient_id': 'रुग्ण आयडी', 'password': 'पासवर्ड', 'submit': 'लॉगिन', 'invalid_credentials': 'अवैध रुग्ण आयडी किंवा पासवर्ड.', 'welcome': 'स्वागत आहे', 'your_health_reports': 'आपल्या आरोग्य अहवाल', 'view_details': 'तपशील पहा', 'view_progress': 'कालांतराने प्रगती पहा', 'admin_dashboard': 'अॅडमिन डॅशबोर्ड', 'language': 'भाषा', 'about_para1': 'पुनर्वसन रोगীंना स्थिर पुनरुचना सुनिश्चित करण्यासाठी आणि सक्षम अवस्थेत अडचणी शोधण्यासाठी सतत, बहु-पॅरामीटर निरीक्षण आवश्यक असते. तथापि, बहुतेक विद्यमान समाधान केवळ हृदयाचा स्पंद, मुद्रा किंवा ग्लुकोज स्तर यासारख्या आरोग्याच्या एका पहलूला संबोधित करतात, ज्यामुळे खंडित काळजी होते.', 'about_para2': 'RehabSense एकीकृत, बुद्धिमान, बहु-मोडल स्वास्थ्य निरीक्षण प्लॅटफॉर्मद्वारे या अंतराला घेण्यासाठी डिজाइन केले आहे. हे मुख्य आरोग्य सूचकांचे विश्लेषण एकत्रित करते, दिल्याची अनियमितता, अनुमानित रक्त ग्लूकोज ट्रेंड्स, श्वसन नमुने, बोलण्याची वैशिष्ट्ये, भावनिक स्थिती आणि मुद्रा, एक समन्वित प्रणालीमध्ये.', 'about_para3': 'RehabSense चे एक मुख्य वैशिष्ट्य म्हणजे त्याचे रिअल-टाइम, व्हिडिओ-आधारित मुद्रा संपादन, जे विशेष हार्डवेअरचा आवश्यकता न ठेवता शरीर संरेखन आणि हालचालींचे अचूक ट्रॅकिंग सक्षम करते.', 'about_para4': 'प्लॅटफॉर्म एक वापरकर्ता-अनुकूल वेब इंटरफेस देखील प्रदान करतो जेथे रोगी आरोग्य डेटा लॉग करू शकतात, ऐतिहासिक रेकॉर्ड अ‍ॅक्सेस करू शकतात आणि सुज्ञ विश्लेषण द्वारे प्रगती दृश्यमान करू शकतात.', 'service1_title': 'रिअल-टाइम निदान मिळवा', 'service1_desc': 'आमच्या प्रगत एआই-संचालित निरीक्षण प्रणालीद्वारे परस्पर चार्ट आणि व्यापक विसंगती सनावणीसह तात्कालिक आरोग्य विश्लेषण अनुभव करा.', 'service2_title': 'उत्तम दृश्य आणि चार्ट', 'service2_desc': 'अंतर्ज्ञान व्हिजुअलाइজेशनसह आपल्या आरोग्य अंतर्दृष्टी सुंदरपणे समजून घ्या आणि व्यापक, सहज-वाचनीय चार्टसह आपली पुनर्वसन प्रगती ट्रॅक करा.', 'service3_title': 'रिअल-टाइम सुझाव', 'service3_desc': 'आपल्या विशिष्ट आरोग्य परिस्थितीनुसार आणि पुनरुचना लक्ष्यांसाठी व्यक्तिगत व्यायाम दिनचर्या, आहार मार्गदर्शन आणि डॉक्टर सुझाव प्राप्त करा.', 'service4_title': 'बहुभाषिक समर्थन', 'service4_desc': 'आपल्या पसंदीच्या भाषेत आमच्या प्लॅटफॉर्मला व्यापक बहुभाषिक समर्थनसह प्रवेश करा, ज्यामुळे भाषा अडचणीच्या पर्वा न करता सर्वांसाठी स्वास्थ्यसेवा सुलभ होते.', 'our_services': 'आमच्या सेवा', 'educational_prototype': 'शैक्षणिक प्रोटोटाइप केवळ', 'disclaimer': 'ही प्रणाली प्रदर्शन उद्देशांसाठी आहे आणि वैद्यकीय सल्ला प्रदान करत नाही. वैद्यकीय निर्णयांसाठी नेहमी योग्य स्वास्थ्य व्यावसायिकांचा सल्ला घ्या.', 'copyright': '© 2026 RehabSense - एआই पुनर्वसन निरीक्षण प्रणाली', 'status_normal': 'सामान्य', 'status_bradycardia': 'ब्रॅडिकार्डिया', 'status_tachycardia': 'टॅकिकार्डिया', 'status_irregular': 'अनियमित', 'status_low': 'कमी', 'status_high': 'उच्च', 'status_shallow_breathing': 'उथळ श्वास', 'status_apnea_risk': 'अप्निया जोखीम', 'status_normal_speech': 'सामान्य बोलणे', 'status_slurred_speech': 'ढीजड/मंद', 'status_stressed_speech': 'तणावपूर्ण बोलणे', 'status_happy': 'खुश', 'status_neutral': 'तटस्थ', 'status_stressed': 'तणावग्रस्त', 'status_sad': 'दु:खी', 'status_good_posture': 'चांगली मुद्रा', 'status_forward_head': 'पुढे सिरा मुद्रा', 'status_slouched': 'खोडून बसणे'
@@ -331,6 +529,415 @@ TRANSLATIONS = {
         'app_name': 'RehabSense', 'nav_home': 'ہوم', 'nav_dashboard': 'ڈیش بورڈ', 'nav_progress': 'پیش رفت', 'nav_contact': 'رابطہ', 'nav_logout': 'لاگ آؤٹ', 'nav_login': 'لاگ ان', 'hero_title': 'RehabSense', 'hero_tagline': 'آپ کا اسمارٹ ریہیب معاون', 'get_started': 'شروع کریں', 'about_heading': 'RehabSense کے بارے میں', 'login_options': 'لاگ ان کے اختیارات', 'login_as_patient': 'مریض کے طور پر لاگ ان کریں', 'login_as_admin': 'ایڈمن کے طور پر لاگ ان کریں', 'patient_id': 'مریض شناخت', 'password': 'پاس ورڈ', 'submit': 'لاگ ان', 'invalid_credentials': 'غلط مریض شناخت یا پاس ورڈ۔', 'welcome': 'خوش آمدید', 'your_health_reports': 'آپ کی صحت کی رپورٹس', 'view_details': 'تفصیلات دیکھیں', 'view_progress': 'وقت کے ساتھ پیش رفت دیکھیں', 'admin_dashboard': 'ایڈمن ڈیش بورڈ', 'language': 'زبان', 'about_para1': 'Continuous patient monitoring system.', 'about_para2': 'Unified health monitoring platform.', 'about_para3': 'Real-time posture detection.', 'about_para4': 'User-friendly health tracking.', 'service1_title': 'Real-time Diagnosis', 'service1_desc': 'Instant health analysis.', 'service2_title': 'Great Visuals', 'service2_desc': 'Intuitive visualizations.', 'service3_title': 'Real-time Recommendations', 'service3_desc': 'Personalized suggestions.', 'service4_title': 'Multilingual Support', 'service4_desc': 'Multiple languages.', 'our_services': 'Our Services', 'educational_prototype': 'Demonstration Only', 'disclaimer': 'Educational use only.', 'copyright': '© 2026 RehabSense', 'status_normal': 'Normal', 'status_bradycardia': 'Bradycardia', 'status_tachycardia': 'Tachycardia', 'status_irregular': 'Irregular', 'status_low': 'Low', 'status_high': 'High', 'status_shallow_breathing': 'Shallow Breathing', 'status_apnea_risk': 'Apnea Risk', 'status_normal_speech': 'Normal Speech', 'status_slurred_speech': 'Slurred/Slow', 'status_stressed_speech': 'Stressed Speech', 'status_happy': 'Happy', 'status_neutral': 'Neutral', 'status_stressed': 'Stressed', 'status_sad': 'Sad', 'status_good_posture': 'Good Posture', 'status_forward_head': 'Forward Head Posture', 'status_slouched': 'Slouched'
     }
 }
+
+# Fill missing translation keys from English for all configured languages.
+for lang_code in SUPPORTED_LANGUAGES:
+    if lang_code not in TRANSLATIONS:
+        TRANSLATIONS[lang_code] = TRANSLATIONS['en'].copy()
+        continue
+    for key, value in TRANSLATIONS['en'].items():
+        TRANSLATIONS[lang_code].setdefault(key, value)
+
+# Native UI completion for high-priority languages.
+TRANSLATIONS['es'].update({
+    'activity_level': 'Nivel de actividad',
+    'add_new_patient': 'Agregar nuevo paciente',
+    'add_patient': 'Agregar paciente',
+    'add_report': 'Agregar informe',
+    'address': 'Dirección',
+    'admin_id': 'ID de administrador',
+    'admin_login': 'Inicio de sesión de administrador',
+    'age': 'Edad',
+    'ai_analysis': 'Análisis de IA',
+    'ai_analysis_results': 'Resultados del análisis de IA',
+    'ai_powered_rehab_system': 'Sistema de monitoreo de rehabilitación impulsado por IA',
+    'blood_glucose': 'Glucosa en sangre',
+    'bmi': 'IMC',
+    'breath_depth': 'Profundidad de respiración',
+    'breathing_pattern': 'Patrón de respiración',
+    'breathing_pattern_status': 'Estado del patrón de respiración',
+    'breathing_rate': 'Frecuencia respiratoria',
+    'confidence': 'Confianza',
+    'data_collection': 'Recolección de datos',
+    'drop_mail': 'Enviar correo',
+    'email': 'Correo electrónico',
+    'emotional_state': 'Estado emocional',
+    'emotional_state_distribution': 'Distribución del estado emocional',
+    'enter_admin_id': 'Ingresa ID de administrador',
+    'enter_data_manually': 'Ingresar datos manualmente',
+    'enter_password': 'Ingresa contraseña',
+    'enter_patient_id': 'Ingresa ID de paciente',
+    'facial_emotion': 'Emoción facial',
+    'gender': 'Género',
+    'glucose_age': 'Edad (glucosa)',
+    'glucose_range': 'Rango de glucosa',
+    'head_tilt': 'Inclinación de cabeza',
+    'health_metrics_over_time': 'Métricas de salud a lo largo del tiempo',
+    'health_status_predictions': 'Predicciones del estado de salud',
+    'heart_rate': 'Frecuencia cardíaca',
+    'heart_rate_trend': 'Tendencia de frecuencia cardíaca',
+    'heartbeat_abnormality_detector': 'Detector de anormalidades del latido',
+    'heartbeat_analysis': 'Análisis de latidos',
+    'id': 'ID',
+    'insights_generation': 'Generación de insights',
+    'loading_progress_data': 'Cargando tus datos de progreso...',
+    'meal_timing': 'Horario de comidas',
+    'name': 'Nombre',
+    'patient_login': 'Inicio de sesión de paciente',
+    'patient_metrics_collected': 'Las métricas de salud del paciente se recopilan mediante informes',
+    'patients': 'Pacientes',
+    'pause_frequency': 'Frecuencia de pausas',
+    'personalized_exercise_tips': 'Se proporcionan ejercicios y consejos de estilo de vida personalizados',
+    'personalized_recommendations': 'Recomendaciones personalizadas',
+    'phone': 'Teléfono',
+    'pitch_variability': 'Variabilidad del tono',
+    'posture_analysis': 'Análisis de postura',
+    'posture_score': 'Puntuación de postura',
+    'posture_score_progression': 'Progresión de la puntuación de postura',
+    'project_overview': 'Resumen del proyecto',
+    'rate': 'Tasa',
+    'recommendations_heading': 'Recomendaciones',
+    'report_title': 'Informe',
+    'rest_vs_exercise': 'Reposo vs ejercicio',
+    'ring_us': 'Llámanos',
+    'rr_variance': 'Varianza del intervalo RR',
+    'save_patient': 'Guardar paciente',
+    'save_report': 'Guardar informe',
+    'select_patient_hint': 'Selecciona un paciente a la izquierda para ver detalles e informes.',
+    'sentiment_score': 'Puntuación de sentimiento',
+    'services': 'Servicios',
+    'shoulder_alignment': 'Alineación de hombros',
+    'six_ai_models': 'Seis modelos de IA',
+    'six_models_analyze': 'Seis modelos de aprendizaje automático analizan los datos',
+    'speech_pattern': 'Patrón de habla',
+    'speech_rate': 'Velocidad del habla',
+    'spine_angle': 'Ángulo de columna',
+    'summary_heading': 'Resumen general',
+    'text_sentiment': 'Sentimiento de texto',
+    'total_reports': 'Total de informes',
+    'tracking_period': 'Período de seguimiento',
+    'upload_file': 'Subir archivo',
+    'upload_files_hint': 'Puedes subir archivos como CSV, DOCX, etc.',
+    'upload_report': 'Subir informe',
+    'voice_emotion': 'Emoción de voz',
+    'weeks': 'semanas',
+    'welcome_admin': 'Bienvenido administrador'
+})
+
+TRANSLATIONS['hi'].update({
+    'activity_level': 'गतिविधि स्तर',
+    'add_new_patient': 'नया मरीज जोड़ें',
+    'add_patient': 'मरीज जोड़ें',
+    'add_report': 'रिपोर्ट जोड़ें',
+    'address': 'पता',
+    'admin_id': 'एडमिन आईडी',
+    'admin_login': 'एडमिन लॉगिन',
+    'age': 'आयु',
+    'ai_analysis': 'एआई विश्लेषण',
+    'ai_powered_rehab_system': 'एआई-संचालित पुनर्वास मॉनिटरिंग सिस्टम',
+    'breath_depth': 'सांस की गहराई',
+    'breathing_pattern_status': 'श्वसन पैटर्न स्थिति',
+    'breathing_rate': 'श्वसन दर',
+    'data_collection': 'डेटा संग्रह',
+    'drop_mail': 'ईमेल करें',
+    'email': 'ईमेल',
+    'emotional_state_distribution': 'भावनात्मक स्थिति वितरण',
+    'enter_admin_id': 'एडमिन आईडी दर्ज करें',
+    'enter_data_manually': 'डेटा मैन्युअली दर्ज करें',
+    'enter_password': 'पासवर्ड दर्ज करें',
+    'enter_patient_id': 'रोगी आईडी दर्ज करें',
+    'facial_emotion': 'चेहरे की भावना',
+    'gender': 'लिंग',
+    'glucose_age': 'ग्लूकोज आयु',
+    'glucose_range': 'ग्लूकोज रेंज',
+    'head_tilt': 'सिर झुकाव',
+    'health_metrics_over_time': 'समय के साथ स्वास्थ्य मेट्रिक्स',
+    'health_status_predictions': 'स्वास्थ्य स्थिति पूर्वानुमान',
+    'heart_rate_trend': 'हृदय गति रुझान',
+    'heartbeat_abnormality_detector': 'हृदय धड़कन असामान्यता डिटेक्टर',
+    'id': 'आईडी',
+    'insights_generation': 'अंतर्दृष्टि निर्माण',
+    'loading_progress_data': 'आपका प्रगति डेटा लोड हो रहा है...',
+    'meal_timing': 'भोजन समय',
+    'name': 'नाम',
+    'patient_login': 'रोगी लॉगिन',
+    'patient_metrics_collected': 'रोगी स्वास्थ्य मेट्रिक्स रिपोर्टों से एकत्र किए जाते हैं',
+    'patients': 'मरीज',
+    'pause_frequency': 'रुकावट आवृत्ति',
+    'personalized_exercise_tips': 'व्यक्तिगत व्यायाम और जीवनशैली सुझाव दिए जाते हैं',
+    'phone': 'फोन',
+    'pitch_variability': 'पिच परिवर्तनशीलता',
+    'posture_score_progression': 'मुद्रा स्कोर प्रगति',
+    'project_overview': 'प्रोजेक्ट अवलोकन',
+    'recommendations_heading': 'सिफारिशें',
+    'report_title': 'रिपोर्ट',
+    'rest_vs_exercise': 'आराम बनाम व्यायाम',
+    'ring_us': 'कॉल करें',
+    'rr_variance': 'आरआर इंटरवल वैरिएंस',
+    'save_patient': 'मरीज सहेजें',
+    'save_report': 'रिपोर्ट सहेजें',
+    'select_patient_hint': 'विवरण और रिपोर्ट देखने के लिए बाईं ओर से मरीज चुनें।',
+    'services': 'सेवाएं',
+    'shoulder_alignment': 'कंधे संरेखण',
+    'six_ai_models': 'छह एआई मॉडल',
+    'six_models_analyze': 'छह प्रशिक्षित मशीन लर्निंग मॉडल डेटा का विश्लेषण करते हैं',
+    'speech_rate': 'बोलने की दर',
+    'spine_angle': 'रीढ़ का कोण',
+    'text_sentiment': 'पाठ भावना',
+    'total_reports': 'कुल रिपोर्ट',
+    'tracking_period': 'ट्रैकिंग अवधि',
+    'upload_file': 'फ़ाइल अपलोड करें',
+    'upload_files_hint': 'आप CSV, DOCX आदि फ़ाइलें अपलोड कर सकते हैं।',
+    'upload_report': 'रिपोर्ट अपलोड करें',
+    'voice_emotion': 'आवाज़ भावना',
+    'weeks': 'सप्ताह',
+    'welcome_admin': 'एडमिन का स्वागत है'
+})
+
+# About page complete i18n keys (English source text; other languages fallback if missing).
+TRANSLATIONS['en'].update({
+    'about_overview_para': 'RehabSense is an educational prototype demonstrating how artificial intelligence can support rehabilitation patients through comprehensive health monitoring. This system integrates six specialized AI models to analyze different aspects of patient health and provide personalized rehabilitation recommendations.',
+    'label_algorithm': 'Algorithm',
+    'label_input': 'Input',
+    'label_output': 'Output',
+    'algo_random_forest_classifier': 'Random Forest Classifier',
+    'algo_gradient_boosting_classifier': 'Gradient Boosting Classifier',
+    'algo_svm': 'Support Vector Machine (SVM)',
+    'algo_logistic_regression': 'Logistic Regression',
+    'algo_knn': 'K-Nearest Neighbors (KNN)',
+    'algo_decision_tree_classifier': 'Decision Tree Classifier',
+    'blood_glucose_estimation': 'Blood Glucose Estimation',
+    'breathing_irregularity_detection': 'Breathing Irregularity Detection',
+    'speech_pattern_analysis': 'Speech Pattern Analysis',
+    'emotional_state_detection': 'Emotional State Detection',
+    'real_time_posture_detection': 'Real-Time Posture Detection',
+    'heartbeat_model_input': 'Heart rate, RR interval variance',
+    'heartbeat_model_output': 'Normal, Bradycardia, Tachycardia, Irregular',
+    'glucose_model_input': 'Age, BMI, meal timing, activity level',
+    'glucose_model_output': 'Low, Normal, High glucose range',
+    'breathing_model_input': 'Breathing rate, breath depth, rest vs exercise',
+    'breathing_model_output': 'Normal, Shallow, Irregular, Apnea risk',
+    'speech_model_input': 'Speech rate, pause frequency, pitch variability',
+    'speech_model_output': 'Normal, Slurred/Slow, Stressed speech',
+    'emotion_model_input': 'Text sentiment, voice emotion, facial emotion',
+    'emotion_model_output': 'Happy, Neutral, Stressed, Sad',
+    'posture_model_input': 'Head tilt, shoulder alignment, spine angle',
+    'posture_model_output': 'Good posture, Forward head, Slouched + Score (0-100)',
+    'how_it_works': 'How It Works',
+    'features_heading': 'Features',
+    'feature_1': 'Comprehensive health monitoring across six vital areas',
+    'feature_2': 'Real-time AI-powered predictions and analysis',
+    'feature_3': 'Personalized rehabilitation recommendations',
+    'feature_4': 'Progress tracking over time with visual charts',
+    'feature_5': 'Clear, accessible, non-medical language',
+    'feature_6': 'Patient-centered design for dignity and inclusivity',
+    'educational_purpose_heading': 'Educational Purpose',
+    'important_notice': 'Important Notice',
+    'educational_notice_strong': 'This is an educational prototype designed to demonstrate AI/ML concepts in healthcare.',
+    'educational_point_1': 'Not intended for actual medical diagnosis or treatment',
+    'educational_point_2': 'Uses synthetic data for demonstration purposes',
+    'educational_point_3': 'Models are simplified for educational clarity',
+    'educational_point_4': 'Always consult qualified healthcare professionals for medical advice',
+    'future_extensions_heading': 'Future Extensions',
+    'future_1': 'Integration with wearable devices (smartwatches, fitness trackers)',
+    'future_2': 'Real-time sensor data processing',
+    'future_3': 'Multi-language support for global accessibility',
+    'future_4': 'Mobile application for on-the-go monitoring',
+    'future_5': 'Advanced deep learning models for improved accuracy',
+    'future_6': 'Telemedicine integration for remote consultations',
+    'future_7': 'Voice-activated interface for accessibility',
+    'technology_stack_heading': 'Technology Stack',
+    'tech_backend': 'Backend',
+    'tech_frontend': 'Frontend',
+    'tech_visualization': 'Visualization',
+    'tech_storage': 'Storage',
+    'tech_storage_value': 'Local file system (JSON)'
+})
+
+# Native about-page completion for Spanish.
+TRANSLATIONS['es'].update({
+    'about_overview_para': 'RehabSense es un prototipo educativo que demuestra cómo la inteligencia artificial puede apoyar a pacientes de rehabilitación mediante monitoreo integral de la salud. Este sistema integra seis modelos de IA especializados para analizar diferentes aspectos de la salud del paciente y ofrecer recomendaciones personalizadas de rehabilitación.',
+    'label_algorithm': 'Algoritmo',
+    'label_input': 'Entrada',
+    'label_output': 'Salida',
+    'algo_random_forest_classifier': 'Clasificador Random Forest',
+    'algo_gradient_boosting_classifier': 'Clasificador Gradient Boosting',
+    'algo_svm': 'Máquina de Vectores de Soporte (SVM)',
+    'algo_logistic_regression': 'Regresión Logística',
+    'algo_knn': 'K-Vecinos más cercanos (KNN)',
+    'algo_decision_tree_classifier': 'Clasificador de Árbol de Decisión',
+    'blood_glucose_estimation': 'Estimación de glucosa en sangre',
+    'breathing_irregularity_detection': 'Detección de irregularidad respiratoria',
+    'speech_pattern_analysis': 'Análisis de patrón del habla',
+    'emotional_state_detection': 'Detección del estado emocional',
+    'real_time_posture_detection': 'Detección de postura en tiempo real',
+    'heartbeat_model_input': 'Frecuencia cardíaca, varianza del intervalo RR',
+    'heartbeat_model_output': 'Normal, bradicardia, taquicardia, irregular',
+    'glucose_model_input': 'Edad, IMC, horario de comidas, nivel de actividad',
+    'glucose_model_output': 'Rango de glucosa bajo, normal, alto',
+    'breathing_model_input': 'Frecuencia respiratoria, profundidad de respiración, reposo vs ejercicio',
+    'breathing_model_output': 'Normal, superficial, irregular, riesgo de apnea',
+    'speech_model_input': 'Velocidad del habla, frecuencia de pausas, variabilidad del tono',
+    'speech_model_output': 'Normal, arrastrado/lento, habla estresada',
+    'emotion_model_input': 'Sentimiento de texto, emoción de voz, emoción facial',
+    'emotion_model_output': 'Feliz, neutral, estresado, triste',
+    'posture_model_input': 'Inclinación de cabeza, alineación de hombros, ángulo de columna',
+    'posture_model_output': 'Buena postura, cabeza adelantada, encorvado + puntuación (0-100)',
+    'how_it_works': 'Cómo funciona',
+    'features_heading': 'Características',
+    'feature_1': 'Monitoreo integral de salud en seis áreas vitales',
+    'feature_2': 'Predicciones y análisis en tiempo real impulsados por IA',
+    'feature_3': 'Recomendaciones de rehabilitación personalizadas',
+    'feature_4': 'Seguimiento del progreso en el tiempo con gráficos visuales',
+    'feature_5': 'Lenguaje claro, accesible y no médico',
+    'feature_6': 'Diseño centrado en el paciente para dignidad e inclusión',
+    'educational_purpose_heading': 'Propósito educativo',
+    'important_notice': 'Aviso importante',
+    'educational_notice_strong': 'Este es un prototipo educativo diseñado para demostrar conceptos de IA/ML en salud.',
+    'educational_point_1': 'No está destinado para diagnóstico o tratamiento médico real',
+    'educational_point_2': 'Usa datos sintéticos con fines de demostración',
+    'educational_point_3': 'Los modelos están simplificados para mayor claridad educativa',
+    'educational_point_4': 'Consulta siempre a profesionales de salud calificados para consejo médico',
+    'future_extensions_heading': 'Extensiones futuras',
+    'future_1': 'Integración con dispositivos wearables (relojes inteligentes, rastreadores de actividad)',
+    'future_2': 'Procesamiento de datos de sensores en tiempo real',
+    'future_3': 'Soporte multilingüe para accesibilidad global',
+    'future_4': 'Aplicación móvil para monitoreo en movimiento',
+    'future_5': 'Modelos avanzados de aprendizaje profundo para mayor precisión',
+    'future_6': 'Integración de telemedicina para consultas remotas',
+    'future_7': 'Interfaz activada por voz para accesibilidad',
+    'technology_stack_heading': 'Pila tecnológica',
+    'tech_backend': 'Backend',
+    'tech_frontend': 'Frontend',
+    'tech_visualization': 'Visualización',
+    'tech_storage': 'Almacenamiento',
+    'tech_storage_value': 'Sistema de archivos local (JSON)'
+})
+
+# Native about-page completion for Hindi.
+TRANSLATIONS['hi'].update({
+    'about_overview_para': 'RehabSense एक शैक्षणिक प्रोटोटाइप है जो दिखाता है कि कृत्रिम बुद्धिमत्ता व्यापक स्वास्थ्य निगरानी के माध्यम से पुनर्वास रोगियों की कैसे मदद कर सकती है। यह सिस्टम रोगी स्वास्थ्य के विभिन्न पहलुओं का विश्लेषण करने और व्यक्तिगत पुनर्वास सिफारिशें देने के लिए छह विशेष एआई मॉडलों को एकीकृत करता है।',
+    'label_algorithm': 'एल्गोरिदम',
+    'label_input': 'इनपुट',
+    'label_output': 'आउटपुट',
+    'algo_random_forest_classifier': 'रैंडम फॉरेस्ट क्लासिफायर',
+    'algo_gradient_boosting_classifier': 'ग्रेडिएंट बूस्टिंग क्लासिफायर',
+    'algo_svm': 'सपोर्ट वेक्टर मशीन (SVM)',
+    'algo_logistic_regression': 'लॉजिस्टिक रिग्रेशन',
+    'algo_knn': 'के-नज़दीकी पड़ोसी (KNN)',
+    'algo_decision_tree_classifier': 'डिसीजन ट्री क्लासिफायर',
+    'blood_glucose_estimation': 'रक्त शर्करा अनुमान',
+    'breathing_irregularity_detection': 'श्वसन अनियमितता पहचान',
+    'speech_pattern_analysis': 'भाषण पैटर्न विश्लेषण',
+    'emotional_state_detection': 'भावनात्मक स्थिति पहचान',
+    'real_time_posture_detection': 'रीयल-टाइम मुद्रा पहचान',
+    'heartbeat_model_input': 'हृदय गति, RR इंटरवल वैरिएंस',
+    'heartbeat_model_output': 'सामान्य, धीमी हृदय गति, तेज हृदय गति, अनियमित',
+    'glucose_model_input': 'आयु, बीएमआई, भोजन समय, गतिविधि स्तर',
+    'glucose_model_output': 'निम्न, सामान्य, उच्च ग्लूकोज रेंज',
+    'breathing_model_input': 'श्वसन दर, सांस की गहराई, आराम बनाम व्यायाम',
+    'breathing_model_output': 'सामान्य, उथली, अनियमित, एपनिया जोखिम',
+    'speech_model_input': 'बोलने की दर, रुकावट आवृत्ति, पिच परिवर्तनशीलता',
+    'speech_model_output': 'सामान्य, लड़खड़ाता/धीमा, तनावपूर्ण भाषण',
+    'emotion_model_input': 'पाठ भावना, आवाज़ भावना, चेहरे की भावना',
+    'emotion_model_output': 'खुश, तटस्थ, तनावग्रस्त, उदास',
+    'posture_model_input': 'सिर झुकाव, कंधे संरेखण, रीढ़ कोण',
+    'posture_model_output': 'अच्छी मुद्रा, आगे की ओर सिर, झुकी हुई मुद्रा + स्कोर (0-100)',
+    'how_it_works': 'यह कैसे काम करता है',
+    'features_heading': 'विशेषताएं',
+    'feature_1': 'छह महत्वपूर्ण क्षेत्रों में व्यापक स्वास्थ्य निगरानी',
+    'feature_2': 'रीयल-टाइम एआई-संचालित पूर्वानुमान और विश्लेषण',
+    'feature_3': 'व्यक्तिगत पुनर्वास सिफारिशें',
+    'feature_4': 'दृश्य चार्ट के साथ समय के साथ प्रगति ट्रैकिंग',
+    'feature_5': 'स्पष्ट, सुलभ, गैर-चिकित्सीय भाषा',
+    'feature_6': 'गरिमा और समावेशन के लिए रोगी-केंद्रित डिजाइन',
+    'educational_purpose_heading': 'शैक्षणिक उद्देश्य',
+    'important_notice': 'महत्वपूर्ण सूचना',
+    'educational_notice_strong': 'यह एक शैक्षणिक प्रोटोटाइप है जो स्वास्थ्य सेवा में AI/ML अवधारणाओं को प्रदर्शित करने के लिए बनाया गया है।',
+    'educational_point_1': 'वास्तविक चिकित्सा निदान या उपचार के लिए नहीं',
+    'educational_point_2': 'प्रदर्शन हेतु सिंथेटिक डेटा का उपयोग',
+    'educational_point_3': 'शैक्षणिक स्पष्टता के लिए मॉडल सरल बनाए गए हैं',
+    'educational_point_4': 'चिकित्सकीय सलाह के लिए हमेशा योग्य स्वास्थ्य विशेषज्ञों से परामर्श करें',
+    'future_extensions_heading': 'भविष्य विस्तार',
+    'future_1': 'वेयरेबल डिवाइस एकीकरण (स्मार्टवॉच, फिटनेस ट्रैकर)',
+    'future_2': 'रीयल-टाइम सेंसर डेटा प्रोसेसिंग',
+    'future_3': 'वैश्विक पहुंच के लिए बहुभाषी समर्थन',
+    'future_4': 'चलते-फिरते निगरानी के लिए मोबाइल ऐप',
+    'future_5': 'बेहतर सटीकता के लिए उन्नत डीप लर्निंग मॉडल',
+    'future_6': 'रिमोट परामर्श के लिए टेलीमेडिसिन एकीकरण',
+    'future_7': 'सुगम्यता के लिए वॉइस-सक्रिय इंटरफ़ेस',
+    'technology_stack_heading': 'तकनीकी स्टैक',
+    'tech_backend': 'बैकएंड',
+    'tech_frontend': 'फ्रंटएंड',
+    'tech_visualization': 'विज़ुअलाइज़ेशन',
+    'tech_storage': 'स्टोरेज',
+    'tech_storage_value': 'लोकल फ़ाइल सिस्टम (JSON)'
+})
+
+# Native about-page completion for Bengali.
+TRANSLATIONS['bn'].update({
+    'about_overview_para': 'RehabSense একটি শিক্ষামূলক প্রোটোটাইপ যা দেখায় কিভাবে কৃত্রিম বুদ্ধিমত্তা সমন্বিত স্বাস্থ্য পর্যবেক্ষণের মাধ্যমে পুনর্বাসন রোগীদের সহায়তা করতে পারে। এই সিস্টেমটি রোগীর স্বাস্থ্যের বিভিন্ন দিক বিশ্লেষণ করতে এবং ব্যক্তিগতকৃত পুনর্বাসন পরামর্শ দিতে ছয়টি বিশেষায়িত এআই মডেল একীভূত করে।',
+    'label_algorithm': 'অ্যালগরিদম',
+    'label_input': 'ইনপুট',
+    'label_output': 'আউটপুট',
+    'algo_random_forest_classifier': 'র‍্যান্ডম ফরেস্ট ক্লাসিফায়ার',
+    'algo_gradient_boosting_classifier': 'গ্রেডিয়েন্ট বুস্টিং ক্লাসিফায়ার',
+    'algo_svm': 'সাপোর্ট ভেক্টর মেশিন (SVM)',
+    'algo_logistic_regression': 'লজিস্টিক রিগ্রেশন',
+    'algo_knn': 'কে-নিয়ারেস্ট নেইবার্স (KNN)',
+    'algo_decision_tree_classifier': 'ডিসিশন ট্রি ক্লাসিফায়ার',
+    'blood_glucose_estimation': 'রক্তে গ্লুকোজের আনুমানিক নির্ধারণ',
+    'breathing_irregularity_detection': 'শ্বাস-প্রশ্বাসের অনিয়ম সনাক্তকরণ',
+    'speech_pattern_analysis': 'কথার ধরন বিশ্লেষণ',
+    'emotional_state_detection': 'আবেগগত অবস্থা সনাক্তকরণ',
+    'real_time_posture_detection': 'রিয়েল-টাইম ভঙ্গি সনাক্তকরণ',
+    'heartbeat_model_input': 'হৃদস্পন্দনের হার, RR ইন্টারভ্যাল ভ্যারিয়েন্স',
+    'heartbeat_model_output': 'স্বাভাবিক, ব্র্যাডিকার্ডিয়া, ট্যাকিকার্ডিয়া, অনিয়মিত',
+    'glucose_model_input': 'বয়স, BMI, খাবারের সময়, কার্যকলাপের স্তর',
+    'glucose_model_output': 'নিম্ন, স্বাভাবিক, উচ্চ গ্লুকোজ পরিসর',
+    'breathing_model_input': 'শ্বাসের হার, শ্বাসের গভীরতা, বিশ্রাম বনাম ব্যায়াম',
+    'breathing_model_output': 'স্বাভাবিক, অগভীর, অনিয়মিত, অ্যাপনিয়া ঝুঁকি',
+    'speech_model_input': 'কথার গতি, বিরতির ঘনত্ব, পিচের পরিবর্তনশীলতা',
+    'speech_model_output': 'স্বাভাবিক, অস্পষ্ট/ধীর, চাপযুক্ত কথা',
+    'emotion_model_input': 'টেক্সট সেন্টিমেন্ট, কণ্ঠের আবেগ, মুখের আবেগ',
+    'emotion_model_output': 'খুশি, নিরপেক্ষ, চাপযুক্ত, দুঃখী',
+    'posture_model_input': 'মাথার ঝোঁক, কাঁধের সমতা, মেরুদণ্ডের কোণ',
+    'posture_model_output': 'ভাল ভঙ্গি, সামনে ঝুঁকে থাকা মাথা, কুঁজো + স্কোর (0-100)',
+    'how_it_works': 'এটি কীভাবে কাজ করে',
+    'features_heading': 'বৈশিষ্ট্যসমূহ',
+    'feature_1': 'ছয়টি গুরুত্বপূর্ণ ক্ষেত্রে সমন্বিত স্বাস্থ্য পর্যবেক্ষণ',
+    'feature_2': 'রিয়েল-টাইম এআই-চালিত পূর্বাভাস ও বিশ্লেষণ',
+    'feature_3': 'ব্যক্তিগতকৃত পুনর্বাসন পরামর্শ',
+    'feature_4': 'চিত্রভিত্তিক চার্ট দিয়ে সময়ের সাথে অগ্রগতি ট্র্যাকিং',
+    'feature_5': 'পরিষ্কার, সহজলভ্য, অ-চিকিৎসাবিদ্যাগত ভাষা',
+    'feature_6': 'মর্যাদা ও অন্তর্ভুক্তির জন্য রোগী-কেন্দ্রিক নকশা',
+    'educational_purpose_heading': 'শিক্ষামূলক উদ্দেশ্য',
+    'important_notice': 'গুরুত্বপূর্ণ নোটিশ',
+    'educational_notice_strong': 'এটি একটি শিক্ষামূলক প্রোটোটাইপ, যা স্বাস্থ্যসেবায় AI/ML ধারণা প্রদর্শনের জন্য তৈরি করা হয়েছে।',
+    'educational_point_1': 'বাস্তব চিকিৎসা নির্ণয় বা চিকিৎসার জন্য নয়',
+    'educational_point_2': 'প্রদর্শনের উদ্দেশ্যে সিন্থেটিক ডেটা ব্যবহার করা হয়েছে',
+    'educational_point_3': 'শিক্ষাগত স্বচ্ছতার জন্য মডেলগুলো সরলীকৃত',
+    'educational_point_4': 'চিকিৎসা পরামর্শের জন্য সর্বদা যোগ্য স্বাস্থ্য পেশাদারের সাথে পরামর্শ করুন',
+    'future_extensions_heading': 'ভবিষ্যৎ সম্প্রসারণ',
+    'future_1': 'ওয়্যারেবল ডিভাইস (স্মার্টওয়াচ, ফিটনেস ট্র্যাকার) এর সাথে সংযুক্তি',
+    'future_2': 'রিয়েল-টাইম সেন্সর ডেটা প্রসেসিং',
+    'future_3': 'বিশ্বব্যাপী প্রবেশযোগ্যতার জন্য বহু-ভাষা সমর্থন',
+    'future_4': 'চলতি পথে পর্যবেক্ষণের জন্য মোবাইল অ্যাপ্লিকেশন',
+    'future_5': 'উন্নত নির্ভুলতার জন্য উন্নত ডিপ লার্নিং মডেল',
+    'future_6': 'দূরবর্তী পরামর্শের জন্য টেলিমেডিসিন ইন্টিগ্রেশন',
+    'future_7': 'প্রবেশযোগ্যতার জন্য ভয়েস-সক্রিয় ইন্টারফেস',
+    'technology_stack_heading': 'প্রযুক্তি স্ট্যাক',
+    'tech_backend': 'ব্যাকএন্ড',
+    'tech_frontend': 'ফ্রন্টএন্ড',
+    'tech_visualization': 'ভিজ্যুয়ালাইজেশন',
+    'tech_storage': 'স্টোরেজ',
+    'tech_storage_value': 'লোকাল ফাইল সিস্টেম (JSON)'
+})
+
+# Ensure all languages also receive newly added English keys.
+for lang_code in SUPPORTED_LANGUAGES:
+    for key, value in TRANSLATIONS['en'].items():
+        TRANSLATIONS[lang_code].setdefault(key, value)
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
@@ -381,11 +988,48 @@ except Exception as e:
 
 def _get_patient_filename(patient_id: str) -> str:
     """Resolve patient JSON filename from patient_id."""
+    patient_id = (patient_id or '').upper().strip()
     file_mapping = {
         '1D55PL6': 'patient_A.json',
         '7D42PL2': 'patient_B.json'
     }
-    return file_mapping.get(patient_id, f'patient_{patient_id}.json')
+    if patient_id in file_mapping:
+        return file_mapping[patient_id]
+
+    # Dynamically resolve all other seeded patients (e.g., C-L) from JSON files.
+    patients_dir = os.path.join(DATA_DIR, 'patients')
+    if os.path.exists(patients_dir):
+        for fname in os.listdir(patients_dir):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(patients_dir, fname)
+            try:
+                with open(fpath, 'r') as f:
+                    pdata = json.load(f)
+                if str(pdata.get('patient_id', '')).upper() == patient_id:
+                    return fname
+            except (json.JSONDecodeError, OSError):
+                continue
+
+    return f'patient_{patient_id}.json'
+
+
+def _get_report_prefix(patient: dict, patient_id: str) -> str:
+    """Derive report prefix like A/B/C from existing records or filename."""
+    reports = patient.get('reports', []) if isinstance(patient, dict) else []
+    for report in reports:
+        report_id = report.get('report_id', '')
+        if '_' in report_id:
+            prefix = report_id.split('_', 1)[0].strip()
+            if prefix:
+                return prefix
+
+    filename = _get_patient_filename(patient_id)
+    stem = os.path.splitext(os.path.basename(filename))[0]
+    if stem.startswith('patient_') and len(stem) > len('patient_'):
+        return stem[len('patient_'):].upper()
+
+    return (patient_id or 'P').upper()
 
 
 def load_patient_data(patient_id):
@@ -440,31 +1084,18 @@ def index():
 @app.route('/login', methods=['POST'])
 def login():
     """Patient login with new credentials"""
-    data = request.json
+    data = request.json or {}
     patient_id = data.get('patient_id', '').upper()
     password = data.get('password', '')
-    
-    # Check new patient credentials
-    if patient_id == '1D55PL6' and password == 'newp@117789':
-        session['patient_id'] = '1D55PL6'
-        patient_data = load_patient_data('1D55PL6')
-        
-        if patient_data:
-            return jsonify({
-                'success': True,
-                'patient': patient_data
-            })
-    
-    elif patient_id == '7D42PL2' and password == 'neww@342217':
-        session['patient_id'] = '7D42PL2'
-        patient_data = load_patient_data('7D42PL2')
-        
-        if patient_data:
-            return jsonify({
-                'success': True,
-                'patient': patient_data
-            })
-    
+
+    patient_data = load_patient_data(patient_id)
+    if patient_data and patient_data.get('password', '') == password:
+        session['patient_id'] = str(patient_data.get('patient_id', patient_id)).upper()
+        return jsonify({
+            'success': True,
+            'patient': patient_data
+        })
+
     return jsonify({'success': False, 'message': TRANSLATIONS.get(session.get('lang', DEFAULT_LANGUAGE), TRANSLATIONS[DEFAULT_LANGUAGE]).get('invalid_credentials', 'Invalid patient ID or password.')})
 
 @app.route('/logout')
@@ -554,7 +1185,8 @@ def admin_add_report_data(patient_id):
 
     reports = patient.get('reports', [])
     next_index = len(reports) + 1
-    report_id = f"{patient_id}_R{next_index:03d}"
+    report_prefix = _get_report_prefix(patient, patient_id)
+    report_id = f"{report_prefix}_R{next_index:03d}"
 
     new_report = {
         'report_id': report_id,
@@ -628,7 +1260,8 @@ def admin_upload_report(patient_id):
 
     reports = patient.get('reports', [])
     next_index = len(reports) + 1
-    report_id = f"{patient_id}_U{next_index:03d}"
+    report_prefix = _get_report_prefix(patient, patient_id)
+    report_id = f"{report_prefix}_U{next_index:03d}"
 
     new_report = {
         'report_id': report_id,
@@ -670,14 +1303,17 @@ def predict():
         return jsonify({'success': False, 'message': 'No report data provided'})
     
     try:
+        # Respect currently selected UI language for generated texts.
+        current_lang = session.get('lang', DEFAULT_LANGUAGE)
+
         # Run all predictions
         predictions = inference_engine.predict_all(report_data)
         
         # Get recommendations
-        recommendations = get_all_recommendations(predictions)
+        recommendations = get_all_recommendations(predictions, current_lang)
         
         # Get summary message
-        summary = get_summary_message(predictions)
+        summary = get_summary_message(predictions, current_lang)
         
         return jsonify({
             'success': True,

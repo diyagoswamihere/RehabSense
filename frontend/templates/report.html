@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Report - {{ report.report_id }}{% endblock %}
+{% block title %}{{ t('report_title') }} - {{ report.report_id }}{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -34,7 +34,7 @@
                     {{ t(predictions.heartbeat.status) }}
                 </div>
                 <div class="prediction-details">
-                    <p><strong>{{ t('heart_rate') }}:</strong> {{ predictions.heartbeat.heart_rate|round(1) }} bpm</p>
+                    <p><strong>{{ t('heart_rate') }}:</strong> {{ predictions.heartbeat.heart_rate|round(1) }} {{ t('bpm') }}</p>
                     <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.heartbeat.confidence * 100)|round(1) }}%</p>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                     {{ t(predictions.breathing.status) }}
                 </div>
                 <div class="prediction-details">
-                    <p><strong>{{ t('rate') }}:</strong> {{ predictions.breathing.breathing_rate|round(1) }} breaths/min</p>
+                    <p><strong>{{ t('rate') }}:</strong> {{ predictions.breathing.breathing_rate|round(1) }} {{ t('breaths_per_min') }}</p>
                     <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.breathing.confidence * 100)|round(1) }}%</p>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                     {{ t(predictions.speech.pattern) }}
                 </div>
                 <div class="prediction-details">
-                    <p><strong>{{ t('rate') }}:</strong> {{ predictions.speech.speech_rate|round(0) }} words/min</p>
+                    <p><strong>{{ t('rate') }}:</strong> {{ predictions.speech.speech_rate|round(0) }} {{ t('words_per_min') }}</p>
                     <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.speech.confidence * 100)|round(1) }}%</p>
                 </div>
             </div>
@@ -119,7 +119,7 @@
                     {{ t(predictions.posture.posture) }}
                 </div>
                 <div class="prediction-details">
-                    <p><strong>{{ t('posture_score') }}:</strong> {{ predictions.posture.score|round(0) }}/100</p>
+                    <p><strong>{{ t('posture_score') }}:</strong> {{ predictions.posture.score|round(0) }}{{ t('out_of_100') }}</p>
                     <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.posture.confidence * 100)|round(1) }}%</p>
                 </div>
             </div>
