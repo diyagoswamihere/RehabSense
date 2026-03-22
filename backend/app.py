@@ -12,12 +12,13 @@ import string
 from datetime import datetime, timedelta
 
 # ── Credentials (edit here directly) ────────────────────────────
-_SMTP_USER   = 'capstoneg042026@gmail.com'
-_SMTP_PASS   = 'jxgeujdzdjvmrbpr'
+# ── Credentials ─────────────────────────────────────────────────
+_SMTP_USER   = os.environ.get('SMTP_USER',  'capstoneg042026@gmail.com')
+_SMTP_PASS   = os.environ.get('SMTP_PASS',  '')
 _SMTP_HOST   = 'smtp.gmail.com'
 _SMTP_PORT   = 465
-_ADMIN_EMAIL = 'capstoneg042026@gmail.com'
-_ADMIN_PASS  = 'Sunday6$'
+_ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL','capstoneg042026@gmail.com')
+_ADMIN_PASS  = os.environ.get('ADMIN_PASS', 'Sunday6$')
 # ────────────────────────────────────────────────────────────────
 
 
