@@ -11,8 +11,26 @@ import random
 import string
 from datetime import datetime, timedelta
 
-# ── Credentials (edit here directly) ────────────────────────────
-# ── Credentials ─────────────────────────────────────────────────
+# ── Load .env file automatically (no extra library needed) ───────
+def _load_env():
+    """Load key=value pairs from .env into os.environ if not already set."""
+    env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
+    if not os.path.exists(env_path):
+        return
+    with open(env_path) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#') or '=' not in line:
+                continue
+            key, _, val = line.partition('=')
+            key = key.strip()
+            val = val.strip()
+            if key and key not in os.environ:   # never override real env vars
+                os.environ[key] = val
+_load_env()
+# ─────────────────────────────────────────────────────────────────
+
+# ── Credentials (loaded from .env or real environment variables) ─
 _SMTP_USER   = os.environ.get('SMTP_USER',  'capstoneg042026@gmail.com')
 _SMTP_PASS   = os.environ.get('SMTP_PASS',  '')
 _SMTP_HOST   = 'smtp.gmail.com'
@@ -967,7 +985,10 @@ from utils.inference import get_inference_engine
 from recommendations.engine import get_all_recommendations, get_summary_message
 
 # Resolve absolute project paths for resources
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# Always resolve to RehabSense-main root, no matter how/where the app is run
+_THIS_FILE   = os.path.abspath(__file__)       # .../RehabSense-main/backend/app.py
+_BACKEND_DIR = os.path.dirname(_THIS_FILE)     # .../RehabSense-main/backend/
+PROJECT_ROOT = os.path.dirname(_BACKEND_DIR)   # .../RehabSense-main/
 TEMPLATES_DIR = os.path.join(PROJECT_ROOT, 'frontend', 'templates')
 STATIC_DIR = os.path.join(PROJECT_ROOT, 'frontend', 'static')
 MODELS_DIR = os.path.join(PROJECT_ROOT, 'models')
@@ -976,7 +997,7 @@ DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
 app = Flask(__name__, 
             template_folder=TEMPLATES_DIR,
             static_folder=STATIC_DIR)
-app.secret_key = 'rehabsense_secret_key_2026'
+app.secret_key = os.environ.get('SECRET_KEY', 'rehabsense_secret_key_2026')
 
 # ── Safe JSON encoder: replaces NaN/Infinity (from numpy) with null ──────────
 import math
