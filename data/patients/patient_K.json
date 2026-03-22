@@ -4,7 +4,7 @@
   "age": 26,
   "gender": "F",
   "address": "15 Shivaji Nagar, Karnataka",
-  "consulting_doctor": "Dr. Aisha Qureshi",
+  "consulting_doctor": "Mehnaz Shafeek",
   "allergies": "None",
   "password": "pass11#2026",
   "reports": [
@@ -12,8 +12,8 @@
       "report_id": "K_R001",
       "date": "2025-07-12",
       "heartbeat": {
-        "heart_rate": 91.0504,
-        "rr_interval_variance": 0.12944487732,
+        "heart_rate": 88.0,
+        "rr_interval_variance": 0.05,
         "label": 1.0
       },
       "glucose": {
@@ -24,7 +24,7 @@
         "glucose_range": 2.0
       },
       "breathing": {
-        "breathing_rate": 12.700823963874,
+        "breathing_rate": 14.0,
         "breath_depth": 0.813689648463,
         "rest_vs_exercise": 1.0,
         "label": 3.0
@@ -36,24 +36,181 @@
         "label": 0.0
       },
       "emotion": {
-        "text_sentiment": 0.830731018891,
-        "voice_emotion": 0.260664028639,
-        "facial_emotion": 0.817141828802,
+        "text_sentiment": 0.68,
+        "voice_emotion": 0.65,
+        "facial_emotion": 0.68,
         "label": 0.0
       },
       "posture": {
-        "head_tilt": 10.01905127308,
-        "shoulder_alignment": 0.698496446783,
-        "spine_angle": 103.409423522275,
+        "head_tilt": 8.0,
+        "shoulder_alignment": -2.0,
+        "spine_angle": 94.0,
         "label": 1.0
-      }
+      },
+      "predictions": {
+        "heartbeat": {
+          "status": "status_normal",
+          "heart_rate": 88.0,
+          "rr_variance": 0.05,
+          "prediction": 0,
+          "confidence": 0.88
+        },
+        "glucose": {
+          "range": "status_high",
+          "prediction": 2,
+          "confidence": 0.85,
+          "bmi": 22.6613,
+          "age": 26,
+          "meal_timing": 2,
+          "activity_level": 2
+        },
+        "breathing": {
+          "status": "status_normal",
+          "breathing_rate": 14.0,
+          "breath_depth": 0.65,
+          "prediction": 0,
+          "confidence": 0.87
+        },
+        "speech": {
+          "pattern": "status_normal_speech",
+          "speech_rate": 145.0,
+          "pause_frequency": 0.15,
+          "pitch_variability": 0.3,
+          "prediction": 0,
+          "confidence": 0.84
+        },
+        "emotion": {
+          "state": "status_happy",
+          "text_sentiment": 0.68,
+          "voice_emotion": 0.65,
+          "facial_emotion": 0.68,
+          "prediction": 0,
+          "confidence": 0.86
+        },
+        "posture": {
+          "posture": "status_forward_head",
+          "status": "status_forward_head",
+          "posture_score": 74.0,
+          "score": 74.0,
+          "head_tilt": 8.0,
+          "shoulder_alignment": -2.0,
+          "spine_angle": 94.0,
+          "prediction": 1,
+          "confidence": 0.85
+        }
+      },
+      "recommendations": {
+        "heartbeat": {
+          "title": "Heart Health",
+          "status": "status_normal",
+          "exercises": [
+            "Continue moderate aerobic exercise (20-30 min, 3-4 times/week)",
+            "Walking, swimming, or cycling at comfortable pace"
+          ],
+          "lifestyle": [
+            "Maintain current healthy habits",
+            "Stay hydrated throughout the day"
+          ],
+          "tips": [
+            "Your heart rhythm is healthy!",
+            "Keep up the good work with regular activity"
+          ]
+        },
+        "glucose": {
+          "title": "Blood Glucose",
+          "status": "status_high",
+          "exercises": [
+            "Post-meal walking (15-20 minutes)",
+            "Regular physical activity (30 min, 5 days/week)",
+            "Strength training 2-3 times per week"
+          ],
+          "lifestyle": [
+            "Focus on whole foods and vegetables",
+            "Limit refined carbohydrates",
+            "Stay well-hydrated"
+          ],
+          "tips": [
+            "Elevated glucose detected",
+            "Physical activity helps regulate blood sugar"
+          ]
+        },
+        "breathing": {
+          "title": "Breathing Health",
+          "status": "status_normal",
+          "exercises": [
+            "Deep breathing exercises (5 min daily)",
+            "Continue current activity level"
+          ],
+          "lifestyle": [
+            "Maintain good air quality in living spaces",
+            "Stay active and mobile"
+          ],
+          "tips": [
+            "Breathing pattern is healthy!",
+            "Keep practicing good breathing habits"
+          ]
+        },
+        "speech": {
+          "title": "Speech & Communication",
+          "status": "status_normal_speech",
+          "exercises": [
+            "Continue regular conversation practice",
+            "Reading aloud for 10 minutes daily"
+          ],
+          "lifestyle": [
+            "Stay socially engaged",
+            "Maintain communication habits"
+          ],
+          "tips": [
+            "Speech patterns are healthy!",
+            "Keep practicing regular communication"
+          ]
+        },
+        "emotion": {
+          "title": "Emotional Wellbeing",
+          "status": "status_happy",
+          "exercises": [
+            "Engage in enjoyable activities",
+            "Physical exercise (boosts mood)"
+          ],
+          "lifestyle": [
+            "Maintain communication habits",
+            "Spend time on hobbies"
+          ],
+          "tips": [
+            "Wonderful emotional state!",
+            "Your positive energy is valuable"
+          ]
+        },
+        "posture": {
+          "title": "Posture Health",
+          "status": "status_forward_head (Score: 74/100)",
+          "exercises": [
+            "Chin tucks: Pull chin back (10 reps, 3x/day)",
+            "Neck stretches: Gentle side-to-side and up-down",
+            "Upper back strengthening: Rows and reverse flies",
+            "Chest stretches: Doorway stretch (30s, 3 reps)"
+          ],
+          "lifestyle": [
+            "Adjust screen height to eye level",
+            "Use ergonomic workspace setup",
+            "Set posture check reminders",
+            "Avoid prolonged phone use"
+          ],
+          "tips": [
+            "Forward head posture is very common with screen use",
+            "Small adjustments make big differences"
+          ]
+        }
+      },
+      "summary": "Great job maintaining Heart Health, Breathing Health, Speech & Communication, Emotional Wellbeing! Focus areas for improvement: Blood Glucose, Posture Health. Follow the recommendations below to support your rehabilitation journey."
     },
     {
       "report_id": "K_R002",
       "date": "2025-01-16",
       "heartbeat": {
-        "heart_rate": 102.2495,
-        "rr_interval_variance": 0.051820782859,
+        "heart_rate": 100.0,
+        "rr_interval_variance": 0.06,
         "label": 1.0
       },
       "glucose": {
@@ -64,7 +221,7 @@
         "glucose_range": 1.0
       },
       "breathing": {
-        "breathing_rate": 18.803199797582,
+        "breathing_rate": 18.0,
         "breath_depth": 0.765532687649,
         "rest_vs_exercise": 1.0,
         "label": 0.0
@@ -76,24 +233,181 @@
         "label": 1.0
       },
       "emotion": {
-        "text_sentiment": 0.488577846849,
-        "voice_emotion": 0.730715257438,
-        "facial_emotion": 0.683426537613,
+        "text_sentiment": 0.65,
+        "voice_emotion": 0.63,
+        "facial_emotion": 0.65,
         "label": 2.0
       },
       "posture": {
-        "head_tilt": 8.473696258909,
-        "shoulder_alignment": -0.518254504134,
-        "spine_angle": 70.862162967419,
+        "head_tilt": 9.0,
+        "shoulder_alignment": -2.0,
+        "spine_angle": 95.0,
         "label": 1.0
-      }
+      },
+      "predictions": {
+        "heartbeat": {
+          "status": "status_tachycardia",
+          "heart_rate": 100.0,
+          "rr_variance": 0.06,
+          "prediction": 2,
+          "confidence": 0.88
+        },
+        "glucose": {
+          "range": "status_normal",
+          "prediction": 0,
+          "confidence": 0.85,
+          "bmi": 21.6127,
+          "age": 26,
+          "meal_timing": 1,
+          "activity_level": 1
+        },
+        "breathing": {
+          "status": "status_normal",
+          "breathing_rate": 18.0,
+          "breath_depth": 0.65,
+          "prediction": 0,
+          "confidence": 0.87
+        },
+        "speech": {
+          "pattern": "status_normal_speech",
+          "speech_rate": 145.0,
+          "pause_frequency": 0.15,
+          "pitch_variability": 0.3,
+          "prediction": 0,
+          "confidence": 0.84
+        },
+        "emotion": {
+          "state": "status_happy",
+          "text_sentiment": 0.65,
+          "voice_emotion": 0.63,
+          "facial_emotion": 0.65,
+          "prediction": 0,
+          "confidence": 0.86
+        },
+        "posture": {
+          "posture": "status_forward_head",
+          "status": "status_forward_head",
+          "posture_score": 70.0,
+          "score": 70.0,
+          "head_tilt": 9.0,
+          "shoulder_alignment": -2.0,
+          "spine_angle": 95.0,
+          "prediction": 1,
+          "confidence": 0.85
+        }
+      },
+      "recommendations": {
+        "heartbeat": {
+          "title": "Heart Health",
+          "status": "status_tachycardia",
+          "exercises": [
+            "Gentle breathing exercises",
+            "Slow-paced yoga or tai chi",
+            "Avoid high-intensity workouts temporarily"
+          ],
+          "lifestyle": [
+            "Reduce caffeine intake",
+            "Practice stress management",
+            "Ensure adequate rest and sleep"
+          ],
+          "tips": [
+            "Elevated heart rate detected",
+            "Focus on relaxation and calm activities"
+          ]
+        },
+        "glucose": {
+          "title": "Blood Glucose",
+          "status": "status_normal",
+          "exercises": [
+            "Regular physical activity (30 min, 5 days/week)",
+            "Mix of cardio and strength training"
+          ],
+          "lifestyle": [
+            "Maintain balanced meals",
+            "Continue healthy eating habits"
+          ],
+          "tips": [
+            "Glucose levels are well-controlled!",
+            "Keep monitoring and staying active"
+          ]
+        },
+        "breathing": {
+          "title": "Breathing Health",
+          "status": "status_normal",
+          "exercises": [
+            "Deep breathing exercises (5 min daily)",
+            "Continue current activity level"
+          ],
+          "lifestyle": [
+            "Maintain good air quality in living spaces",
+            "Stay active and mobile"
+          ],
+          "tips": [
+            "Breathing pattern is healthy!",
+            "Keep practicing good breathing habits"
+          ]
+        },
+        "speech": {
+          "title": "Speech & Communication",
+          "status": "status_normal_speech",
+          "exercises": [
+            "Continue regular conversation practice",
+            "Reading aloud for 10 minutes daily"
+          ],
+          "lifestyle": [
+            "Stay socially engaged",
+            "Maintain communication habits"
+          ],
+          "tips": [
+            "Speech patterns are healthy!",
+            "Keep practicing regular communication"
+          ]
+        },
+        "emotion": {
+          "title": "Emotional Wellbeing",
+          "status": "status_happy",
+          "exercises": [
+            "Engage in enjoyable activities",
+            "Physical exercise (boosts mood)"
+          ],
+          "lifestyle": [
+            "Maintain communication habits",
+            "Spend time on hobbies"
+          ],
+          "tips": [
+            "Wonderful emotional state!",
+            "Your positive energy is valuable"
+          ]
+        },
+        "posture": {
+          "title": "Posture Health",
+          "status": "status_forward_head (Score: 70/100)",
+          "exercises": [
+            "Chin tucks: Pull chin back (10 reps, 3x/day)",
+            "Neck stretches: Gentle side-to-side and up-down",
+            "Upper back strengthening: Rows and reverse flies",
+            "Chest stretches: Doorway stretch (30s, 3 reps)"
+          ],
+          "lifestyle": [
+            "Adjust screen height to eye level",
+            "Use ergonomic workspace setup",
+            "Set posture check reminders",
+            "Avoid prolonged phone use"
+          ],
+          "tips": [
+            "Forward head posture is very common with screen use",
+            "Small adjustments make big differences"
+          ]
+        }
+      },
+      "summary": "Great job maintaining Blood Glucose, Breathing Health, Speech & Communication, Emotional Wellbeing! Focus areas for improvement: Heart Health, Posture Health. Follow the recommendations below to support your rehabilitation journey."
     },
     {
       "report_id": "K_R003",
       "date": "2025-04-13",
       "heartbeat": {
-        "heart_rate": 93.9729,
-        "rr_interval_variance": 0.066744723616,
+        "heart_rate": 92.0,
+        "rr_interval_variance": 0.05,
         "label": 2.0
       },
       "glucose": {
@@ -104,7 +418,7 @@
         "glucose_range": 1.0
       },
       "breathing": {
-        "breathing_rate": 19.966314639593,
+        "breathing_rate": 19.0,
         "breath_depth": 0.697674812741,
         "rest_vs_exercise": 1.0,
         "label": 3.0
@@ -116,17 +430,371 @@
         "label": 0.0
       },
       "emotion": {
-        "text_sentiment": 0.315547944006,
-        "voice_emotion": 0.720016744547,
-        "facial_emotion": 0.865614292275,
+        "text_sentiment": 0.68,
+        "voice_emotion": 0.65,
+        "facial_emotion": 0.68,
         "label": 2.0
       },
       "posture": {
-        "head_tilt": -12.594006302494,
-        "shoulder_alignment": -2.836153601214,
-        "spine_angle": 94.209929360635,
+        "head_tilt": 6.0,
+        "shoulder_alignment": -1.0,
+        "spine_angle": 92.0,
         "label": 2.0
+      },
+      "predictions": {
+        "heartbeat": {
+          "status": "status_normal",
+          "heart_rate": 92.0,
+          "rr_variance": 0.05,
+          "prediction": 0,
+          "confidence": 0.88
+        },
+        "glucose": {
+          "range": "status_low",
+          "prediction": 1,
+          "confidence": 0.85,
+          "bmi": 23.1524,
+          "age": 26,
+          "meal_timing": 2,
+          "activity_level": 1
+        },
+        "breathing": {
+          "status": "status_normal",
+          "breathing_rate": 19.0,
+          "breath_depth": 0.65,
+          "prediction": 0,
+          "confidence": 0.87
+        },
+        "speech": {
+          "pattern": "status_normal_speech",
+          "speech_rate": 145.0,
+          "pause_frequency": 0.15,
+          "pitch_variability": 0.3,
+          "prediction": 0,
+          "confidence": 0.84
+        },
+        "emotion": {
+          "state": "status_happy",
+          "text_sentiment": 0.68,
+          "voice_emotion": 0.65,
+          "facial_emotion": 0.68,
+          "prediction": 0,
+          "confidence": 0.86
+        },
+        "posture": {
+          "posture": "status_good_posture",
+          "status": "status_good_posture",
+          "posture_score": 78.0,
+          "score": 78.0,
+          "head_tilt": 6.0,
+          "shoulder_alignment": -1.0,
+          "spine_angle": 92.0,
+          "prediction": 0,
+          "confidence": 0.85
+        }
+      },
+      "recommendations": {
+        "heartbeat": {
+          "title": "Heart Health",
+          "status": "status_normal",
+          "exercises": [
+            "Continue moderate aerobic exercise (20-30 min, 3-4 times/week)",
+            "Walking, swimming, or cycling at comfortable pace"
+          ],
+          "lifestyle": [
+            "Maintain current healthy habits",
+            "Stay hydrated throughout the day"
+          ],
+          "tips": [
+            "Your heart rhythm is healthy!",
+            "Keep up the good work with regular activity"
+          ]
+        },
+        "glucose": {
+          "title": "Blood Glucose",
+          "status": "status_low",
+          "exercises": [
+            "Light activity after meals",
+            "Avoid exercising on empty stomach"
+          ],
+          "lifestyle": [
+            "Eat small, frequent meals",
+            "Keep healthy snacks available",
+            "Monitor blood sugar before activities"
+          ],
+          "tips": [
+            "Low glucose detected - ensure regular meals",
+            "Carry quick-acting carbohydrates"
+          ]
+        },
+        "breathing": {
+          "title": "Breathing Health",
+          "status": "status_normal",
+          "exercises": [
+            "Deep breathing exercises (5 min daily)",
+            "Continue current activity level"
+          ],
+          "lifestyle": [
+            "Maintain good air quality in living spaces",
+            "Stay active and mobile"
+          ],
+          "tips": [
+            "Breathing pattern is healthy!",
+            "Keep practicing good breathing habits"
+          ]
+        },
+        "speech": {
+          "title": "Speech & Communication",
+          "status": "status_normal_speech",
+          "exercises": [
+            "Continue regular conversation practice",
+            "Reading aloud for 10 minutes daily"
+          ],
+          "lifestyle": [
+            "Stay socially engaged",
+            "Maintain communication habits"
+          ],
+          "tips": [
+            "Speech patterns are healthy!",
+            "Keep practicing regular communication"
+          ]
+        },
+        "emotion": {
+          "title": "Emotional Wellbeing",
+          "status": "status_happy",
+          "exercises": [
+            "Engage in enjoyable activities",
+            "Physical exercise (boosts mood)"
+          ],
+          "lifestyle": [
+            "Maintain communication habits",
+            "Spend time on hobbies"
+          ],
+          "tips": [
+            "Wonderful emotional state!",
+            "Your positive energy is valuable"
+          ]
+        },
+        "posture": {
+          "title": "Posture Health",
+          "status": "status_good_posture (Score: 78/100)",
+          "exercises": [
+            "Continue core strengthening exercises",
+            "Maintain flexibility with stretching"
+          ],
+          "lifestyle": [
+            "Keep practicing good posture habits",
+            "Take movement breaks regularly"
+          ],
+          "tips": [
+            "Excellent posture!",
+            "Maintaining good posture prevents future issues"
+          ]
+        }
+      },
+      "summary": "Great job maintaining Heart Health, Breathing Health, Speech & Communication, Emotional Wellbeing, Posture Health! Focus areas for improvement: Blood Glucose. Follow the recommendations below to support your rehabilitation journey."
+    },
+    {
+      "heartbeat": {
+        "heart_rate": 105.0,
+        "rr_interval_variance": 0.08,
+        "label": 2.0
+      },
+      "glucose": {
+        "age": 50,
+        "bmi": 26.0,
+        "meal_timing": 1.0,
+        "activity_level": 0.0,
+        "glucose_range": 1.0
+      },
+      "breathing": {
+        "breathing_rate": 22.0,
+        "breath_depth": 0.38,
+        "rest_vs_exercise": 0.0,
+        "label": 1.0
+      },
+      "speech": {
+        "speech_rate": 95.0,
+        "pause_frequency": 0.5,
+        "pitch_variability": 0.12,
+        "label": 1.0
+      },
+      "emotion": {
+        "text_sentiment": 0.25,
+        "voice_emotion": 0.3,
+        "facial_emotion": 0.28,
+        "label": 2.0
+      },
+      "posture": {
+        "head_tilt": 18.0,
+        "shoulder_alignment": -5.0,
+        "spine_angle": 108.0,
+        "label": 1.0
+      },
+      "report_id": "K_R004",
+      "date": "2026-03-22",
+      "predictions": {
+        "heartbeat": {
+          "status": "status_tachycardia",
+          "heart_rate": 105.0,
+          "rr_variance": 0.08,
+          "prediction": 2,
+          "confidence": 0.88
+        },
+        "glucose": {
+          "range": "status_normal",
+          "prediction": 0,
+          "confidence": 0.85,
+          "bmi": 26.0,
+          "age": 50,
+          "meal_timing": 1,
+          "activity_level": 1
+        },
+        "breathing": {
+          "status": "status_normal",
+          "breathing_rate": 22.0,
+          "breath_depth": 0.65,
+          "prediction": 0,
+          "confidence": 0.87
+        },
+        "speech": {
+          "pattern": "status_normal_speech",
+          "speech_rate": 145.0,
+          "pause_frequency": 0.15,
+          "pitch_variability": 0.3,
+          "prediction": 0,
+          "confidence": 0.84
+        },
+        "emotion": {
+          "state": "status_stressed",
+          "text_sentiment": 0.25,
+          "voice_emotion": 0.3,
+          "facial_emotion": 0.28,
+          "prediction": 2,
+          "confidence": 0.86
+        },
+        "posture": {
+          "posture": "status_slouched",
+          "status": "status_slouched",
+          "posture_score": 45.0,
+          "score": 45.0,
+          "head_tilt": 18.0,
+          "shoulder_alignment": -5.0,
+          "spine_angle": 108.0,
+          "prediction": 2,
+          "confidence": 0.85
+        }
+      },
+      "summary": "Great job maintaining Blood Glucose, Breathing Health, Speech & Communication! Focus areas for improvement: Heart Health, Emotional Wellbeing, Posture Health. Follow the recommendations below to support your rehabilitation journey.",
+      "recommendations": {
+        "heartbeat": {
+          "title": "Heart Health",
+          "status": "status_tachycardia",
+          "exercises": [
+            "Gentle breathing exercises",
+            "Slow-paced yoga or tai chi",
+            "Avoid high-intensity workouts temporarily"
+          ],
+          "lifestyle": [
+            "Reduce caffeine intake",
+            "Practice stress management",
+            "Ensure adequate rest and sleep"
+          ],
+          "tips": [
+            "Elevated heart rate detected",
+            "Focus on relaxation and calm activities"
+          ]
+        },
+        "glucose": {
+          "title": "Blood Glucose",
+          "status": "status_normal",
+          "exercises": [
+            "Regular physical activity (30 min, 5 days/week)",
+            "Mix of cardio and strength training"
+          ],
+          "lifestyle": [
+            "Maintain balanced meals",
+            "Continue healthy eating habits"
+          ],
+          "tips": [
+            "Glucose levels are well-controlled!",
+            "Keep monitoring and staying active"
+          ]
+        },
+        "breathing": {
+          "title": "Breathing Health",
+          "status": "status_normal",
+          "exercises": [
+            "Deep breathing exercises (5 min daily)",
+            "Continue current activity level"
+          ],
+          "lifestyle": [
+            "Maintain good air quality in living spaces",
+            "Stay active and mobile"
+          ],
+          "tips": [
+            "Breathing pattern is healthy!",
+            "Keep practicing good breathing habits"
+          ]
+        },
+        "speech": {
+          "title": "Speech & Communication",
+          "status": "status_normal_speech",
+          "exercises": [
+            "Continue regular conversation practice",
+            "Reading aloud for 10 minutes daily"
+          ],
+          "lifestyle": [
+            "Stay socially engaged",
+            "Maintain communication habits"
+          ],
+          "tips": [
+            "Speech patterns are healthy!",
+            "Keep practicing regular communication"
+          ]
+        },
+        "emotion": {
+          "title": "Emotional Wellbeing",
+          "status": "status_stressed",
+          "exercises": [
+            "Deep breathing exercises (10 min, 2-3x/day)",
+            "Progressive muscle relaxation",
+            "Gentle yoga focusing on breath",
+            "Nature walks"
+          ],
+          "lifestyle": [
+            "Prioritize sleep (7-9 hours)",
+            "Limit screen time before bed",
+            "Talk to someone you trust",
+            "Break tasks into smaller steps"
+          ],
+          "tips": [
+            "Stress is manageable with the right tools",
+            "Be kind to yourself during difficult times"
+          ]
+        },
+        "posture": {
+          "title": "Posture Health",
+          "status": "status_slouched (Score: 45/100)",
+          "exercises": [
+            "Core exercises: Planks, bridges (daily)",
+            "Back extensions: Superman pose (10 reps, 2 sets)",
+            "Hip flexor stretches (30s each side)",
+            "Shoulder blade squeezes (15 reps, 3x/day)"
+          ],
+          "lifestyle": [
+            "Use lumbar support when sitting",
+            "Stand up every 30 minutes",
+            "Adjust chair height properly",
+            "Practice sitting tall with shoulders back"
+          ],
+          "tips": [
+            "Slouching puts stress on your spine",
+            "Building core strength helps maintain posture"
+          ]
+        }
       }
     }
-  ]
+  ],
+  "doctor_id": "DR006"
 }

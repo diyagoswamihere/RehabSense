@@ -113,6 +113,7 @@
             <h2>{{ t('login_options') }}</h2>
             <div class="login-options">
                 <button class="login-option-btn" onclick="showPatientLogin()">{{ t('login_as_patient') }}</button>
+                <button class="login-option-btn" onclick="showDoctorLogin()" style="background:linear-gradient(135deg,#26a69a,#00796b);">Login as Doctor</button>
                 <button class="login-option-btn" onclick="showAdminLogin()">{{ t('login_as_admin') }}</button>
             </div>
         </div>
@@ -156,6 +157,27 @@
         </div>
     </div>
 
+    <!-- Doctor Login Modal -->
+    <div id="doctorLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('doctorLoginModal')">&times;</span>
+            <h2 style="color:#00796b;">Doctor Login</h2>
+            <p style="color:#666;font-size:.9rem;margin-bottom:1rem;">Enter your Doctor ID and password to access your patient panel.</p>
+            <form id="doctorLoginForm">
+                <div class="form-group">
+                    <label for="doctorId">Doctor ID</label>
+                    <input type="text" id="doctorId" name="doctorId" placeholder="e.g. DR001" required style="text-transform:uppercase;">
+                </div>
+                <div class="form-group">
+                    <label for="doctorPassword">Password</label>
+                    <input type="password" id="doctorPassword" name="doctorPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="submit-btn" style="background:linear-gradient(135deg,#26a69a,#00796b);">Login as Doctor</button>
+            </form>
+            <p id="doctorLoginError" style="color:#c62828;font-size:.85rem;margin-top:.75rem;display:none;"></p>
+        </div>
+    </div>
+
     <script>
         const i18n = {
             loginFailedTryAgain: {{ t('login_failed_try_again') | tojson }},
@@ -189,6 +211,11 @@
         function showAdminLogin() {
             closeModal('loginModal');
             document.getElementById('adminLoginModal').style.display = 'block';
+        }
+
+        function showDoctorLogin() {
+            closeModal('loginModal');
+            document.getElementById('doctorLoginModal').style.display = 'block';
         }
 
         function closeModal(modalId) {
@@ -237,6 +264,32 @@
                 }
             } catch (error) {
                 alert(i18n.errorLoggingIn);
+            }
+        });
+
+        // Doctor login form submission
+        document.getElementById('doctorLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const doctorId = document.getElementById('doctorId').value.toUpperCase().trim();
+            const password = document.getElementById('doctorPassword').value;
+            const errEl = document.getElementById('doctorLoginError');
+            errEl.style.display = 'none';
+            try {
+                const response = await fetch('/doctor/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ doctor_id: doctorId, password: password })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    window.location.href = '/doctor/dashboard';
+                } else {
+                    errEl.textContent = data.message || 'Invalid credentials.';
+                    errEl.style.display = 'block';
+                }
+            } catch (error) {
+                errEl.textContent = 'Login error. Please try again.';
+                errEl.style.display = 'block';
             }
         });
 

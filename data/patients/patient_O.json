@@ -1,0 +1,207 @@
+{
+  "patient_id": "15C15PL05",
+  "name": "Pooja Krishnan",
+  "age": 45,
+  "gender": "F",
+  "address": "",
+  "phone": "",
+  "email": "",
+  "emergency_email": "",
+  "consulting_doctor": "Diya Goswami",
+  "doctor_id": "DR003",
+  "doctor_email": "",
+  "allergies": "",
+  "password": "Pk@3287f",
+  "reports": [
+    {
+      "report_id": "15C15PL05_R001",
+      "date": "2026-03-15",
+      "heartbeat": {
+        "heart_rate": 72.0,
+        "rr_interval_variance": 0.05,
+        "label": 0.0
+      },
+      "glucose": {
+        "age": 50,
+        "bmi": 22.5,
+        "meal_timing": 0,
+        "activity_level": 1,
+        "glucose_range": 0
+      },
+      "breathing": {
+        "breathing_rate": 14.5,
+        "breath_depth": 0.75,
+        "rest_vs_exercise": 0,
+        "label": 0.0
+      },
+      "speech": {
+        "speech_rate": 152.0,
+        "pause_frequency": 0.18,
+        "pitch_variability": 0.3,
+        "label": 0.0
+      },
+      "emotion": {
+        "text_sentiment": 0.72,
+        "voice_emotion": 0.68,
+        "facial_emotion": 0.75,
+        "label": 0.0
+      },
+      "posture": {
+        "head_tilt": 5.0,
+        "shoulder_alignment": -1.0,
+        "spine_angle": 91.0,
+        "label": 0.0
+      },
+      "predictions": {
+        "heartbeat": {
+          "status": "status_normal",
+          "prediction": 0,
+          "confidence": 0.38819887238433226,
+          "heart_rate": 72.0,
+          "rr_variance": 0.05
+        },
+        "glucose": {
+          "range": "status_normal",
+          "prediction": 1,
+          "confidence": 0.6842042704061141,
+          "age": 50,
+          "bmi": 22.5,
+          "meal_timing": 0,
+          "activity_level": 1
+        },
+        "breathing": {
+          "status": "status_normal",
+          "prediction": 0,
+          "confidence": 0.95,
+          "breathing_rate": 14.5,
+          "breath_depth": 0.75
+        },
+        "speech": {
+          "pattern": "status_normal_speech",
+          "prediction": 0,
+          "confidence": 0.760577131577445,
+          "speech_rate": 152.0,
+          "pause_frequency": 0.18
+        },
+        "emotion": {
+          "state": "status_happy",
+          "prediction": 3,
+          "confidence": 0.9,
+          "text_sentiment": 0.72,
+          "voice_emotion": 0.68,
+          "facial_emotion": 0.75
+        },
+        "posture": {
+          "posture": "status_good_posture",
+          "status": "status_good_posture",
+          "prediction": 2,
+          "posture_score": 91.66666666666667,
+          "score": 91.66666666666667,
+          "confidence": 0.92,
+          "head_tilt": 5.0,
+          "shoulder_alignment": -1.0,
+          "spine_angle": 91.0
+        }
+      },
+      "recommendations": {
+        "heartbeat": {
+          "title": "Heart Health",
+          "status": "status_normal",
+          "exercises": [
+            "Continue moderate aerobic exercise (20-30 min, 3-4 times/week)",
+            "Walking, swimming, or cycling at comfortable pace"
+          ],
+          "lifestyle": [
+            "Maintain current healthy habits",
+            "Stay hydrated throughout the day"
+          ],
+          "tips": [
+            "Your heart rhythm is healthy!",
+            "Keep up the good work with regular activity"
+          ]
+        },
+        "glucose": {
+          "title": "Blood Glucose",
+          "status": "status_normal",
+          "exercises": [
+            "Regular physical activity (30 min, 5 days/week)",
+            "Mix of cardio and strength training"
+          ],
+          "lifestyle": [
+            "Maintain balanced meals",
+            "Continue healthy eating habits"
+          ],
+          "tips": [
+            "Glucose levels are well-controlled!",
+            "Keep monitoring and staying active"
+          ]
+        },
+        "breathing": {
+          "title": "Breathing Health",
+          "status": "status_normal",
+          "exercises": [
+            "Deep breathing exercises (5 min daily)",
+            "Continue current activity level"
+          ],
+          "lifestyle": [
+            "Maintain good air quality in living spaces",
+            "Stay active and mobile"
+          ],
+          "tips": [
+            "Breathing pattern is healthy!",
+            "Keep practicing good breathing habits"
+          ]
+        },
+        "speech": {
+          "title": "Speech & Communication",
+          "status": "status_normal_speech",
+          "exercises": [
+            "Continue regular conversation practice",
+            "Reading aloud for 10 minutes daily"
+          ],
+          "lifestyle": [
+            "Stay socially engaged",
+            "Maintain communication habits"
+          ],
+          "tips": [
+            "Speech patterns are healthy!",
+            "Keep practicing regular communication"
+          ]
+        },
+        "emotion": {
+          "title": "Emotional Wellbeing",
+          "status": "status_happy",
+          "exercises": [
+            "Engage in enjoyable activities",
+            "Physical exercise (boosts mood)"
+          ],
+          "lifestyle": [
+            "Maintain communication habits",
+            "Spend time on hobbies"
+          ],
+          "tips": [
+            "Wonderful emotional state!",
+            "Your positive energy is valuable"
+          ]
+        },
+        "posture": {
+          "title": "Posture Health",
+          "status": "status_good_posture (Score: 92/100)",
+          "exercises": [
+            "Continue core strengthening exercises",
+            "Maintain flexibility with stretching"
+          ],
+          "lifestyle": [
+            "Keep practicing good posture habits",
+            "Take movement breaks regularly"
+          ],
+          "tips": [
+            "Excellent posture!",
+            "Maintaining good posture prevents future issues"
+          ]
+        }
+      },
+      "summary": "Great job maintaining Heart Health, Blood Glucose, Breathing Health, Speech & Communication, Emotional Wellbeing, Posture Health! Continue your healthy habits and stay consistent with your routine."
+    }
+  ]
+}

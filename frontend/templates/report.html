@@ -1,314 +1,245 @@
 {% extends "base.html" %}
-
-{% block title %}{{ t('report_title') }} - {{ report.report_id }}{% endblock %}
+{% block title %}Report {{ report.report_id }} — {{ patient.name }}{% endblock %}
 
 {% block content %}
 <div class="container">
-    <div class="report-header">
-        <div>
-            <h1>{{ t('your_health_reports') }}</h1>
-            <p class="report-meta">{{ patient.name }} | {{ report.date }} | {{ report.report_id }}</p>
-        </div>
-        <a href="/dashboard" class="btn-secondary">← {{ t('nav_dashboard') }}</a>
+
+  <!-- Header -->
+  <div class="rpt-header">
+    <div>
+      <h1 class="rpt-title">Health Report</h1>
+      <p class="rpt-meta">
+        <span class="rpt-badge">{{ report.report_id }}</span>
+        {{ patient.name }} &nbsp;·&nbsp; {{ report.date }}
+      </p>
     </div>
+    <a href="{{ back_url }}" class="btn-back">← Back</a>
+  </div>
 
-    <div class="summary-section">
-        <h2>{{ t('summary_heading') }}</h2>
-        <div class="summary-card">
-            <p>{{ summary }}</p>
+  <!-- Summary -->
+  <div class="summary-banner">
+    <span class="summary-icon">🩺</span>
+    <p>{{ summary }}</p>
+  </div>
+
+  <!-- AI Analysis Cards -->
+  <section class="section">
+    <h2 class="section-title">AI Analysis Results</h2>
+    <div class="pred-grid">
+
+      {% if predictions.heartbeat %}
+      {% set hb = predictions.heartbeat %}
+      <div class="pred-card {{ 'card-good' if hb.status == 'status_normal' else 'card-warn' }}">
+        <div class="pred-icon">❤️</div>
+        <div class="pred-label">Heartbeat</div>
+        <div class="pred-value">{{ hb.heart_rate|round(1) }} <span class="pred-unit">bpm</span></div>
+        <div class="pred-status-pill {{ 'pill-good' if hb.status == 'status_normal' else 'pill-warn' }}">
+          {{ hb.status|replace('status_','') |replace('_',' ')|title }}
         </div>
-    </div>
+        <div class="pred-conf">Confidence: {{ (hb.confidence*100)|round(0)|int }}%</div>
+      </div>
+      {% endif %}
 
-    <div class="predictions-section">
-        <h2>{{ t('ai_analysis_results') }}</h2>
-        
-        <div class="predictions-grid">
-            <!-- Heartbeat -->
-            {% if predictions.heartbeat %}
-            <div class="prediction-card">
-                <div class="prediction-header">
-                    <span class="icon"></span>
-                    <h3>{{ t('heartbeat_analysis') }}</h3>
-                </div>
-                <div class="prediction-result {{ 'status-good' if predictions.heartbeat.status == 'status_normal' else 'status-warning' }}">
-                    {{ t(predictions.heartbeat.status) }}
-                </div>
-                <div class="prediction-details">
-                    <p><strong>{{ t('heart_rate') }}:</strong> {{ predictions.heartbeat.heart_rate|round(1) }} {{ t('bpm') }}</p>
-                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.heartbeat.confidence * 100)|round(1) }}%</p>
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Glucose -->
-            {% if predictions.glucose %}
-            <div class="prediction-card">
-                <div class="prediction-header">
-                    <span class="icon"></span>
-                    <h3>{{ t('blood_glucose') }}</h3>
-                </div>
-                <div class="prediction-result {{ 'status-good' if predictions.glucose.range == 'status_normal' else 'status-warning' }}">
-                    {{ t(predictions.glucose.range) }}
-                </div>
-                <div class="prediction-details">
-                    <p><strong>{{ t('bmi') }}:</strong> {{ predictions.glucose.bmi|round(1) }}</p>
-                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.glucose.confidence * 100)|round(1) }}%</p>
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Breathing -->
-            {% if predictions.breathing %}
-            <div class="prediction-card">
-                <div class="prediction-header">
-                    <span class="icon"></span>
-                    <h3>{{ t('breathing_pattern') }}</h3>
-                </div>
-                <div class="prediction-result {{ 'status-good' if predictions.breathing.status == 'status_normal' else 'status-warning' }}">
-                    {{ t(predictions.breathing.status) }}
-                </div>
-                <div class="prediction-details">
-                    <p><strong>{{ t('rate') }}:</strong> {{ predictions.breathing.breathing_rate|round(1) }} {{ t('breaths_per_min') }}</p>
-                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.breathing.confidence * 100)|round(1) }}%</p>
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Speech -->
-            {% if predictions.speech %}
-            <div class="prediction-card">
-                <div class="prediction-header">
-                    <span class="icon"></span>
-                    <h3>{{ t('speech_pattern') }}</h3>
-                </div>
-                <div class="prediction-result {{ 'status-good' if predictions.speech.pattern == 'status_normal_speech' else 'status-warning' }}">
-                    {{ t(predictions.speech.pattern) }}
-                </div>
-                <div class="prediction-details">
-                    <p><strong>{{ t('rate') }}:</strong> {{ predictions.speech.speech_rate|round(0) }} {{ t('words_per_min') }}</p>
-                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.speech.confidence * 100)|round(1) }}%</p>
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Emotion -->
-            {% if predictions.emotion %}
-            <div class="prediction-card">
-                <div class="prediction-header">
-                    <span class="icon"></span>
-                    <h3>{{ t('emotional_state') }}</h3>
-                </div>
-                <div class="prediction-result {{ 'status-good' if predictions.emotion.state in ['status_happy', 'status_neutral'] else 'status-warning' }}">
-                    {{ t(predictions.emotion.state) }}
-                </div>
-                <div class="prediction-details">
-                    <p><strong>{{ t('sentiment_score') }}:</strong> {{ (predictions.emotion.text_sentiment * 100)|round(0) }}%</p>
-                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.emotion.confidence * 100)|round(1) }}%</p>
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Posture -->
-            {% if predictions.posture %}
-            <div class="prediction-card">
-                <div class="prediction-header">
-                    <span class="icon">🧍</span>
-                    <h3>{{ t('posture_analysis') }}</h3>
-                </div>
-                <div class="prediction-result {{ 'status-good' if predictions.posture.posture == 'status_good_posture' else 'status-warning' }}">
-                    {{ t(predictions.posture.posture) }}
-                </div>
-                <div class="prediction-details">
-                    <p><strong>{{ t('posture_score') }}:</strong> {{ predictions.posture.score|round(0) }}{{ t('out_of_100') }}</p>
-                    <p><strong>{{ t('confidence') }}:</strong> {{ (predictions.posture.confidence * 100)|round(1) }}%</p>
-                </div>
-            </div>
-            {% endif %}
+      {% if predictions.glucose %}
+      {% set gl = predictions.glucose %}
+      <div class="pred-card {{ 'card-good' if gl.range == 'status_normal' else 'card-warn' }}">
+        <div class="pred-icon">🩸</div>
+        <div class="pred-label">Blood Glucose</div>
+        <div class="pred-value">BMI {{ gl.bmi|round(1) }}</div>
+        <div class="pred-status-pill {{ 'pill-good' if gl.range == 'status_normal' else 'pill-warn' }}">
+          {{ gl.range|replace('status_','') |replace('_',' ')|title }}
         </div>
-    </div>
+        <div class="pred-conf">Confidence: {{ (gl.confidence*100)|round(0)|int }}%</div>
+      </div>
+      {% endif %}
 
-    <div class="recommendations-section">
-        <h2>{{ t('personalized_recommendations') }}</h2>
-        
-        {% for key, rec in recommendations.items() %}
-        <div class="recommendation-card">
-            <h3>{{ rec.title }}</h3>
-            
-            {% if rec.exercises %}
-            <div class="rec-category">
-                <h4>{{ t('exercises_activities') }}</h4>
-                <ul>
-                    {% for exercise in rec.exercises %}
-                    <li>{{ exercise }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-
-            {% if rec.lifestyle %}
-            <div class="rec-category">
-                <h4>{{ t('lifestyle_tips') }}</h4>
-                <ul>
-                    {% for tip in rec.lifestyle %}
-                    <li>{{ tip }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-
-            {% if rec.tips %}
-            <div class="rec-category tips">
-                <h4>{{ t('important_notes') }}</h4>
-                <ul>
-                    {% for tip in rec.tips %}
-                    <li>{{ tip }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
+      {% if predictions.breathing %}
+      {% set br = predictions.breathing %}
+      <div class="pred-card {{ 'card-good' if br.status == 'status_normal' else 'card-warn' }}">
+        <div class="pred-icon">🫁</div>
+        <div class="pred-label">Breathing</div>
+        <div class="pred-value">{{ br.breathing_rate|round(1) }} <span class="pred-unit">br/min</span></div>
+        <div class="pred-status-pill {{ 'pill-good' if br.status == 'status_normal' else 'pill-warn' }}">
+          {{ br.status|replace('status_','') |replace('_',' ')|title }}
         </div>
-        {% endfor %}
+        <div class="pred-conf">Confidence: {{ (br.confidence*100)|round(0)|int }}%</div>
+      </div>
+      {% endif %}
+
+      {% if predictions.speech %}
+      {% set sp = predictions.speech %}
+      <div class="pred-card {{ 'card-good' if sp.pattern == 'status_normal_speech' else 'card-warn' }}">
+        <div class="pred-icon">🎙️</div>
+        <div class="pred-label">Speech</div>
+        <div class="pred-value">{{ (sp.speech_rate or sp.get('speech_rate_wpm',0))|round(0)|int }} <span class="pred-unit">wpm</span></div>
+        <div class="pred-status-pill {{ 'pill-good' if sp.pattern == 'status_normal_speech' else 'pill-warn' }}">
+          {{ sp.pattern|replace('status_','') |replace('_',' ')|title }}
+        </div>
+        {% if sp.transcript %}
+        <div class="pred-transcript">"{{ sp.transcript[:80] }}{% if sp.transcript|length > 80 %}…{% endif %}"</div>
+        {% endif %}
+        <div class="pred-conf">Confidence: {{ (sp.confidence*100)|round(0)|int }}%</div>
+      </div>
+      {% endif %}
+
+      {% if predictions.emotion %}
+      {% set em = predictions.emotion %}
+      {% set em_good = em.state in ['status_happy','status_neutral'] %}
+      <div class="pred-card {{ 'card-good' if em_good else 'card-warn' }}">
+        <div class="pred-icon">{{ '😊' if em.state == 'status_happy' else '😐' if em.state == 'status_neutral' else '😟' }}</div>
+        <div class="pred-label">Emotion</div>
+        <div class="pred-value">{{ (em.text_sentiment*100)|round(0)|int }}<span class="pred-unit">%</span></div>
+        <div class="pred-status-pill {{ 'pill-good' if em_good else 'pill-warn' }}">
+          {{ em.state|replace('status_','') |replace('_',' ')|title }}
+        </div>
+        <div class="pred-conf">Confidence: {{ (em.confidence*100)|round(0)|int }}%</div>
+      </div>
+      {% endif %}
+
+      {% if predictions.posture %}
+      {% set ps = predictions.posture %}
+      {% set ps_score = ps.posture_score if ps.posture_score is defined else ps.score %}
+      <div class="pred-card {{ 'card-good' if ps.posture == 'status_good_posture' else 'card-warn' }}">
+        <div class="pred-icon">🧍</div>
+        <div class="pred-label">Posture</div>
+        <div class="pred-value">{{ ps_score|round(0)|int }}<span class="pred-unit">/100</span></div>
+        <div class="pred-status-pill {{ 'pill-good' if ps.posture == 'status_good_posture' else 'pill-warn' }}">
+          {{ ps.posture|replace('status_','') |replace('_',' ')|title }}
+        </div>
+        <div class="pred-conf">Confidence: {{ (ps.confidence*100)|round(0)|int }}%</div>
+      </div>
+      {% endif %}
+
     </div>
+  </section>
+
+  <!-- Weekly Progress vs PREVIOUS report -->
+  {% if weekly_progress and weekly_progress.metrics %}
+  <section class="section">
+    <h2 class="section-title">Weekly Progress</h2>
+    <p class="section-sub">
+      Comparing this report <strong>({{ weekly_progress.curr_date }})</strong>
+      against the previous report <strong>({{ weekly_progress.prev_date }})</strong>
+    </p>
+    <div class="progress-grid">
+      {% for key, m in weekly_progress.metrics.items() %}
+      {% if m.delta is not none %}
+        {% set improved = (m.higher_is_better and m.delta > 0) or (not m.higher_is_better and m.delta < 0 and m.higher_is_better is not none) %}
+        {% set worsened = (m.higher_is_better and m.delta < 0) or (not m.higher_is_better and m.delta > 0 and m.higher_is_better is not none) %}
+      {% endif %}
+      <div class="prog-card">
+        <div class="prog-metric">{{ m.label }} {% if m.unit %}<span class="prog-unit">({{ m.unit }})</span>{% endif %}</div>
+        <div class="prog-row">
+          <div class="prog-col">
+            <div class="prog-lbl">Previous</div>
+            <div class="prog-val">{{ m.prev }}</div>
+            <div class="prog-status-small">{{ m.prev_status }}</div>
+          </div>
+          <div class="prog-arrow">→</div>
+          <div class="prog-col">
+            <div class="prog-lbl">Current</div>
+            <div class="prog-val">{{ m.curr }}</div>
+            <div class="prog-status-small">{{ m.curr_status }}</div>
+          </div>
+        </div>
+        {% if m.delta is not none %}
+        <div class="prog-delta {{ 'delta-good' if improved else 'delta-bad' if worsened else 'delta-neutral' }}">
+          {{ '+' if m.delta > 0 else '' }}{{ m.delta }}
+          {% if improved %} ↑ Improved{% elif worsened %} ↓ Declined{% endif %}
+        </div>
+        {% else %}
+        <div class="prog-delta {{ 'delta-good' if m.curr_status != m.prev_status and m.curr in ['Happy','Neutral'] else 'delta-neutral' }}">
+          {% if m.curr != m.prev %}→ Changed{% else %}→ No change{% endif %}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Recommendations -->
+  <section class="section">
+    <h2 class="section-title">Personalized Recommendations</h2>
+    <div class="rec-grid">
+      {% for key, rec in recommendations.items() %}
+      <div class="rec-card">
+        <h3 class="rec-title">{{ rec.title }}</h3>
+        {% if rec.exercises %}
+        <div class="rec-block">
+          <div class="rec-block-title">🏃 Exercises &amp; Activities</div>
+          <ul>{% for e in rec.exercises %}<li>{{ e }}</li>{% endfor %}</ul>
+        </div>
+        {% endif %}
+        {% if rec.lifestyle %}
+        <div class="rec-block">
+          <div class="rec-block-title">🌿 Lifestyle Tips</div>
+          <ul>{% for t in rec.lifestyle %}<li>{{ t }}</li>{% endfor %}</ul>
+        </div>
+        {% endif %}
+        {% if rec.tips %}
+        <div class="rec-block rec-notes">
+          <div class="rec-block-title">📌 Important Notes</div>
+          <ul>{% for t in rec.tips %}<li>{{ t }}</li>{% endfor %}</ul>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
 </div>
 
 <style>
-.report-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #e0e0e0;
-}
-
-.report-header h1 {
-    margin: 0 0 0.5rem 0;
-}
-
-.report-meta {
-    color: #666;
-    margin: 0;
-}
-
-.summary-section {
-    margin-bottom: 3rem;
-}
-
-.summary-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 2rem;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    line-height: 1.6;
-}
-
-.predictions-section {
-    margin-bottom: 3rem;
-}
-
-.predictions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.prediction-card {
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 1.5rem;
-    transition: all 0.3s;
-}
-
-.prediction-card:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.prediction-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.prediction-header .icon {
-    font-size: 1.5rem;
-}
-
-.prediction-header h3 {
-    margin: 0;
-    font-size: 1.1rem;
-}
-
-.prediction-result {
-    font-size: 1.5rem;
-    font-weight: bold;
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.status-good {
-    background: #d4edda;
-    color: #155724;
-}
-
-.status-warning {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.prediction-details p {
-    margin: 0.5rem 0;
-    color: #666;
-}
-
-.recommendations-section {
-    margin-bottom: 3rem;
-}
-
-.recommendation-card {
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-}
-
-.recommendation-card h3 {
-    color: #667eea;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-}
-
-.rec-category {
-    margin-bottom: 1.5rem;
-}
-
-.rec-category h4 {
-    color: #333;
-    margin-bottom: 0.75rem;
-}
-
-.rec-category ul {
-    margin: 0;
-    padding-left: 1.5rem;
-}
-
-.rec-category li {
-    margin-bottom: 0.5rem;
-    line-height: 1.6;
-}
-
-.rec-category.tips {
-    background: #e7f3ff;
-    padding: 1rem;
-    border-radius: 8px;
-    border-left: 4px solid #667eea;
-}
+.rpt-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:2px solid rgba(255,255,255,.4)}
+.rpt-title{margin:0 0 .4rem;font-size:1.8rem;color:#1a1a2e}
+.rpt-meta{margin:0;color:#555;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.rpt-badge{background:#667eea;color:#fff;padding:2px 10px;border-radius:12px;font-size:.78rem;font-family:monospace}
+.btn-back{background:rgba(255,255,255,.85);color:#333;padding:.5rem 1.25rem;border-radius:20px;text-decoration:none;font-weight:600;font-size:.88rem;border:1px solid rgba(0,0,0,.15);transition:all .2s;white-space:nowrap}
+.btn-back:hover{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.summary-banner{display:flex;align-items:flex-start;gap:1rem;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:1.25rem 1.5rem;border-radius:12px;margin-bottom:2rem;font-size:1rem;line-height:1.6}
+.summary-icon{font-size:1.5rem;flex-shrink:0;margin-top:.1rem}
+.summary-banner p{margin:0}
+.section{margin-bottom:2.5rem}
+.section-title{font-size:1.25rem;font-weight:700;color:#1a1a2e;margin-bottom:.35rem}
+.section-sub{font-size:.88rem;color:#666;margin-bottom:1rem}
+.pred-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:1rem}
+.pred-card{background:#fff;border-radius:14px;padding:1.25rem;text-align:center;border:2px solid transparent;transition:transform .2s,box-shadow .2s}
+.pred-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.1)}
+.card-good{border-color:#c3e6cb}
+.card-warn{border-color:#ffc107}
+.pred-icon{font-size:1.75rem;margin-bottom:.4rem}
+.pred-label{font-size:.75rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem}
+.pred-value{font-size:1.5rem;font-weight:700;color:#1a1a2e;line-height:1}
+.pred-unit{font-size:.75rem;font-weight:400;color:#888}
+.pred-status-pill{display:inline-block;margin:.4rem auto .2rem;padding:3px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
+.pill-good{background:#d4edda;color:#155724}
+.pill-warn{background:#fff3cd;color:#856404}
+.pred-conf{font-size:.72rem;color:#aaa;margin-top:.2rem}
+.pred-transcript{font-size:.72rem;color:#667eea;font-style:italic;margin:.3rem 0;line-height:1.3}
+/* Progress */
+.progress-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem}
+.prog-card{background:#fff;border-radius:12px;padding:1rem;border:1px solid #e0e0e0}
+.prog-metric{font-size:.78rem;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.4px;margin-bottom:.6rem}
+.prog-unit{font-weight:400;color:#aaa}
+.prog-row{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.5rem}
+.prog-col{text-align:center;min-width:55px}
+.prog-lbl{font-size:.65rem;color:#aaa;text-transform:uppercase;letter-spacing:.3px}
+.prog-val{font-size:1.1rem;font-weight:700;color:#1a1a2e}
+.prog-status-small{font-size:.62rem;color:#888;margin-top:.1rem}
+.prog-arrow{color:#667eea;font-size:1rem;flex-shrink:0}
+.prog-delta{text-align:center;font-size:.8rem;font-weight:700;padding:3px 10px;border-radius:12px;display:inline-block;margin-top:.2rem}
+.delta-good{background:#d4edda;color:#155724}
+.delta-bad{background:#f8d7da;color:#721c24}
+.delta-neutral{background:#e2e3e5;color:#383d41}
+/* Recommendations */
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
+.rec-card{background:#fff;border-radius:12px;padding:1.5rem;border:1px solid #e0e0e0}
+.rec-title{margin:0 0 1rem;font-size:1.05rem;color:#667eea;font-weight:700}
+.rec-block{margin-bottom:1rem}
+.rec-block-title{font-size:.82rem;font-weight:700;color:#333;margin-bottom:.4rem}
+.rec-block ul{margin:0;padding-left:1.2rem}
+.rec-block li{font-size:.85rem;color:#555;margin-bottom:.3rem;line-height:1.5}
+.rec-notes{background:#f0f4ff;padding:.75rem;border-radius:8px;border-left:3px solid #667eea}
 </style>
 {% endblock %}

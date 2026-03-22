@@ -7,7 +7,19 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 import json
 import os
 import sys
-from datetime import datetime
+import random
+import string
+from datetime import datetime, timedelta
+
+# ── Credentials (edit here directly) ────────────────────────────
+_SMTP_USER   = 'capstoneg042026@gmail.com'
+_SMTP_PASS   = 'jxgeujdzdjvmrbpr'
+_SMTP_HOST   = 'smtp.gmail.com'
+_SMTP_PORT   = 465
+_ADMIN_EMAIL = 'capstoneg042026@gmail.com'
+_ADMIN_PASS  = 'Sunday6$'
+# ────────────────────────────────────────────────────────────────
+
 
 # Simple in-memory translation catalog (free, no paid API)
 SUPPORTED_LANGUAGES = ['en', 'es', 'hi', 'bn', 'mr', 'ta', 'kn', 'te', 'or', 'pa', 'hry', 'gu', 'bho', 'ur']
@@ -965,6 +977,46 @@ app = Flask(__name__,
             static_folder=STATIC_DIR)
 app.secret_key = 'rehabsense_secret_key_2026'
 
+# ── Safe JSON encoder: replaces NaN/Infinity (from numpy) with null ──────────
+import math
+from flask.json.provider import DefaultJSONProvider
+
+class SafeJSONProvider(DefaultJSONProvider):
+    @staticmethod
+    def _sanitize(obj):
+        """Recursively replace NaN/Infinity with None so JSON stays valid."""
+        if isinstance(obj, float):
+            if math.isnan(obj) or math.isinf(obj):
+                return None
+            return obj
+        if isinstance(obj, dict):
+            return {k: SafeJSONProvider._sanitize(v) for k, v in obj.items()}
+        if isinstance(obj, (list, tuple)):
+            return [SafeJSONProvider._sanitize(v) for v in obj]
+        # Handle numpy types
+        try:
+            import numpy as np
+            if isinstance(obj, (np.floating, np.float32, np.float64)):
+                val = float(obj)
+                return None if (math.isnan(val) or math.isinf(val)) else val
+            if isinstance(obj, (np.integer,)):
+                return int(obj)
+            if isinstance(obj, np.ndarray):
+                return [SafeJSONProvider._sanitize(v) for v in obj.tolist()]
+        except ImportError:
+            pass
+        return obj
+
+    def dumps(self, obj, **kwargs):
+        return super().dumps(SafeJSONProvider._sanitize(obj), **kwargs)
+
+    def response(self, *args, **kwargs):
+        return super().response(*args, **kwargs)
+
+app.json_provider_class = SafeJSONProvider
+app.json = SafeJSONProvider(app)
+# ─────────────────────────────────────────────────────────────────────────────
+
 @app.context_processor
 def inject_i18n_context():
     def t(key):
@@ -1084,6 +1136,347 @@ def load_all_patients():
                 continue
     return patients
 
+def generate_patient_id():
+    """Generate a unique patient ID like RS-2026-XXXXX."""
+    patients_dir = os.path.join(DATA_DIR, 'patients')
+    existing_ids = set()
+    if os.path.exists(patients_dir):
+        for fname in os.listdir(patients_dir):
+            if not fname.endswith('.json'):
+                continue
+            fpath = os.path.join(patients_dir, fname)
+            try:
+                with open(fpath) as f:
+                    pdata = json.load(f)
+                existing_ids.add(str(pdata.get('patient_id', '')).upper())
+            except Exception:
+                pass
+    year = datetime.now().year
+    for _ in range(100):
+        suffix = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+        pid = f"RS{year}{suffix}"
+        if pid not in existing_ids:
+            return pid
+    raise RuntimeError("Could not generate unique patient ID")
+
+
+def check_dangerous_conditions(predictions, patient_data, report_id):
+    """Check dangerous conditions using BOTH model predictions AND raw physiological thresholds.
+    Raw thresholds are the primary safety net since the ML model may not always flag edge cases."""
+    alerts = []
+
+    # ── Raw value thresholds (clinical safety net) ──────────────────────────
+    hb = predictions.get('heartbeat', {})
+    hr = hb.get('heart_rate', 0) or 0
+    if hr >= 120:
+        alerts.append(f"❤️ HEART RATE CRITICAL: {hr:.0f} bpm — Tachycardia (≥120 bpm)")
+    elif hr > 0 and hr <= 45:
+        alerts.append(f"❤️ HEART RATE CRITICAL: {hr:.0f} bpm — Severe Bradycardia (≤45 bpm)")
+    elif hb.get('status') in ('status_tachycardia', 'status_bradycardia', 'status_irregular'):
+        alerts.append(f"❤️ HEART RATE ALERT: {hb.get('status','').replace('status_','').upper()} — {hr:.0f} bpm")
+
+    br = predictions.get('breathing', {})
+    br_rate = br.get('breathing_rate', 0) or 0
+    if br_rate > 0 and br_rate < 8:
+        alerts.append(f"🫁 BREATHING CRITICAL: {br_rate:.1f} breaths/min — Dangerously low (normal 12–20)")
+    elif br_rate > 25:
+        alerts.append(f"🫁 BREATHING ALERT: {br_rate:.1f} breaths/min — Rapid breathing (normal 12–20)")
+    elif br.get('status') in ('status_apnea_risk', 'status_irregular'):
+        alerts.append(f"🫁 BREATHING ALERT: {br.get('status','').replace('status_','').replace('_',' ').title()}")
+
+    gl = predictions.get('glucose', {})
+    if gl.get('range') == 'status_high':
+        alerts.append("🩸 GLUCOSE ALERT: High blood glucose detected")
+    elif gl.get('range') == 'status_low':
+        alerts.append("🩸 GLUCOSE ALERT: Low blood glucose — risk of hypoglycemia")
+
+    em = predictions.get('emotion', {})
+    if em.get('state') in ('status_stressed', 'status_sad'):
+        ts = em.get('text_sentiment', 0.5) or 0.5
+        if ts <= 0.2:
+            alerts.append(f"😟 EMOTIONAL ALERT: Severely negative emotional state — patient may need psychological support")
+        else:
+            alerts.append(f"😟 EMOTIONAL ALERT: Patient showing signs of {em.get('state','').replace('status_','')}")
+
+    sp = predictions.get('speech', {})
+    if sp.get('pattern') == 'status_slurred_speech':
+        alerts.append("🎙️ SPEECH ALERT: Slurred/Slow speech — possible neurological concern")
+    sp_rate = sp.get('speech_rate', 0) or 0
+    if 0 < sp_rate < 60:
+        alerts.append(f"🎙️ SPEECH ALERT: Very slow speech ({sp_rate:.0f} wpm) — possible neurological issue")
+
+    ps = predictions.get('posture', {})
+    ps_score = ps.get('posture_score') or ps.get('score') or 100
+    if ps_score < 35:
+        alerts.append(f"🧍 POSTURE ALERT: Severely poor posture score ({ps_score:.0f}/100)")
+
+    return alerts
+
+
+
+def send_alert_email(patient_data, alerts, report_id, doctor_email=None):
+    """Send beautiful HTML alert email to admin, doctor, and patient emergency contact."""
+    import smtplib
+    from email.mime.text import MIMEText
+    from email.mime.multipart import MIMEMultipart
+
+    ADMIN_EMAIL = _ADMIN_EMAIL
+    SMTP_USER   = _SMTP_USER
+    SMTP_PASS   = _SMTP_PASS
+
+    if not SMTP_PASS:
+        print(f"\u26a0\ufe0f  SMTP_PASS is empty in config.py — alert email skipped. Conditions: {alerts}")
+        return False
+
+    patient_name    = patient_data.get('name', 'Unknown')
+    patient_id      = patient_data.get('patient_id', '')
+    patient_age     = patient_data.get('age', '\u2014')
+    emergency_email = patient_data.get('emergency_email', '')
+    doc_id          = patient_data.get('doctor_id', '')
+    consulting_doc  = patient_data.get('consulting_doctor', 'Attending Physician')
+    now_str         = datetime.now().strftime('%d %B %Y, %I:%M %p')
+
+    recipients = [ADMIN_EMAIL]
+    doctors = load_doctors()
+    if doc_id and doc_id in doctors:
+        doc_em = doctors[doc_id].get('email', '')
+        if doc_em and doc_em not in recipients:
+            recipients.append(doc_em)
+    if doctor_email and doctor_email not in recipients:
+        recipients.append(doctor_email)
+    if emergency_email and emergency_email not in recipients:
+        recipients.append(emergency_email)
+
+    plain_lines = [
+        f"\U0001f6a8 URGENT HEALTH ALERT \u2014 RehabSense",
+        f"",
+        f"Patient : {patient_name} (ID: {patient_id}, Age: {patient_age})",
+        f"Doctor  : {consulting_doc}",
+        f"Report  : {report_id}",
+        f"Time    : {now_str}",
+        f"",
+        "Detected conditions:",
+    ] + [f"  \u2022 {a}" for a in alerts] + [
+        f"",
+        "Please review the patient\u2019s report immediately.",
+        "\u2014 RehabSense Automated Alert System",
+    ]
+
+    alerts_html = "".join(
+        f'<tr><td style="padding:8px 12px;border-bottom:1px solid #fde0e0;">'
+        f'<span style="color:#c62828;font-size:1.1em;">\u26a0\ufe0f</span> {a}</td></tr>'
+        for a in alerts
+    )
+
+    html_body = f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:30px 0;">
+  <tr><td align="center">
+    <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+      <tr><td style="background:linear-gradient(135deg,#c62828,#e53935);padding:30px 40px;text-align:center;">
+        <h1 style="margin:0;color:#ffffff;font-size:24px;">\U0001f6a8 URGENT HEALTH ALERT</h1>
+        <p style="margin:8px 0 0;color:#ffcdd2;font-size:14px;">RehabSense AI Monitoring System</p>
+      </td></tr>
+      <tr><td style="padding:28px 40px 16px;">
+        <table width="100%" style="background:#fff3f3;border-radius:8px;border:1px solid #ffcdd2;padding:16px;" cellpadding="0" cellspacing="0">
+          <tr><td style="padding:6px 16px;color:#555;font-size:14px;"><strong>Patient</strong></td>
+              <td style="padding:6px 16px;color:#1a1a2e;font-size:15px;font-weight:bold;">{patient_name} <span style="font-family:monospace;background:#eee;padding:2px 8px;border-radius:4px;font-size:12px;">{patient_id}</span></td></tr>
+          <tr><td style="padding:6px 16px;color:#555;font-size:14px;"><strong>Age</strong></td>
+              <td style="padding:6px 16px;color:#1a1a2e;font-size:15px;">{patient_age} years</td></tr>
+          <tr><td style="padding:6px 16px;color:#555;font-size:14px;"><strong>Doctor</strong></td>
+              <td style="padding:6px 16px;color:#1a1a2e;font-size:15px;">Dr. {consulting_doc}</td></tr>
+          <tr><td style="padding:6px 16px;color:#555;font-size:14px;"><strong>Report</strong></td>
+              <td style="padding:6px 16px;color:#1a1a2e;font-size:14px;font-family:monospace;">{report_id}</td></tr>
+          <tr><td style="padding:6px 16px;color:#555;font-size:14px;"><strong>Time</strong></td>
+              <td style="padding:6px 16px;color:#1a1a2e;font-size:14px;">{now_str}</td></tr>
+        </table>
+      </td></tr>
+      <tr><td style="padding:16px 40px;">
+        <h2 style="color:#c62828;font-size:16px;margin:0 0 12px;">Conditions Requiring Immediate Attention</h2>
+        <table width="100%" style="background:#fff8f8;border:1px solid #ffcdd2;border-radius:8px;" cellpadding="0" cellspacing="0">
+          {alerts_html}
+        </table>
+      </td></tr>
+      <tr><td style="padding:16px 40px 28px;">
+        <div style="background:#e3f2fd;border-left:4px solid #1976d2;border-radius:4px;padding:14px 18px;">
+          <p style="margin:0;color:#1565c0;font-size:14px;line-height:1.6;">
+            <strong>Action Required:</strong> Please review this patient's full health report in the RehabSense portal and take appropriate clinical action.
+          </p>
+        </div>
+      </td></tr>
+      <tr><td style="background:#f9f9f9;padding:16px 40px;border-top:1px solid #eee;text-align:center;">
+        <p style="margin:0;color:#aaa;font-size:12px;">Automated alert from RehabSense AI Health Monitoring System. Do not reply to this email.</p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</body></html>"""
+
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = f"\U0001f6a8 URGENT: {patient_name} \u2014 Immediate Attention Required | RehabSense"
+    msg['From']    = f"RehabSense Alerts <{SMTP_USER}>"
+    msg['To']      = ', '.join(recipients)
+    msg.attach(MIMEText('\n'.join(plain_lines), 'plain'))
+    msg.attach(MIMEText(html_body, 'html'))
+
+    try:
+        with smtplib.SMTP_SSL(_SMTP_HOST, _SMTP_PORT, timeout=15) as server:
+            server.login(SMTP_USER, SMTP_PASS)
+            server.sendmail(SMTP_USER, recipients, msg.as_string())
+        print(f"\u2705 Alert email sent to: {recipients}")
+        return True
+    except smtplib.SMTPAuthenticationError:
+        print("\u274c Email auth failed. Check SMTP_USER and SMTP_PASS (use Gmail App Password).")
+        return False
+    except Exception as e:
+        print(f"\u26a0\ufe0f  Alert email error: {e}")
+        return False
+
+
+def compute_weekly_progress(patient_data, report_id=None):
+    """Compare a specific report against the one immediately before it.
+    If report_id is None, compares the last two reports.
+    Returns None if fewer than 2 reports exist."""
+    reports = patient_data.get('reports', [])
+    if len(reports) < 2:
+        return None
+
+    def safe_date(r):
+        try:
+            return datetime.strptime(r.get('date', '1900-01-01'), '%Y-%m-%d')
+        except Exception:
+            return datetime(1900, 1, 1)
+
+    sorted_reports = sorted(reports, key=safe_date)
+
+    # Find the target report and its predecessor
+    if report_id:
+        curr_idx = next((i for i, r in enumerate(sorted_reports) if r.get('report_id') == report_id), None)
+        if curr_idx is None or curr_idx == 0:
+            return None  # First report or not found — no previous to compare against
+        curr_report = sorted_reports[curr_idx]
+        prev_report = sorted_reports[curr_idx - 1]
+    else:
+        prev_report = sorted_reports[-2]
+        curr_report = sorted_reports[-1]
+
+    def get_predictions_cached(report):
+        if 'predictions' in report and report['predictions']:
+            return report['predictions']
+        try:
+            return inference_engine.predict_all(report)
+        except Exception:
+            return {}
+
+    prev_pred = get_predictions_cached(prev_report)
+    curr_pred = get_predictions_cached(curr_report)
+
+    # Map status_ labels to readable text
+    STATUS_LABELS = {
+        'status_normal': 'Normal', 'status_bradycardia': 'Bradycardia',
+        'status_tachycardia': 'Tachycardia', 'status_irregular': 'Irregular',
+        'status_low': 'Low', 'status_high': 'High',
+        'status_normal_speech': 'Normal Speech', 'status_slurred_speech': 'Slurred/Slow',
+        'status_stressed_speech': 'Stressed Speech',
+        'status_happy': 'Happy', 'status_neutral': 'Neutral',
+        'status_stressed': 'Stressed', 'status_sad': 'Sad',
+        'status_good_posture': 'Good Posture', 'status_forward_head': 'Forward Head',
+        'status_slouched': 'Slouched', 'status_shallow_breathing': 'Shallow Breathing',
+        'status_apnea_risk': 'Apnea Risk',
+    }
+
+    def readable(s):
+        return STATUS_LABELS.get(s, str(s).replace('status_', '').replace('_', ' ').title()) if s else '—'
+
+    progress = {
+        'prev_date': prev_report.get('date', ''),
+        'curr_date': curr_report.get('date', ''),
+        'prev_report_id': prev_report.get('report_id', ''),
+        'curr_report_id': curr_report.get('report_id', ''),
+        'metrics': {}
+    }
+
+    # Heart rate — lower is generally better if previously high
+    try:
+        prev_hr = prev_pred.get('heartbeat', {}).get('heart_rate')
+        curr_hr = curr_pred.get('heartbeat', {}).get('heart_rate')
+        if prev_hr is not None and curr_hr is not None:
+            delta = round(curr_hr - prev_hr, 1)
+            progress['metrics']['heart_rate'] = {
+                'label': 'Heart Rate', 'unit': 'bpm',
+                'prev': round(prev_hr, 1), 'curr': round(curr_hr, 1), 'delta': delta,
+                'prev_status': readable(prev_pred.get('heartbeat', {}).get('status', '')),
+                'curr_status': readable(curr_pred.get('heartbeat', {}).get('status', '')),
+                'higher_is_better': False,
+            }
+    except Exception:
+        pass
+
+    # Posture score — higher is better
+    try:
+        prev_ps = prev_pred.get('posture', {}).get('posture_score') or prev_pred.get('posture', {}).get('score')
+        curr_ps = curr_pred.get('posture', {}).get('posture_score') or curr_pred.get('posture', {}).get('score')
+        if prev_ps is not None and curr_ps is not None:
+            delta = round(curr_ps - prev_ps, 1)
+            progress['metrics']['posture_score'] = {
+                'label': 'Posture Score', 'unit': '/100',
+                'prev': round(prev_ps, 1), 'curr': round(curr_ps, 1), 'delta': delta,
+                'prev_status': readable(prev_pred.get('posture', {}).get('status', '')),
+                'curr_status': readable(curr_pred.get('posture', {}).get('status', '')),
+                'higher_is_better': True,
+            }
+    except Exception:
+        pass
+
+    # Breathing rate
+    try:
+        prev_br = prev_pred.get('breathing', {}).get('breathing_rate')
+        curr_br = curr_pred.get('breathing', {}).get('breathing_rate')
+        if prev_br is not None and curr_br is not None:
+            delta = round(curr_br - prev_br, 1)
+            progress['metrics']['breathing_rate'] = {
+                'label': 'Breathing Rate', 'unit': 'br/min',
+                'prev': round(prev_br, 1), 'curr': round(curr_br, 1), 'delta': delta,
+                'prev_status': readable(prev_pred.get('breathing', {}).get('status', '')),
+                'curr_status': readable(curr_pred.get('breathing', {}).get('status', '')),
+                'higher_is_better': False,
+            }
+    except Exception:
+        pass
+
+    # Emotion state
+    try:
+        prev_em = prev_pred.get('emotion', {}).get('state', '')
+        curr_em = curr_pred.get('emotion', {}).get('state', '')
+        progress['metrics']['emotion'] = {
+            'label': 'Emotional State', 'unit': '',
+            'prev': readable(prev_em), 'curr': readable(curr_em), 'delta': None,
+            'prev_status': readable(prev_em), 'curr_status': readable(curr_em),
+            'higher_is_better': None,
+        }
+    except Exception:
+        pass
+
+    # Speech rate
+    try:
+        prev_sr = prev_pred.get('speech', {}).get('speech_rate') or prev_pred.get('speech', {}).get('speech_rate_wpm')
+        curr_sr = curr_pred.get('speech', {}).get('speech_rate') or curr_pred.get('speech', {}).get('speech_rate_wpm')
+        if prev_sr is not None and curr_sr is not None:
+            delta = round(curr_sr - prev_sr, 1)
+            progress['metrics']['speech_rate'] = {
+                'label': 'Speech Rate', 'unit': 'wpm',
+                'prev': round(prev_sr, 1), 'curr': round(curr_sr, 1), 'delta': delta,
+                'prev_status': readable(prev_pred.get('speech', {}).get('pattern', '')),
+                'curr_status': readable(curr_pred.get('speech', {}).get('pattern', '')),
+                'higher_is_better': None,
+            }
+    except Exception:
+        pass
+
+    return progress
+
+
 @app.route('/')
 def index():
     """Home page"""
@@ -1108,10 +1501,8 @@ def login():
 
 @app.route('/logout')
 def logout():
-    """Logout"""
-    session.pop('patient_id', None)
-    session.pop('is_admin', None)
-    # After logout, send the user back to the main portal page
+    """Logout — clears all session types (patient, admin, doctor)."""
+    session.clear()
     return redirect(url_for('index'))
 
 
@@ -1122,7 +1513,7 @@ def admin_login():
     email = data.get('email', '')
     password = data.get('password', '')
 
-    if email == 'capstoneg_4@gmail.com' and password == 'lastreview@3451':
+    if email == _ADMIN_EMAIL and password == _ADMIN_PASS:
         session['is_admin'] = True
         return jsonify({'success': True})
 
@@ -1145,43 +1536,57 @@ def admin_dashboard():
 
 @app.route('/admin/patients/add', methods=['POST'])
 def admin_add_patient():
-    """Add a new patient record (basic demographic details)."""
+    """Add a new patient record (basic demographic details). Auto-generates patient ID."""
     if not session.get('is_admin'):
         return jsonify({'success': False, 'message': 'Not authorized'}), 403
 
     data = request.json or {}
-    required_fields = ['patient_id', 'name', 'age']
+    required_fields = ['name', 'age']
     for field in required_fields:
         if not data.get(field):
             return jsonify({'success': False, 'message': f'Missing field: {field}'}), 400
 
-    patient_id = data['patient_id'].upper()
-    existing = load_patient_data(patient_id)
-    if existing:
-        return jsonify({'success': False, 'message': 'Patient ID already exists'}), 400
+    # Allow admin to manually specify ID, or auto-generate one
+    if data.get('patient_id'):
+        patient_id = data['patient_id'].upper().strip()
+        existing = load_patient_data(patient_id)
+        if existing:
+            return jsonify({'success': False, 'message': 'Patient ID already exists'}), 400
+    else:
+        patient_id = generate_patient_id()
+
+    # Auto-generate a strong password if not provided
+    password = data.get('password', '')
+    if not password:
+        password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
 
     new_patient = {
         'patient_id': patient_id,
         'name': data['name'],
         'age': data.get('age'),
-        'gender': data.get('gender'),
-        'address': data.get('address'),
-        'phone': data.get('phone'),
-        'email': data.get('email'),
-        'consulting_doctor': data.get('consulting_doctor'),
-        'allergies': data.get('allergies'),
-        'image': data.get('image'),  # optional URL or filename
-        'password': data.get('password', ''),
+        'gender': data.get('gender', ''),
+        'address': data.get('address', ''),
+        'phone': data.get('phone', ''),
+        'email': data.get('email', ''),
+        'emergency_email': data.get('emergency_email', ''),
+        'consulting_doctor': data.get('consulting_doctor', ''),
+        'doctor_email': data.get('doctor_email', ''),
+        'doctor_id': data.get('doctor_id', ''),
+        'allergies': data.get('allergies', ''),
+        'image': data.get('image', ''),
+        'password': password,
+        'is_new': True,
         'reports': []
     }
 
     save_patient_data(new_patient)
-    return jsonify({'success': True, 'patient': new_patient})
+    return jsonify({'success': True, 'patient': {**new_patient, 'password': password}})
 
 
 @app.route('/admin/patient/<patient_id>/reports/add-data', methods=['POST'])
 def admin_add_report_data(patient_id):
-    """Admin manually enters structured report data."""
+    """Admin manually enters structured report data, runs AI inference, saves predictions.
+    Accepts multipart/form-data so audio and image files can be included."""
     if not session.get('is_admin'):
         return jsonify({'success': False, 'message': 'Not authorized'}), 403
 
@@ -1189,59 +1594,205 @@ def admin_add_report_data(patient_id):
     if not patient:
         return jsonify({'success': False, 'message': 'Patient not found'}), 404
 
-    data = request.json or {}
+    # Support both JSON and multipart
+    if request.content_type and 'application/json' in request.content_type:
+        data = request.json or {}
+        files = {}
+    else:
+        data = request.form.to_dict()
+        files = request.files
 
     reports = patient.get('reports', [])
     next_index = len(reports) + 1
     report_prefix = _get_report_prefix(patient, patient_id)
     report_id = f"{report_prefix}_R{next_index:03d}"
 
+    # --- Save uploaded audio file for speech analysis ---
+    speech_audio_path = None
+    if 'speech_audio' in files and files['speech_audio'].filename:
+        import tempfile
+        af = files['speech_audio']
+        suffix = os.path.splitext(af.filename)[1] or '.wav'
+        uploads_dir = os.path.join(DATA_DIR, 'uploads', patient_id)
+        os.makedirs(uploads_dir, exist_ok=True)
+        audio_path = os.path.join(uploads_dir, f"{report_id}_speech{suffix}")
+        af.save(audio_path)
+        speech_audio_path = audio_path
+
+    # --- Save uploaded posture image/video ---
+    posture_media_path = None
+    if 'posture_media' in files and files['posture_media'].filename:
+        pf = files['posture_media']
+        suffix = os.path.splitext(pf.filename)[1] or '.jpg'
+        uploads_dir = os.path.join(DATA_DIR, 'uploads', patient_id)
+        os.makedirs(uploads_dir, exist_ok=True)
+        posture_path = os.path.join(uploads_dir, f"{report_id}_posture{suffix}")
+        pf.save(posture_path)
+        posture_media_path = posture_path
+
+    def _f(key, default=0.0):
+        try:
+            return float(data.get(key, default) or default)
+        except (ValueError, TypeError):
+            return float(default)
+
     new_report = {
         'report_id': report_id,
         'date': datetime.today().strftime('%Y-%m-%d'),
         'heartbeat': {
-            'heart_rate': float(data.get('heart_rate', 0)),
-            'rr_interval_variance': float(data.get('rr_interval_variance', 0)),
-            'label': float(data.get('heartbeat_label', 0)),
+            'heart_rate': _f('heart_rate', 72),
+            'rr_interval_variance': _f('rr_interval_variance', 0.05),
+            'label': _f('heartbeat_label', 0),
         },
         'glucose': {
-            'age': float(data.get('glucose_age', 0)),
-            'bmi': float(data.get('bmi', 0)),
-            'meal_timing': float(data.get('meal_timing', 0)),
-            'activity_level': float(data.get('activity_level', 0)),
-            'glucose_range': float(data.get('glucose_range', 0)),
+            'age': _f('glucose_age', patient.get('age', 30)),
+            'bmi': _f('bmi', 22),
+            'meal_timing': _f('meal_timing', 0),
+            'activity_level': _f('activity_level', 1),
+            'glucose_range': _f('glucose_range', 0),
         },
         'breathing': {
-            'breathing_rate': float(data.get('breathing_rate', 0)),
-            'breath_depth': float(data.get('breath_depth', 0)),
-            'rest_vs_exercise': float(data.get('rest_vs_exercise', 0)),
-            'label': float(data.get('breathing_label', 0)),
+            'breathing_rate': _f('breathing_rate', 15),
+            'breath_depth': _f('breath_depth', 0.7),
+            'rest_vs_exercise': _f('rest_vs_exercise', 0),
+            'label': _f('breathing_label', 0),
         },
         'speech': {
-            'speech_rate': float(data.get('speech_rate', 0)),
-            'pause_frequency': float(data.get('pause_frequency', 0)),
-            'pitch_variability': float(data.get('pitch_variability', 0)),
-            'label': float(data.get('speech_label', 0)),
+            'speech_rate': _f('speech_rate', 150),
+            'pause_frequency': _f('pause_frequency', 0.2),
+            'pitch_variability': _f('pitch_variability', 0.3),
+            'label': _f('speech_label', 0),
         },
         'emotion': {
-            'text_sentiment': float(data.get('text_sentiment', 0)),
-            'voice_emotion': float(data.get('voice_emotion', 0)),
-            'facial_emotion': float(data.get('facial_emotion', 0)),
-            'label': float(data.get('emotion_label', 0)),
+            'text_sentiment': _f('text_sentiment', 0.4),
+            'voice_emotion': _f('voice_emotion', 0.5),
+            'facial_emotion': _f('facial_emotion', 0.4),
+            'label': _f('emotion_label', 0),
         },
         'posture': {
-            'head_tilt': float(data.get('head_tilt', 0)),
-            'shoulder_alignment': float(data.get('shoulder_alignment', 0)),
-            'spine_angle': float(data.get('spine_angle', 0)),
-            'label': float(data.get('posture_label', 0)),
+            'head_tilt': _f('head_tilt', 0),
+            'shoulder_alignment': _f('shoulder_alignment', 0),
+            'spine_angle': _f('spine_angle', 90),
+            'label': _f('posture_label', 0),
         },
     }
 
+    # Store media file paths so predict_all can use them
+    if speech_audio_path:
+        new_report['speech']['audio_file_path'] = speech_audio_path
+    if posture_media_path:
+        new_report['posture']['media_file_path'] = posture_media_path
+
+    # ── Auto-analyse uploaded files ────────────────────────────────────────
+    auto_audio   = False
+    auto_posture = False
+
+    # AUDIO → auto-fill speech + emotion fields
+    if speech_audio_path:
+        try:
+            from utils.inference import analyze_audio_complete
+            audio_result = analyze_audio_complete(speech_audio_path)
+            if audio_result:
+                new_report['speech']['speech_rate']       = float(audio_result['speech_rate'])
+                new_report['speech']['pause_frequency']   = float(audio_result['pause_frequency'])
+                new_report['speech']['pitch_variability'] = float(audio_result['pitch_variability'])
+                new_report['emotion']['voice_emotion']    = float(audio_result['voice_emotion'])
+                new_report['emotion']['text_sentiment']   = float(audio_result['text_sentiment'])
+                new_report['speech']['audio_file_path']   = speech_audio_path
+                auto_audio = True
+                print(f"✅ Audio: {audio_result['speech_rate']} wpm, emotion={audio_result['voice_emotion']:.2f}")
+        except Exception as e:
+            print(f"Audio auto-analysis error: {e}")
+
+    # IMAGE/VIDEO → auto-fill posture fields
+    if posture_media_path:
+        ext = posture_media_path.rsplit('.', 1)[-1].lower()
+        if ext in ('jpg', 'jpeg', 'png', 'bmp', 'webp'):
+            try:
+                from utils.inference import analyze_posture_from_image
+                posture_result = analyze_posture_from_image(posture_media_path)
+                if posture_result:
+                    new_report['posture']['head_tilt']          = posture_result['head_tilt']
+                    new_report['posture']['shoulder_alignment'] = posture_result['shoulder_alignment']
+                    new_report['posture']['spine_angle']        = posture_result['spine_angle']
+                    auto_posture = True
+                    print(f"✅ Posture: tilt={posture_result['head_tilt']}°, spine={posture_result['spine_angle']}°")
+            except Exception as e:
+                print(f"Posture image analysis error: {e}")
+        elif ext in ('mp4', 'mov', 'webm', 'avi'):
+            # Extract middle frame via subprocess (keeps cv2 out of Flask process)
+            try:
+                import subprocess, sys, json, tempfile
+                script = """
+import cv2, sys, json
+path = sys.argv[1]; out = sys.argv[2]
+cap = cv2.VideoCapture(path)
+total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+cap.set(cv2.CAP_PROP_POS_FRAMES, total // 2)
+ret, frame = cap.read(); cap.release()
+if ret: cv2.imwrite(out, frame); print('ok')
+else: print('fail')
+"""
+                with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False, dir=os.path.dirname(posture_media_path)) as tf:
+                    tmp_frame = tf.name
+                r = subprocess.run([sys.executable, '-c', script, posture_media_path, tmp_frame],
+                                   capture_output=True, text=True, timeout=20)
+                if r.stdout.strip() == 'ok':
+                    from utils.inference import analyze_posture_from_image
+                    posture_result = analyze_posture_from_image(tmp_frame)
+                    if posture_result:
+                        new_report['posture']['head_tilt']          = posture_result['head_tilt']
+                        new_report['posture']['shoulder_alignment'] = posture_result['shoulder_alignment']
+                        new_report['posture']['spine_angle']        = posture_result['spine_angle']
+                        auto_posture = True
+                try: os.unlink(tmp_frame)
+                except: pass
+            except Exception as e:
+                print(f"Video posture analysis error: {e}")
+
+    # Run AI inference and cache results in the report
+    try:
+        predictions = inference_engine.predict_all(new_report)
+        recommendations = get_all_recommendations(predictions, 'en')
+        summary = get_summary_message(predictions, 'en')
+        new_report['predictions'] = predictions
+        new_report['recommendations'] = recommendations
+        new_report['summary'] = summary
+
+        # Check for dangerous conditions and send alert
+        danger_alerts = check_dangerous_conditions(predictions, patient, report_id)
+        if danger_alerts:
+            doctor_email = patient.get('doctor_email') or patient.get('email') or None
+            email_sent = send_alert_email(patient, danger_alerts, report_id, doctor_email)
+        else:
+            danger_alerts = []
+            email_sent = False
+
+    except Exception as e:
+        predictions = {}
+        new_report['predictions'] = {}
+        new_report['recommendations'] = {}
+        new_report['summary'] = f'Analysis error: {e}'
+        danger_alerts = []
+
+        email_sent = False
+
     reports.append(new_report)
     patient['reports'] = reports
+    patient.pop('is_new', None)
     save_patient_data(patient)
 
-    return jsonify({'success': True, 'report': new_report})
+    weekly_progress = compute_weekly_progress(patient, report_id)
+
+    return jsonify({
+        'success': True,
+        'report': new_report,
+        'predictions': predictions,
+        'weekly_progress': weekly_progress,
+        'report_id': report_id,
+        'danger_alerts': danger_alerts,
+        'alert_email_sent': email_sent,
+    })
 
 
 @app.route('/admin/patient/<patient_id>/reports/upload', methods=['POST'])
@@ -1352,108 +1903,589 @@ def get_patient_reports():
 
 @app.route('/api/patient/history')
 def get_patient_history():
-    """Get patient history with predictions"""
-    if 'patient_id' not in session:
+    """Get patient history with predictions — works for both patient and admin sessions."""
+    patient_id = request.args.get('patient_id')
+
+    if patient_id and session.get('is_admin'):
+        pass  # admin querying specific patient
+    elif 'patient_id' in session:
+        patient_id = session['patient_id']
+    else:
         return jsonify({'success': False, 'message': 'Not logged in'})
-    
-    patient_id = session['patient_id']
+
     patient_data = load_patient_data(patient_id)
-    
     if not patient_data:
         return jsonify({'success': False, 'message': 'Patient not found'})
-    
-    # Process all reports
-    history = []
-    for report in patient_data['reports']:
-        predictions = inference_engine.predict_all(report)
-        history.append({
-            'date': report['date'],
-            'report_id': report['report_id'],
-            'predictions': predictions
-        })
-    
-    return jsonify({
-        'success': True,
-        'history': history
-    })
+
+    history = _build_history(patient_data)
+    return jsonify({'success': True, 'history': history})
 
 @app.route('/report/<report_id>')
 def view_report(report_id):
     """View specific report"""
     if 'patient_id' not in session:
-        return render_template('login.html')
-    
+        return render_template('index.html')
+
     patient_id = session['patient_id']
     patient_data = load_patient_data(patient_id)
-    
+
     if not patient_data:
         return "Patient not found", 404
-    
+
     # Find the report
     report = None
     for r in patient_data['reports']:
         if r['report_id'] == report_id:
             report = r
             break
-    
+
     if not report:
         return "Report not found", 404
-    
+
     # Get current language from session
     current_lang = session.get('lang', DEFAULT_LANGUAGE)
-    
-    # Run predictions
-    predictions = inference_engine.predict_all(report)
-    recommendations = get_all_recommendations(predictions, current_lang)
-    summary = get_summary_message(predictions, current_lang)
-    
+
+    # Use cached predictions if available
+    if 'predictions' in report and report['predictions']:
+        predictions = report['predictions']
+        recommendations = report.get('recommendations') or get_all_recommendations(predictions, current_lang)
+        summary = report.get('summary') or get_summary_message(predictions, current_lang)
+    else:
+        predictions = inference_engine.predict_all(report)
+        recommendations = get_all_recommendations(predictions, current_lang)
+        summary = get_summary_message(predictions, current_lang)
+
+    weekly_progress = compute_weekly_progress(patient_data, report_id)
+
     return render_template('report.html',
                          patient=patient_data,
                          report=report,
                          predictions=predictions,
                          recommendations=recommendations,
-                         summary=summary)
+                         summary=summary,
+                         weekly_progress=weekly_progress,
+                         is_admin_view=False,
+                         back_url='/dashboard')
 
 
 @app.route('/admin/patient/<patient_id>/report/<report_id>')
 def admin_view_report(patient_id, report_id):
-    """Admin view of a specific patient report (opens in new tab)."""
+    """Admin view of a specific patient report - renders directly without clobbering session."""
     if not session.get('is_admin'):
         return redirect(url_for('index'))
 
-    # Reuse existing report view logic by setting the session patient_id
-    session['patient_id'] = patient_id
-    return redirect(url_for('view_report', report_id=report_id))
+    patient_data = load_patient_data(patient_id)
+    if not patient_data:
+        return "Patient not found", 404
+
+    report = None
+    for r in patient_data.get('reports', []):
+        if r['report_id'] == report_id:
+            report = r
+            break
+
+    if not report:
+        return "Report not found", 404
+
+    current_lang = session.get('lang', DEFAULT_LANGUAGE)
+
+    # Use cached predictions if available, otherwise compute
+    if 'predictions' in report and report['predictions']:
+        predictions = report['predictions']
+        recommendations = report.get('recommendations') or get_all_recommendations(predictions, current_lang)
+        summary = report.get('summary') or get_summary_message(predictions, current_lang)
+    else:
+        predictions = inference_engine.predict_all(report)
+        recommendations = get_all_recommendations(predictions, current_lang)
+        summary = get_summary_message(predictions, current_lang)
+
+    weekly_progress = compute_weekly_progress(patient_data, report_id)
+
+    return render_template('report.html',
+                           patient=patient_data,
+                           report=report,
+                           predictions=predictions,
+                           recommendations=recommendations,
+                           summary=summary,
+                           weekly_progress=weekly_progress,
+                           is_admin_view=True,
+                           back_url=f'/admin/dashboard#{patient_id}')
+
+
+@app.route('/admin/patient/search')
+def admin_search_patient():
+    """Search a patient by ID. Returns patient summary JSON."""
+    if not session.get('is_admin'):
+        return jsonify({'success': False, 'message': 'Not authorized'}), 403
+    patient_id = request.args.get('q', '').strip().upper()
+    if not patient_id:
+        return jsonify({'success': False, 'message': 'No query provided'}), 400
+    patient = load_patient_data(patient_id)
+    if not patient:
+        return jsonify({'success': False, 'message': 'Patient not found'}), 404
+    safe = {k: v for k, v in patient.items() if k != 'password'}
+    return jsonify({'success': True, 'patient': safe})
+
+
+@app.route('/admin/patient/<patient_id>/update-contacts', methods=['POST'])
+def admin_update_patient_contacts(patient_id):
+    """Update a patient's email contact fields (doctor email, emergency email)."""
+    if not session.get('is_admin'):
+        return jsonify({'success': False, 'message': 'Not authorized'}), 403
+
+    patient = load_patient_data(patient_id)
+    if not patient:
+        return jsonify({'success': False, 'message': 'Patient not found'}), 404
+
+    data = request.json or {}
+
+    # Update only the contact fields — never overwrite reports or password
+    updatable = ['doctor_email', 'emergency_email', 'phone', 'email',
+                 'address', 'allergies', 'consulting_doctor', 'doctor_id']
+    for field in updatable:
+        if field in data:
+            patient[field] = data[field]
+
+    save_patient_data(patient)
+    safe = {k: v for k, v in patient.items() if k != 'password'}
+    return jsonify({'success': True, 'patient': safe})
+
+
+@app.route('/admin/doctor/<doctor_id>/update-email', methods=['POST'])
+def admin_update_doctor_email(doctor_id):
+    """Update a doctor's email address in doctors.json."""
+    if not session.get('is_admin'):
+        return jsonify({'success': False, 'message': 'Not authorized'}), 403
+
+    data = request.json or {}
+    new_email = data.get('email', '').strip()
+
+    doctors = load_doctors()
+    if doctor_id not in doctors:
+        return jsonify({'success': False, 'message': 'Doctor not found'}), 404
+
+    doctors[doctor_id]['email'] = new_email
+    save_doctors(doctors)
+    return jsonify({'success': True, 'doctor': doctors[doctor_id]})
+
+
+@app.route('/admin/doctors/all')
+def admin_get_all_doctors():
+    """Return all doctors (for admin UI)."""
+    if not session.get('is_admin'):
+        return jsonify({'success': False, 'message': 'Not authorized'}), 403
+    doctors = load_doctors()
+    # Strip passwords
+    safe = {did: {k: v for k, v in doc.items() if k != 'password'}
+            for did, doc in doctors.items()}
+    return jsonify({'success': True, 'doctors': safe})
+
+
 
 @app.route('/progress')
 def progress():
-    """Progress tracking page"""
+    """Progress tracking page - passes pre-computed history to template"""
     if 'patient_id' not in session:
-        return render_template('login.html')
-    
+        return render_template('index.html')
     patient_id = session['patient_id']
     patient_data = load_patient_data(patient_id)
-    
     if not patient_data:
         return "Patient not found", 404
-    
-    return render_template('progress.html', patient=patient_data)
+
+    history = _build_history(patient_data)
+    return render_template('progress.html', patient=patient_data, history=history)
+
+
+def _build_history(patient_data):
+    """Build history list with predictions for all reports."""
+    history = []
+    for report in patient_data.get('reports', []):
+        try:
+            if 'predictions' in report and report['predictions']:
+                predictions = report['predictions']
+            else:
+                predictions = inference_engine.predict_all(report)
+            history.append({
+                'date': report.get('date', ''),
+                'report_id': report.get('report_id', ''),
+                'predictions': predictions,
+            })
+        except Exception:
+            pass
+    return history
 
 
 @app.route('/admin/patient/<patient_id>/analysis')
 def admin_patient_analysis(patient_id):
-    """Admin view of patient's progress/analysis (opens in new tab)."""
+    """Admin view of patient's progress/analysis."""
     if not session.get('is_admin'):
         return redirect(url_for('index'))
+    patient_data = load_patient_data(patient_id)
+    if not patient_data:
+        return "Patient not found", 404
+    history = _build_history(patient_data)
+    return render_template('progress.html',
+                           patient=patient_data,
+                           history=history,
+                           back_url=f'/admin/dashboard#{patient_id}')
 
-    # Point existing progress machinery at the selected patient
-    session['patient_id'] = patient_id
-    return redirect(url_for('progress'))
+@app.route('/api/speech/analyze', methods=['POST'])
+def analyze_speech_audio():
+    """
+    Accept an audio file upload, run the full acoustic pipeline,
+    classify with the ML model, and return all metrics.
+    Field name: 'audio' (WAV or OGG).
+    """
+    if not session.get('is_admin') and 'patient_id' not in session:
+        return jsonify({'success': False, 'message': 'Not authorized'}), 401
+
+    if 'audio' not in request.files:
+        return jsonify({'success': False, 'message': 'No audio file provided'}), 400
+
+    audio_file = request.files['audio']
+    if audio_file.filename == '':
+        return jsonify({'success': False, 'message': 'Empty filename'}), 400
+
+    import tempfile
+    suffix = os.path.splitext(audio_file.filename)[1] or '.wav'
+    tmp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
+            audio_file.save(tmp.name)
+            tmp_path = tmp.name
+        result = inference_engine.predict_speech(audio_file_path=tmp_path)
+        result['success'] = True
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+    finally:
+        if tmp_path and os.path.exists(tmp_path):
+            os.remove(tmp_path)
+
 
 @app.route('/about')
 def about():
     """About page"""
     return render_template('about.html')
+
+
+@app.route('/admin/test-email', methods=['POST'])
+def admin_test_email():
+    """Send a test alert email to verify SMTP configuration."""
+    if not session.get('is_admin'):
+        return jsonify({'success': False, 'message': 'Not authorized'}), 403
+
+    smtp_pass = _SMTP_PASS
+    if not smtp_pass:
+        return jsonify({
+            'success': False,
+            'message': 'SMTP_PASS is empty in config.py. Edit RehabSense-main/config.py and add your Gmail App Password.',
+            'smtp_configured': False
+        })
+
+    # Send a test email
+    test_patient = {
+        'name': 'Test Patient', 'patient_id': 'TEST-001', 'age': 30,
+        'consulting_doctor': 'Test Doctor', 'doctor_id': '',
+        'emergency_email': ''
+    }
+    test_alerts = ['❤️ TEST: Tachycardia detected (148 bpm)', '🫁 TEST: Apnea risk detected']
+    success = send_alert_email(test_patient, test_alerts, 'TEST_R001')
+    return jsonify({
+        'success': success,
+        'smtp_configured': True,
+        'message': 'Test email sent successfully! Check your inbox.' if success else 'Email sending failed. Check server logs.'
+    })
+
+
+@app.route('/admin/email-status')
+def admin_email_status():
+    """Check if email is configured."""
+    if not session.get('is_admin'):
+        return jsonify({'authorized': False}), 403
+    return jsonify({
+        'configured': bool(_SMTP_PASS),
+        'admin_email': _ADMIN_EMAIL,
+        'smtp_user': _SMTP_USER,
+    })
+
+
+
+
+# ---------------------------------------------------------------------------
+# Doctor system
+# ---------------------------------------------------------------------------
+
+DOCTORS_FILE = os.path.join(DATA_DIR, '..', 'data', 'doctors.json')
+
+def load_doctors():
+    """Load all doctors from doctors.json."""
+    path = os.path.join(os.path.dirname(DATA_DIR), 'data', 'doctors.json')
+    if not os.path.exists(path):
+        path = os.path.join(DATA_DIR, '..', 'data', 'doctors.json')
+    # Try project root / data / doctors.json
+    candidates = [
+        os.path.join(PROJECT_ROOT, 'data', 'doctors.json'),
+        os.path.join(DATA_DIR, 'doctors.json'),
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            with open(p) as f:
+                return json.load(f)
+    return {}
+
+
+def save_doctors(doctors):
+    path = os.path.join(PROJECT_ROOT, 'data', 'doctors.json')
+    with open(path, 'w') as f:
+        json.dump(doctors, f, indent=2)
+
+
+def score_patient_health(patient_data):
+    """Return (score 0-100, priority 'green'/'yellow'/'red', issues list)
+    based on the latest report predictions.
+    green  = all good  (score >= 70)
+    yellow = some concerns (score 40-69)
+    red    = urgent attention needed (score < 40)
+    """
+    reports = patient_data.get('reports', [])
+    if not reports:
+        return 50, 'yellow', ['No reports yet']
+
+    # Use last report
+    def safe_date(r):
+        try:
+            return datetime.strptime(r.get('date', '1900-01-01'), '%Y-%m-%d')
+        except Exception:
+            return datetime(1900, 1, 1)
+
+    latest = sorted(reports, key=safe_date)[-1]
+
+    if 'predictions' in latest and latest['predictions']:
+        pred = latest['predictions']
+    else:
+        try:
+            pred = inference_engine.predict_all(latest)
+        except Exception:
+            return 50, 'yellow', ['Could not compute predictions']
+
+    issues = []
+    score = 100
+
+    # Heartbeat
+    hb = pred.get('heartbeat', {})
+    hb_status = hb.get('status', '')
+    if hb_status == 'status_tachycardia':
+        score -= 25; issues.append(f"Tachycardia ({hb.get('heart_rate',0):.0f} bpm)")
+    elif hb_status == 'status_bradycardia':
+        score -= 20; issues.append(f"Bradycardia ({hb.get('heart_rate',0):.0f} bpm)")
+    elif hb_status == 'status_irregular':
+        score -= 30; issues.append("Irregular heartbeat")
+
+    # Breathing
+    br = pred.get('breathing', {})
+    if br.get('status') == 'status_apnea_risk':
+        score -= 35; issues.append("Apnea risk")
+    elif br.get('status') == 'status_shallow_breathing':
+        score -= 15; issues.append("Shallow breathing")
+    elif br.get('status') == 'status_irregular':
+        score -= 20; issues.append("Irregular breathing")
+
+    # Glucose
+    gl = pred.get('glucose', {})
+    if gl.get('range') == 'status_high':
+        score -= 15; issues.append("High blood glucose")
+    elif gl.get('range') == 'status_low':
+        score -= 20; issues.append("Low blood glucose")
+
+    # Emotion
+    em = pred.get('emotion', {})
+    if em.get('state') == 'status_stressed':
+        score -= 10; issues.append("Stressed emotional state")
+    elif em.get('state') == 'status_sad':
+        score -= 15; issues.append("Sad / depressed state")
+
+    # Speech
+    sp = pred.get('speech', {})
+    if sp.get('pattern') == 'status_slurred_speech':
+        score -= 20; issues.append("Slurred/slow speech")
+    elif sp.get('pattern') == 'status_stressed_speech':
+        score -= 10; issues.append("Stressed speech pattern")
+
+    # Posture
+    ps = pred.get('posture', {})
+    ps_score = ps.get('posture_score') or ps.get('score') or 100
+    if ps_score < 50:
+        score -= 10; issues.append(f"Poor posture ({ps_score:.0f}/100)")
+
+    score = max(0, min(100, score))
+    if score >= 70:
+        priority = 'green'
+    elif score >= 40:
+        priority = 'yellow'
+    else:
+        priority = 'red'
+
+    if not issues:
+        issues = ['All metrics normal']
+
+    return score, priority, issues
+
+
+@app.route('/doctor/login', methods=['POST'])
+def doctor_login():
+    """Doctor login endpoint."""
+    data = request.json or {}
+    doctor_id = data.get('doctor_id', '').strip().upper()
+    password = data.get('password', '')
+
+    doctors = load_doctors()
+    doc = doctors.get(doctor_id)
+    if doc and doc.get('password') == password:
+        session['doctor_id'] = doctor_id
+        session['doctor_name'] = doc['name']
+        return jsonify({'success': True, 'doctor': {'id': doctor_id, 'name': doc['name']}})
+    return jsonify({'success': False, 'message': 'Invalid doctor ID or password.'}), 401
+
+
+@app.route('/doctor/dashboard')
+def doctor_dashboard():
+    """Doctor's patient overview dashboard."""
+    if 'doctor_id' not in session:
+        return redirect(url_for('index'))
+
+    doctor_id = session['doctor_id']
+    doctors = load_doctors()
+    doctor = doctors.get(doctor_id)
+    if not doctor:
+        return redirect(url_for('index'))
+
+    # Load all assigned patients with health scores
+    patients_with_scores = []
+    for pid in doctor.get('patient_ids', []):
+        patient = load_patient_data(pid)
+        if patient:
+            safe = {k: v for k, v in patient.items() if k != 'password'}
+            score, priority, issues = score_patient_health(patient)
+            safe['health_score'] = score
+            safe['priority'] = priority
+            safe['health_issues'] = issues
+            safe['report_count'] = len(patient.get('reports', []))
+            patients_with_scores.append(safe)
+
+    # Sort: red first, then yellow, then green
+    priority_order = {'red': 0, 'yellow': 1, 'green': 2}
+    patients_with_scores.sort(key=lambda p: (priority_order.get(p['priority'], 1), -p.get('health_score', 50)))
+
+    return render_template('doctor_dashboard.html', doctor=doctor, patients=patients_with_scores)
+
+
+@app.route('/doctor/patient/<patient_id>')
+def doctor_view_patient(patient_id):
+    """Doctor views a specific patient's full report list."""
+    if 'doctor_id' not in session:
+        return redirect(url_for('index'))
+
+    doctor_id = session['doctor_id']
+    doctors = load_doctors()
+    doctor = doctors.get(doctor_id)
+
+    # Verify this patient belongs to this doctor
+    if not doctor or patient_id not in doctor.get('patient_ids', []):
+        return "Access denied", 403
+
+    patient_data = load_patient_data(patient_id)
+    if not patient_data:
+        return "Patient not found", 404
+
+    history = _build_history(patient_data)
+    score, priority, issues = score_patient_health(patient_data)
+
+    return render_template('doctor_patient.html',
+                           doctor=doctor,
+                           patient=patient_data,
+                           history=history,
+                           health_score=score,
+                           priority=priority,
+                           health_issues=issues)
+
+
+@app.route('/doctor/patient/<patient_id>/report/<report_id>')
+def doctor_view_report(patient_id, report_id):
+    """Doctor views a specific report."""
+    if 'doctor_id' not in session:
+        return redirect(url_for('index'))
+
+    doctor_id = session['doctor_id']
+    doctors = load_doctors()
+    doctor = doctors.get(doctor_id)
+
+    if not doctor or patient_id not in doctor.get('patient_ids', []):
+        return "Access denied", 403
+
+    patient_data = load_patient_data(patient_id)
+    if not patient_data:
+        return "Patient not found", 404
+
+    report = next((r for r in patient_data.get('reports', []) if r['report_id'] == report_id), None)
+    if not report:
+        return "Report not found", 404
+
+    current_lang = session.get('lang', DEFAULT_LANGUAGE)
+    if 'predictions' in report and report['predictions']:
+        predictions = report['predictions']
+        recommendations = report.get('recommendations') or get_all_recommendations(predictions, current_lang)
+        summary = report.get('summary') or get_summary_message(predictions, current_lang)
+    else:
+        predictions = inference_engine.predict_all(report)
+        recommendations = get_all_recommendations(predictions, current_lang)
+        summary = get_summary_message(predictions, current_lang)
+
+    weekly_progress = compute_weekly_progress(patient_data, report_id)
+
+    return render_template('report.html',
+                           patient=patient_data,
+                           report=report,
+                           predictions=predictions,
+                           recommendations=recommendations,
+                           summary=summary,
+                           weekly_progress=weekly_progress,
+                           is_admin_view=False,
+                           back_url=f'/doctor/patient/{patient_id}')
+
+
+@app.route('/doctor/patient/<patient_id>/analysis')
+def doctor_patient_analysis(patient_id):
+    """Doctor views patient progress charts."""
+    if 'doctor_id' not in session:
+        return redirect(url_for('index'))
+
+    doctor_id = session['doctor_id']
+    doctors = load_doctors()
+    doctor = doctors.get(doctor_id)
+
+    if not doctor or patient_id not in doctor.get('patient_ids', []):
+        return "Access denied", 403
+
+    patient_data = load_patient_data(patient_id)
+    if not patient_data:
+        return "Patient not found", 404
+
+    history = _build_history(patient_data)
+    return render_template('progress.html',
+                           patient=patient_data,
+                           history=history,
+                           back_url=f'/doctor/patient/{patient_id}')
+
+
+@app.route('/doctor/logout')
+def doctor_logout():
+    session.pop('doctor_id', None)
+    session.pop('doctor_name', None)
+    return redirect(url_for('index'))
+
+
+
 
 
 @app.route('/contact')
@@ -1473,4 +2505,4 @@ if __name__ == '__main__':
     print("  - Patient B: Progress tracking (12 reports)")
     print("\n" + "=" * 60 + "\n")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000, use_reloader=False)

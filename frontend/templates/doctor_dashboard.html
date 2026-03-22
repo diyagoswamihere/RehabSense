@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Dr. {{ doctor.name }} — Patient Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- Doctor Header -->
+  <div class="doc-header">
+    <div class="doc-avatar-ring">
+      <div class="doc-avatar">{{ doctor.name[0] }}</div>
+    </div>
+    <div class="doc-info">
+      <p class="doc-label">Doctor Portal · {{ doctor.specialty }}</p>
+      <h1 class="doc-name">Dr. {{ doctor.name }}</h1>
+      <p class="doc-sub">{{ doctor.patient_ids|length }} patients assigned</p>
+    </div>
+    <div class="doc-triage-stats">
+      {% set red_n    = patients | selectattr('priority','eq','red')    | list | length %}
+      {% set yellow_n = patients | selectattr('priority','eq','yellow') | list | length %}
+      {% set green_n  = patients | selectattr('priority','eq','green')  | list | length %}
+      <div class="triage-box triage-red">
+        <div class="triage-num">{{ red_n }}</div>
+        <div class="triage-lbl">Urgent</div>
+      </div>
+      <div class="triage-box triage-yellow">
+        <div class="triage-num">{{ yellow_n }}</div>
+        <div class="triage-lbl">Monitor</div>
+      </div>
+      <div class="triage-box triage-green">
+        <div class="triage-num">{{ green_n }}</div>
+        <div class="triage-lbl">Stable</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="triage-legend">
+    <span class="legend-dot" style="background:#e53935;"></span> <span>Urgent — immediate attention needed</span>
+    <span class="legend-sep">·</span>
+    <span class="legend-dot" style="background:#f9a825;"></span> <span>Monitor — watch closely</span>
+    <span class="legend-sep">·</span>
+    <span class="legend-dot" style="background:#43a047;"></span> <span>Stable — all metrics healthy</span>
+  </div>
+
+  <!-- Patient Grid -->
+  <div class="patient-grid">
+    {% for patient in patients %}
+    {% set pc = 'red' if patient.priority == 'red' else 'yellow' if patient.priority == 'yellow' else 'green' %}
+    {% set pcolor = '#e53935' if pc=='red' else '#f9a825' if pc=='yellow' else '#43a047' %}
+    {% set pbg    = '#fff5f5' if pc=='red' else '#fffde7' if pc=='yellow' else '#f1f8e9' %}
+
+    <a href="/doctor/patient/{{ patient.patient_id }}" class="pat-card-link">
+      <div class="pat-card" style="border-top:4px solid {{ pcolor }};background:#fff;">
+
+        <!-- Card top: avatar + name + score -->
+        <div class="pat-card-top">
+          <div class="pat-avatar" style="background:{{ pcolor }};">{{ patient.name[0] }}</div>
+          <div class="pat-name-block">
+            <div class="pat-fullname">{{ patient.name }}</div>
+            <div class="pat-sub">{{ patient.age }} yrs · {{ patient.gender }} · <span style="font-family:monospace;font-size:.72rem;color:#aaa;">{{ patient.patient_id }}</span></div>
+          </div>
+          <div class="pat-score-ring" style="--ring-color:{{ pcolor }};--ring-bg:{{ pbg }};">
+            <div class="pat-score-num" style="color:{{ pcolor }};">{{ patient.health_score }}</div>
+            <div class="pat-score-lbl">/100</div>
+          </div>
+        </div>
+
+        <!-- Priority badge -->
+        <div class="pat-priority-badge" style="background:{{ pbg }};color:{{ pcolor }};border:1px solid {{ pcolor }}30;">
+          {% if pc == 'red' %}🔴 URGENT — Immediate attention needed
+          {% elif pc == 'yellow' %}🟡 MONITOR — Elevated parameters
+          {% else %}🟢 STABLE — All metrics healthy
+          {% endif %}
+        </div>
+
+        <!-- Issues -->
+        {% if patient.health_issues %}
+        <div class="pat-issues">
+          {% for issue in patient.health_issues[:3] %}
+          <span class="issue-chip" style="background:{{ pbg }};color:{{ pcolor }};border:1px solid {{ pcolor }}40;">{{ issue }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Footer -->
+        <div class="pat-card-footer">
+          <span style="color:#999;font-size:.76rem;">📋 {{ patient.report_count }} report{{ 's' if patient.report_count != 1 }}</span>
+          <span class="pat-view-btn" style="color:{{ pcolor }};">View Profile →</span>
+        </div>
+
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+</div>
+
+<style>
+/* Header */
+.doc-header{display:flex;align-items:center;gap:1.5rem;background:#fff;border-radius:16px;padding:1.75rem 2rem;margin-bottom:1rem;box-shadow:0 2px 16px rgba(0,0,0,.07);flex-wrap:wrap}
+.doc-avatar-ring{width:68px;height:68px;border-radius:50%;padding:3px;background:linear-gradient(135deg,#26a69a,#00796b);flex-shrink:0}
+.doc-avatar{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#26a69a,#00796b);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;}
+.doc-info{flex:1;min-width:160px}
+.doc-label{margin:0;font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;color:#26a69a;font-weight:700}
+.doc-name{margin:.2rem 0;font-size:1.5rem;color:#1a1a2e;font-weight:800}
+.doc-sub{margin:0;color:#888;font-size:.85rem}
+/* Triage stats */
+.doc-triage-stats{display:flex;gap:.75rem;flex-shrink:0}
+.triage-box{text-align:center;padding:.6rem 1.1rem;border-radius:12px;min-width:64px}
+.triage-red{background:#fdecea;border:1px solid #ef9a9a}
+.triage-yellow{background:#fffde7;border:1px solid #fff176}
+.triage-green{background:#e8f5e9;border:1px solid #a5d6a7}
+.triage-num{font-size:1.6rem;font-weight:800;line-height:1}
+.triage-red .triage-num{color:#c62828}
+.triage-yellow .triage-num{color:#f57f17}
+.triage-green .triage-num{color:#2e7d32}
+.triage-lbl{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:.15rem}
+.triage-red .triage-lbl{color:#c62828}
+.triage-yellow .triage-lbl{color:#f57f17}
+.triage-green .triage-lbl{color:#2e7d32}
+/* Legend */
+.triage-legend{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:.82rem;color:#666;background:#fff;padding:.65rem 1.25rem;border-radius:10px;margin-bottom:1.25rem;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-sep{color:#ddd;margin:0 .25rem}
+/* Patient grid */
+.patient-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem}
+.pat-card-link{text-decoration:none;color:inherit;display:block}
+.pat-card{border-radius:14px;padding:1.25rem;border:1px solid #e8e8e8;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;gap:.7rem;height:100%}
+.pat-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.1)}
+/* Card top row */
+.pat-card-top{display:flex;align-items:center;gap:.75rem}
+.pat-avatar{width:44px;height:44px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;flex-shrink:0}
+.pat-name-block{flex:1;min-width:0}
+.pat-fullname{font-weight:700;font-size:.95rem;color:#1a1a2e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pat-sub{font-size:.74rem;color:#888;margin-top:.1rem}
+/* Score ring */
+.pat-score-ring{width:48px;height:48px;border-radius:50%;background:var(--ring-bg);border:2.5px solid var(--ring-color);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.pat-score-num{font-size:1rem;font-weight:800;line-height:1}
+.pat-score-lbl{font-size:.55rem;color:#aaa;line-height:1}
+/* Priority badge */
+.pat-priority-badge{font-size:.75rem;font-weight:700;padding:5px 10px;border-radius:8px;text-align:center}
+/* Issues */
+.pat-issues{display:flex;flex-wrap:wrap;gap:.3rem}
+.issue-chip{font-size:.69rem;padding:3px 9px;border-radius:10px;font-weight:600;line-height:1.4}
+/* Footer */
+.pat-card-footer{display:flex;justify-content:space-between;align-items:center;padding-top:.4rem;border-top:1px solid #f5f5f5;margin-top:auto}
+.pat-view-btn{font-size:.78rem;font-weight:700}
+</style>
+{% endblock %}

@@ -11,21 +11,21 @@
     <div class="page-header">
         <div>
             <h1>{{ t('view_progress') }}</h1>
-            <p class="subtitle">{{ patient.name }} - {{ t('hero_tagline') }}</p>
+            <p class="subtitle">{{ patient.name }} &mdash; {{ t('hero_tagline') }}</p>
         </div>
-        <a href="/dashboard" class="btn-secondary">← {{ t('nav_dashboard') }}</a>
+        <a href="{{ back_url | default('/dashboard') }}" class="btn-secondary">← Back</a>
     </div>
 
     <div class="progress-info">
         <div class="info-card">
-            <span class="info-icon"></span>
+            <span class="info-icon">📋</span>
             <div>
                 <h3>{{ t('total_reports') }}</h3>
                 <p class="info-value">{{ patient.reports|length }}</p>
             </div>
         </div>
         <div class="info-card">
-            <span class="info-icon"></span>
+            <span class="info-icon">📅</span>
             <div>
                 <h3>{{ t('tracking_period') }}</h3>
                 <p class="info-value">{{ patient.reports|length }} {{ t('weeks') }}</p>
@@ -33,293 +33,145 @@
         </div>
     </div>
 
+    {% if patient.reports|length < 2 %}
+    <div style="text-align:center;padding:3rem;background:white;border-radius:10px;border:2px solid #e0e0e0;">
+        <h3>Not enough data yet</h3>
+        <p style="color:#666;">At least 2 reports are needed to show progress charts. Add more reports via the Admin Dashboard.</p>
+    </div>
+    {% else %}
     <div class="charts-section">
         <h2>{{ t('health_metrics_over_time') }}</h2>
-        
-        <div class="chart-container">
-            <h3>{{ t('heart_rate_trend') }}</h3>
-            <canvas id="heartRateChart"></canvas>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3>{{ t('heart_rate_trend') }}</h3>
+                <canvas id="heartRateChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>{{ t('posture_score_progression') }}</h3>
+                <canvas id="postureChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Breathing Rate Trend</h3>
+                <canvas id="breathingRateChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Speech Rate Trend</h3>
+                <canvas id="speechRateChart"></canvas>
+            </div>
         </div>
 
-        <div class="chart-container">
-            <h3>{{ t('posture_score_progression') }}</h3>
-            <canvas id="postureChart"></canvas>
-        </div>
-
-        <div class="chart-container">
-            <h3>{{ t('emotional_state_distribution') }}</h3>
-            <canvas id="emotionChart"></canvas>
-        </div>
-
-        <div class="chart-container">
-            <h3>{{ t('breathing_pattern_status') }}</h3>
-            <canvas id="breathingChart"></canvas>
+        <div class="charts-grid-single">
+            <div class="chart-container">
+                <h3>{{ t('emotional_state_distribution') }}</h3>
+                <canvas id="emotionChart" style="max-height:280px;"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>{{ t('breathing_pattern_status') }}</h3>
+                <canvas id="breathingChart" style="max-height:280px;"></canvas>
+            </div>
         </div>
     </div>
-
-    <div id="loadingMessage" style="text-align: center; padding: 3rem;">
-        <p>{{ t('loading_progress_data') }}</p>
-    </div>
+    {% endif %}
 </div>
 
 <style>
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #e0e0e0;
-}
-
-.page-header h1 {
-    margin: 0 0 0.5rem 0;
-}
-
-.subtitle {
-    color: #666;
-    margin: 0;
-}
-
-.progress-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-}
-
-.info-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 2rem;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.info-icon {
-    font-size: 3rem;
-}
-
-.info-card h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1rem;
-    opacity: 0.9;
-}
-
-.info-value {
-    margin: 0;
-    font-size: 2rem;
-    font-weight: bold;
-}
-
-.charts-section {
-    margin-bottom: 3rem;
-}
-
-.charts-section h2 {
-    margin-bottom: 2rem;
-}
-
-.chart-container {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    border: 2px solid #e0e0e0;
-    margin-bottom: 2rem;
-}
-
-.chart-container h3 {
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    color: #333;
-}
-
-canvas {
-    max-height: 400px;
-}
+.page-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; padding-bottom:1rem; border-bottom:2px solid #e0e0e0; }
+.page-header h1 { margin:0 0 0.5rem 0; }
+.subtitle { color:#666; margin:0; }
+.progress-info { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1.5rem; margin-bottom:3rem; }
+.info-card { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; padding:2rem; border-radius:10px; display:flex; align-items:center; gap:1.5rem; }
+.info-icon { font-size:2.5rem; }
+.info-card h3 { margin:0 0 0.5rem 0; font-size:1rem; opacity:0.9; }
+.info-value { margin:0; font-size:2rem; font-weight:bold; }
+.charts-section { margin-bottom:3rem; }
+.charts-section h2 { margin-bottom:2rem; }
+.charts-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(420px,1fr)); gap:1.5rem; margin-bottom:1.5rem; }
+.charts-grid-single { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:1.5rem; }
+.chart-container { background:white; padding:1.5rem; border-radius:10px; border:2px solid #e0e0e0; }
+.chart-container h3 { margin-top:0; margin-bottom:1rem; color:#333; font-size:1rem; }
+canvas { max-height:300px; }
 </style>
 
 <script>
-// Fetch patient history and create charts
-async function loadProgressData() {
-    try {
-        const response = await fetch('/api/patient/history');
-        const data = await response.json();
-        
-        if (data.success) {
-            createCharts(data.history);
-            document.getElementById('loadingMessage').style.display = 'none';
-        }
-    } catch (error) {
-        console.error('Error loading progress data:', error);
-    }
-}
+// History injected from server — no async fetch needed
+const history = {{ history | tojson }};
 
-function createCharts(history) {
-    // Prepare data
-    const dates = history.map(h => h.date);
-    const heartRates = history.map(h => h.predictions.heartbeat?.heart_rate || null);
-    const postureScores = history.map(h => h.predictions.posture?.score || null);
-    
-    // Count emotion states
-    const emotionCounts = {
-        status_happy: 0,
-        status_neutral: 0,
-        status_stressed: 0,
-        status_sad: 0
-    };
+function safeNum(v) { return (v !== null && v !== undefined && !isNaN(v)) ? Number(v) : null; }
+
+function buildCharts() {
+    if (!history || history.length < 2) return;
+
+    const dates          = history.map(h => h.date);
+    const heartRates     = history.map(h => safeNum(h.predictions.heartbeat?.heart_rate));
+    const postureScores  = history.map(h => safeNum(h.predictions.posture?.posture_score ?? h.predictions.posture?.score));
+    const breathingRates = history.map(h => safeNum(h.predictions.breathing?.breathing_rate));
+    const speechRates    = history.map(h => safeNum(h.predictions.speech?.speech_rate ?? h.predictions.speech?.speech_rate_wpm));
+
+    const emotionCounts = { status_happy:0, status_neutral:0, status_stressed:0, status_sad:0 };
     history.forEach(h => {
-        const state = h.predictions.emotion?.state;
-        if (state && emotionCounts.hasOwnProperty(state)) {
-            emotionCounts[state]++;
-        }
+        const s = h.predictions.emotion?.state;
+        if (s && s in emotionCounts) emotionCounts[s]++;
     });
-    
-    // Count breathing statuses
-    const breathingCounts = {
-        status_normal: 0,
-        status_shallow_breathing: 0,
-        status_irregular: 0,
-        status_apnea_risk: 0
-    };
+
+    const breathingCounts = { status_normal:0, status_shallow_breathing:0, status_irregular:0, status_apnea_risk:0 };
     history.forEach(h => {
-        const status = h.predictions.breathing?.status;
-        if (status && breathingCounts.hasOwnProperty(status)) {
-            breathingCounts[status]++;
-        }
+        const s = h.predictions.breathing?.status;
+        if (s && s in breathingCounts) breathingCounts[s]++;
     });
-    
-    // Heart Rate Chart
-    new Chart(document.getElementById('heartRateChart'), {
+
+    const lineDefaults = (label, data, color) => ({
         type: 'line',
-        data: {
-            labels: dates,
-            datasets: [{
-                label: 'Heart Rate (bpm)',
-                data: heartRates,
-                borderColor: '#667eea',
-                backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    display: true
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: false,
-                    title: {
-                        display: true,
-                        text: '{{ t("heart_rate") }} ({{ t("bpm") }})'
-                    }
-                }
-            }
-        }
+        data: { labels: dates, datasets: [{ label, data, borderColor: color,
+            backgroundColor: color + '22', borderWidth: 3, tension: 0.4, fill: true,
+            pointRadius: 5, pointHoverRadius: 7 }] },
+        options: { responsive:true, maintainAspectRatio:true,
+            plugins: { legend:{ display:true } },
+            scales: { y:{ beginAtZero:false } } }
     });
-    
-    // Posture Score Chart
+
+    new Chart(document.getElementById('heartRateChart'),
+        lineDefaults('Heart Rate (bpm)', heartRates, '#667eea'));
+
+    new Chart(document.getElementById('breathingRateChart'),
+        lineDefaults('Breathing Rate (br/min)', breathingRates, '#26c6da'));
+
+    new Chart(document.getElementById('speechRateChart'),
+        lineDefaults('Speech Rate (wpm)', speechRates, '#ab47bc'));
+
+    // Posture bar chart with color coding
     new Chart(document.getElementById('postureChart'), {
         type: 'bar',
-        data: {
-            labels: dates,
-            datasets: [{
-                label: '{{ t("posture_score") }}',
-                data: postureScores,
-                backgroundColor: dates.map((_, i) => {
-                    const score = postureScores[i];
-                    if (score >= 80) return '#4caf50';
-                    if (score >= 60) return '#ff9800';
-                    return '#f44336';
-                }),
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    title: {
-                        display: true,
-                        text: '{{ t("score_0_100") }}'
-                    }
-                }
-            }
-        }
+        data: { labels: dates, datasets: [{ label: 'Posture Score', data: postureScores,
+            backgroundColor: postureScores.map(s => s >= 80 ? '#4caf50' : s >= 60 ? '#ff9800' : '#f44336'),
+            borderWidth: 1 }] },
+        options: { responsive:true, maintainAspectRatio:true,
+            plugins:{ legend:{display:false} },
+            scales:{ y:{ beginAtZero:true, max:100,
+                title:{display:true,text:'Score (0–100)'} } } }
     });
-    
-    // Emotion Distribution Chart
+
     new Chart(document.getElementById('emotionChart'), {
         type: 'pie',
-        data: {
-            labels: ['{{ t("status_happy") }}', '{{ t("status_neutral") }}', '{{ t("status_stressed") }}', '{{ t("status_sad") }}'],
-            datasets: [{
-                data: Object.values(emotionCounts),
-                backgroundColor: [
-                    '#4caf50',  // Happy
-                    '#2196f3',  // Neutral
-                    '#ff9800',  // Stressed
-                    '#f44336'   // Sad
-                ],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }
+        data: { labels: ['Happy','Neutral','Stressed','Sad'],
+            datasets:[{ data: Object.values(emotionCounts),
+                backgroundColor:['#4caf50','#2196f3','#ff9800','#f44336'],
+                borderWidth:2 }] },
+        options: { responsive:true, maintainAspectRatio:true,
+            plugins:{ legend:{position:'bottom'} } }
     });
-    
-    // Breathing Status Chart
+
     new Chart(document.getElementById('breathingChart'), {
         type: 'doughnut',
-        data: {
-            labels: ['{{ t("status_normal") }}', '{{ t("status_shallow_breathing") }}', '{{ t("status_irregular") }}', '{{ t("status_apnea_risk") }}'],
-            datasets: [{
-                data: Object.values(breathingCounts),
-                backgroundColor: [
-                    '#4caf50',  // Normal
-                    '#ff9800',  // Shallow
-                    '#f44336',  // Irregular
-                    '#9c27b0'   // Apnea
-                ],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }
+        data: { labels: ['Normal','Shallow','Irregular','Apnea Risk'],
+            datasets:[{ data: Object.values(breathingCounts),
+                backgroundColor:['#4caf50','#ff9800','#f44336','#9c27b0'],
+                borderWidth:2 }] },
+        options: { responsive:true, maintainAspectRatio:true,
+            plugins:{ legend:{position:'bottom'} } }
     });
 }
 
-// Load data when page loads
-window.addEventListener('load', loadProgressData);
+window.addEventListener('load', buildCharts);
 </script>
 {% endblock %}

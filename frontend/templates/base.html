@@ -17,8 +17,10 @@
             <div class="nav-links">
                 {% if session.is_admin %}
                 <button class="nav-btn" onclick="window.location.href='/admin/dashboard'">{{ t('admin_dashboard') }}</button>
-                <button class="nav-btn" onclick="window.location.href='/contact'">{{ t('nav_contact') }}</button>
                 <button class="nav-btn" onclick="window.location.href='/logout'">{{ t('nav_logout') }}</button>
+                {% elif session.doctor_id %}
+                <button class="nav-btn" onclick="window.location.href='/doctor/dashboard'">My Patients</button>
+                <button class="nav-btn" onclick="window.location.href='/doctor/logout'">Logout</button>
                 {% elif session.patient_id %}
                 <button class="nav-btn" onclick="window.location.href='/dashboard'">{{ t('nav_dashboard') }}</button>
                 <button class="nav-btn" onclick="window.location.href='/progress'">{{ t('nav_progress') }}</button>

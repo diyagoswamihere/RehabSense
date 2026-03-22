@@ -1,0 +1,74 @@
+{
+  "DR001": {
+    "doctor_id": "DR001",
+    "name": "R Nidharshana",
+    "password": "RN6022@",
+    "specialty": "Rehabilitation Medicine",
+    "patient_ids": [
+      "1D55PL6",
+      "7D42PL2",
+      "13C13PL91"
+    ],
+    "email": "nidharshanaraj@gmail.com"
+  },
+  "DR002": {
+    "doctor_id": "DR002",
+    "name": "Sayantika Laskar",
+    "password": "SL6804@",
+    "specialty": "Rehabilitation Medicine",
+    "patient_ids": [
+      "03C03PL21",
+      "04C04PL28",
+      "14C14PL98"
+    ],
+    "email": "sayantikalaskar2002@gmail.com"
+  },
+  "DR003": {
+    "doctor_id": "DR003",
+    "name": "Diya Goswami",
+    "password": "DG0265$",
+    "specialty": "Rehabilitation Medicine",
+    "patient_ids": [
+      "05C05PL35",
+      "06C06PL42",
+      "15C15PL05"
+    ],
+    "email": "diya13goswami@gmail.com"
+  },
+  "DR004": {
+    "doctor_id": "DR004",
+    "name": "Lokaesshwar S",
+    "password": "LS2580#",
+    "specialty": "Rehabilitation Medicine",
+    "patient_ids": [
+      "07C07PL49",
+      "08C08PL56",
+      "16C16PL12"
+    ],
+    "email": "lokaesshwar@gmail.com"
+  },
+  "DR005": {
+    "doctor_id": "DR005",
+    "name": "Harlin Martin",
+    "password": "HM6319!",
+    "specialty": "Rehabilitation Medicine",
+    "patient_ids": [
+      "09C09PL63",
+      "10C10PL70",
+      "17C17PL19"
+    ],
+    "email": "harlinmartin2022@vitbhopal.ac.in"
+  },
+  "DR006": {
+    "doctor_id": "DR006",
+    "name": "Mehnaz Shafeek",
+    "password": "MS1333!",
+    "specialty": "Rehabilitation Medicine",
+    "patient_ids": [
+      "11C11PL77",
+      "12C12PL84",
+      "18C18PL26"
+    ],
+    "email": "mehnazshafeek@gmail.com"
+  }
+}

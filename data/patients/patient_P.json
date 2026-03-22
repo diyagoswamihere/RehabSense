@@ -1,0 +1,218 @@
+{
+  "patient_id": "16C16PL12",
+  "name": "Ramesh Gupta",
+  "age": 62,
+  "gender": "M",
+  "address": "",
+  "phone": "",
+  "email": "",
+  "emergency_email": "",
+  "consulting_doctor": "Lokaesshwar S",
+  "doctor_id": "DR004",
+  "doctor_email": "",
+  "allergies": "",
+  "password": "Rg@6541n",
+  "reports": [
+    {
+      "report_id": "16C16PL12_R001",
+      "date": "2026-03-15",
+      "heartbeat": {
+        "heart_rate": 148.0,
+        "rr_interval_variance": 0.14,
+        "label": 2.0
+      },
+      "glucose": {
+        "age": 62,
+        "bmi": 29.5,
+        "meal_timing": 1,
+        "activity_level": 0,
+        "glucose_range": 2
+      },
+      "breathing": {
+        "breathing_rate": 5.2,
+        "breath_depth": 0.18,
+        "rest_vs_exercise": 0,
+        "label": 3.0
+      },
+      "speech": {
+        "speech_rate": 68.0,
+        "pause_frequency": 0.85,
+        "pitch_variability": 0.05,
+        "label": 1.0
+      },
+      "emotion": {
+        "text_sentiment": 0.0,
+        "voice_emotion": 0.1,
+        "facial_emotion": 0.05,
+        "label": 2.0
+      },
+      "posture": {
+        "head_tilt": 28.0,
+        "shoulder_alignment": -9.0,
+        "spine_angle": 130.0,
+        "label": 1.0
+      },
+      "predictions": {
+        "heartbeat": {
+          "status": "status_tachycardia",
+          "prediction": 0,
+          "confidence": 0.99,
+          "heart_rate": 148.0,
+          "rr_variance": 0.14
+        },
+        "glucose": {
+          "range": "status_normal",
+          "prediction": 1,
+          "confidence": 0.5929927800401533,
+          "age": 62,
+          "bmi": 29.5,
+          "meal_timing": 1,
+          "activity_level": 0
+        },
+        "breathing": {
+          "status": "status_apnea_risk",
+          "prediction": 0,
+          "confidence": 0.95,
+          "breathing_rate": 5.2,
+          "breath_depth": 0.18
+        },
+        "speech": {
+          "pattern": "status_normal_speech",
+          "prediction": 0,
+          "confidence": 0.5035932843232805,
+          "speech_rate": 68.0,
+          "pause_frequency": 0.85
+        },
+        "emotion": {
+          "state": "status_sad",
+          "prediction": 0,
+          "confidence": 0.9,
+          "text_sentiment": 0.0,
+          "voice_emotion": 0.1,
+          "facial_emotion": 0.05
+        },
+        "posture": {
+          "posture": "status_slouched",
+          "status": "status_slouched",
+          "prediction": 1,
+          "posture_score": 9.444444444444443,
+          "score": 9.444444444444443,
+          "confidence": 0.92,
+          "head_tilt": 28.0,
+          "shoulder_alignment": -9.0,
+          "spine_angle": 130.0
+        }
+      },
+      "recommendations": {
+        "heartbeat": {
+          "title": "Heart Health",
+          "status": "status_tachycardia",
+          "exercises": [
+            "Gentle breathing exercises",
+            "Slow-paced yoga or tai chi",
+            "Avoid high-intensity workouts temporarily"
+          ],
+          "lifestyle": [
+            "Reduce caffeine intake",
+            "Practice stress management",
+            "Ensure adequate rest and sleep"
+          ],
+          "tips": [
+            "Elevated heart rate detected",
+            "Focus on relaxation and calm activities"
+          ]
+        },
+        "glucose": {
+          "title": "Blood Glucose",
+          "status": "status_normal",
+          "exercises": [
+            "Regular physical activity (30 min, 5 days/week)",
+            "Mix of cardio and strength training"
+          ],
+          "lifestyle": [
+            "Maintain balanced meals",
+            "Continue healthy eating habits"
+          ],
+          "tips": [
+            "Glucose levels are well-controlled!",
+            "Keep monitoring and staying active"
+          ]
+        },
+        "breathing": {
+          "title": "Breathing Health",
+          "status": "status_apnea_risk",
+          "exercises": [
+            "Breathing awareness exercises",
+            "Gentle aerobic activity",
+            "Consult sleep specialist"
+          ],
+          "lifestyle": [
+            "Sleep on your side",
+            "Maintain healthy weight",
+            "Avoid alcohol before bed"
+          ],
+          "tips": [
+            "Potential apnea risk - medical evaluation recommended",
+            "Good sleep position helps breathing"
+          ]
+        },
+        "speech": {
+          "title": "Speech & Communication",
+          "status": "status_normal_speech",
+          "exercises": [
+            "Continue regular conversation practice",
+            "Reading aloud for 10 minutes daily"
+          ],
+          "lifestyle": [
+            "Stay socially engaged",
+            "Maintain communication habits"
+          ],
+          "tips": [
+            "Speech patterns are healthy!",
+            "Keep practicing regular communication"
+          ]
+        },
+        "emotion": {
+          "title": "Emotional Wellbeing",
+          "status": "status_sad",
+          "exercises": [
+            "Light physical activity (walks, gentle exercise)",
+            "Breathing exercises before speaking",
+            "Creative expression (art, music, writing)"
+          ],
+          "lifestyle": [
+            "Reach out to supportive people",
+            "Maintain routine where possible",
+            "Consider speaking with a counselor",
+            "Engage in small, achievable tasks"
+          ],
+          "tips": [
+            "These feelings are valid and temporary",
+            "Support is available - you don't have to go through this alone"
+          ]
+        },
+        "posture": {
+          "title": "Posture Health",
+          "status": "status_slouched (Score: 9/100)",
+          "exercises": [
+            "Core exercises: Planks, bridges (daily)",
+            "Back extensions: Superman pose (10 reps, 2 sets)",
+            "Hip flexor stretches (30s each side)",
+            "Shoulder blade squeezes (15 reps, 3x/day)"
+          ],
+          "lifestyle": [
+            "Use lumbar support when sitting",
+            "Stand up every 30 minutes",
+            "Adjust chair height properly",
+            "Practice sitting tall with shoulders back"
+          ],
+          "tips": [
+            "Slouching puts stress on your spine",
+            "Building core strength helps maintain posture"
+          ]
+        }
+      },
+      "summary": "Great job maintaining Blood Glucose, Speech & Communication! Focus areas for improvement: Heart Health, Breathing Health, Emotional Wellbeing, Posture Health. Follow the recommendations below to support your rehabilitation journey."
+    }
+  ]
+}

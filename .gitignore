@@ -1,3 +1,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
+*.pyo
+data/uploads/
+*.zip
+.env

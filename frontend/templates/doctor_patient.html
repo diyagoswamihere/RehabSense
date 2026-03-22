@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% block title %}{{ patient.name }} — Dr. {{ doctor.name }}{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- Back nav -->
+  <div class="back-nav">
+    <a href="/doctor/dashboard" class="btn-back">← My Patients</a>
+  </div>
+
+  <!-- Patient header with priority -->
+  {% set p_color = '#e53935' if priority == 'red' else '#f9a825' if priority == 'yellow' else '#43a047' %}
+  {% set p_bg = '#fdecea' if priority == 'red' else '#fffde7' if priority == 'yellow' else '#e8f5e9' %}
+  {% set p_label = 'URGENT' if priority == 'red' else 'MONITOR' if priority == 'yellow' else 'STABLE' %}
+
+  <div class="pat-header" style="border-left: 5px solid {{ p_color }}">
+    <div class="pat-avatar-lg" style="background:{{ p_color }}">{{ patient.name[0] }}</div>
+    <div class="pat-details-block">
+      <div class="pat-priority-badge" style="background:{{ p_bg }};color:{{ p_color }}">
+        {{ p_label }} — Health Score: {{ health_score }}/100
+      </div>
+      <h1>{{ patient.name }}</h1>
+      <div class="pat-meta-row">
+        <span>🪪 {{ patient.patient_id }}</span>
+        <span>🎂 Age {{ patient.age }}</span>
+        <span>{{ patient.gender }}</span>
+        {% if patient.phone %}<span>📞 {{ patient.phone }}</span>{% endif %}
+        {% if patient.email %}<span>✉️ {{ patient.email }}</span>{% endif %}
+      </div>
+      {% if patient.allergies %}
+      <div class="allergy-note">⚠️ Allergies: {{ patient.allergies }}</div>
+      {% endif %}
+    </div>
+    <div class="pat-issues-panel" style="border:1px solid {{ p_color }}20;background:{{ p_bg }}">
+      <div class="issues-title" style="color:{{ p_color }}">Current Health Concerns</div>
+      {% for issue in health_issues %}
+      <div class="issue-line" style="color:{{ p_color }}">
+        {% if priority == 'red' %}🔴{% elif priority == 'yellow' %}🟡{% else %}✅{% endif %} {{ issue }}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Progress charts (if enough reports) -->
+  {% if patient.reports|length >= 2 %}
+  <section class="dp-section">
+    <h2 class="section-title">Progress Overview</h2>
+    <div class="charts-grid-doc">
+      <div class="chart-box">
+        <h4>Heart Rate Trend</h4>
+        <canvas id="hrChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>Posture Score</h4>
+        <canvas id="postureChart"></canvas>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Reports list -->
+  <section class="dp-section">
+    <div class="section-header-row">
+      <h2 class="section-title">All Reports ({{ patient.reports|length }})</h2>
+      <a href="/doctor/patient/{{ patient.patient_id }}/analysis" class="btn-primary-sm">View Charts →</a>
+    </div>
+
+    {% if patient.reports %}
+    <div class="reports-doc-grid">
+      {% for report in patient.reports|reverse %}
+      {% set pred = report.get('predictions', {}) %}
+      {% set hb_ok = pred.get('heartbeat',{}).get('status','') == 'status_normal' %}
+      {% set ps_ok = pred.get('posture',{}).get('posture','') == 'status_good_posture' %}
+      {% set em_ok = pred.get('emotion',{}).get('state','') in ['status_happy','status_neutral'] %}
+      {% set all_ok = hb_ok and ps_ok and em_ok %}
+      {% set any_bad = pred.get('heartbeat',{}).get('status','') in ['status_tachycardia','status_bradycardia','status_irregular'] or pred.get('breathing',{}).get('status','') == 'status_apnea_risk' %}
+      <a href="/doctor/patient/{{ patient.patient_id }}/report/{{ report.report_id }}" class="doc-report-card {{ 'rcard-red' if any_bad else 'rcard-green' if all_ok else 'rcard-yellow' }}">
+        <div class="rcard-top">
+          <strong>{{ report.report_id }}</strong>
+          <span class="rcard-date">{{ report.date }}</span>
+        </div>
+        {% if pred %}
+        <div class="rcard-pills">
+          {% if pred.heartbeat %}
+          <span class="rpill {{ 'rpill-ok' if pred.heartbeat.status == 'status_normal' else 'rpill-warn' }}">
+            ❤️ {{ pred.heartbeat.heart_rate|round(0)|int }} bpm
+          </span>
+          {% endif %}
+          {% if pred.posture %}
+          <span class="rpill {{ 'rpill-ok' if pred.posture.get('posture','') == 'status_good_posture' else 'rpill-warn' }}">
+            🧍 {{ (pred.posture.posture_score or pred.posture.score or 0)|round(0)|int }}/100
+          </span>
+          {% endif %}
+          {% if pred.emotion %}
+          <span class="rpill {{ 'rpill-ok' if pred.emotion.state in ['status_happy','status_neutral'] else 'rpill-warn' }}">
+            😊 {{ pred.emotion.state|replace('status_','')|replace('_',' ')|title }}
+          </span>
+          {% endif %}
+        </div>
+        {% else %}
+        <div style="font-size:.78rem;color:#aaa;">No AI analysis yet</div>
+        {% endif %}
+        <div class="rcard-cta">View Full Report →</div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state"><div class="empty-icon">📋</div><p>No reports yet.</p></div>
+    {% endif %}
+  </section>
+
+</div>
+
+<style>
+.back-nav{margin-bottom:1rem}
+.btn-back{background:rgba(255,255,255,.85);color:#333;padding:.5rem 1.2rem;border-radius:20px;text-decoration:none;font-weight:600;font-size:.85rem;border:1px solid rgba(0,0,0,.15)}
+.btn-back:hover{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.pat-header{display:flex;align-items:flex-start;gap:1.25rem;background:#fff;border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.07);flex-wrap:wrap}
+.pat-avatar-lg{width:60px;height:60px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;flex-shrink:0}
+.pat-details-block{flex:1;min-width:160px}
+.pat-priority-badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:.75rem;font-weight:700;letter-spacing:.5px;margin-bottom:.4rem}
+.pat-details-block h1{margin:0 0 .4rem;font-size:1.3rem;color:#1a1a2e}
+.pat-meta-row{display:flex;flex-wrap:wrap;gap:.6rem;font-size:.8rem;color:#666}
+.allergy-note{font-size:.78rem;color:#e65100;background:#fff3e0;padding:3px 10px;border-radius:8px;display:inline-block;margin-top:.4rem}
+.pat-issues-panel{border-radius:10px;padding:.75rem 1rem;min-width:180px;max-width:260px}
+.issues-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}
+.issue-line{font-size:.8rem;margin-bottom:.2rem}
+.dp-section{margin-bottom:2rem}
+.section-title{font-size:1.1rem;font-weight:700;color:#1a1a2e;margin-bottom:.75rem}
+.section-header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+.btn-primary-sm{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:.4rem 1rem;border-radius:20px;text-decoration:none;font-size:.82rem;font-weight:600}
+.charts-grid-doc{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin-bottom:1rem}
+.chart-box{background:#fff;border-radius:12px;padding:1.25rem;border:1px solid #e0e0e0}
+.chart-box h4{margin:0 0 .75rem;font-size:.9rem;color:#333}
+.reports-doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.9rem}
+.doc-report-card{background:#fff;border-radius:12px;padding:1rem;text-decoration:none;color:inherit;border:1px solid #e0e0e0;border-left:4px solid #e0e0e0;display:flex;flex-direction:column;gap:.5rem;transition:transform .2s,box-shadow .2s}
+.doc-report-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.1)}
+.rcard-red{border-left-color:#e53935}
+.rcard-yellow{border-left-color:#fdd835}
+.rcard-green{border-left-color:#43a047}
+.rcard-top{display:flex;justify-content:space-between;align-items:center;font-size:.88rem;font-weight:700;color:#333}
+.rcard-date{font-size:.75rem;color:#999;font-weight:400}
+.rcard-pills{display:flex;flex-wrap:wrap;gap:.3rem}
+.rpill{font-size:.7rem;padding:2px 8px;border-radius:10px;font-weight:600}
+.rpill-ok{background:#d4edda;color:#155724}
+.rpill-warn{background:#fff3cd;color:#856404}
+.rcard-cta{font-size:.76rem;color:#667eea;font-weight:600;margin-top:auto}
+.empty-state{text-align:center;background:#fff;border-radius:12px;padding:3rem;color:#888}
+.empty-icon{font-size:3rem;margin-bottom:.5rem}
+</style>
+
+{% if patient.reports|length >= 2 %}
+<script>
+const history = {{ history | tojson }};
+if (history.length >= 2) {
+    const dates = history.map(h => h.date);
+    const hrs = history.map(h => h.predictions?.heartbeat?.heart_rate || null);
+    const scores = history.map(h => h.predictions?.posture?.posture_score || h.predictions?.posture?.score || null);
+
+    new Chart(document.getElementById('hrChart'), {
+        type: 'line',
+        data: { labels: dates, datasets: [{ label: 'Heart Rate (bpm)', data: hrs,
+            borderColor: '#e53935', backgroundColor: '#e5393520', borderWidth: 2.5,
+            tension: 0.4, fill: true, pointRadius: 4 }] },
+        options: { responsive: true, plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: false } } }
+    });
+
+    new Chart(document.getElementById('postureChart'), {
+        type: 'bar',
+        data: { labels: dates, datasets: [{ label: 'Posture Score', data: scores,
+            backgroundColor: scores.map(s => s >= 80 ? '#43a047' : s >= 60 ? '#fdd835' : '#e53935') }] },
+        options: { responsive: true, plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, max: 100 } } }
+    });
+}
+</script>
+{% endif %}
+{% endblock %}
