@@ -31,11 +31,11 @@ _load_env()
 # ─────────────────────────────────────────────────────────────────
 
 # ── Credentials (loaded from .env or real environment variables) ─
-_SMTP_USER   = os.environ.get('SMTP_USER',  'capstoneg042026@gmail.com')
+_SMTP_USER   = os.environ.get('SMTP_USER',  'nidhiinvit@gmail.com')
 _SMTP_PASS   = os.environ.get('SMTP_PASS',  '')
 _SMTP_HOST   = 'smtp.gmail.com'
 _SMTP_PORT   = 465
-_ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL','capstoneg042026@gmail.com')
+_ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL','nidhiinvit@gmail.com')
 _ADMIN_PASS  = os.environ.get('ADMIN_PASS', 'Sunday6$')
 # ────────────────────────────────────────────────────────────────
 
