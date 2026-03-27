@@ -283,7 +283,7 @@ class ModelInference:
         X = np.array([[heart_rate, rr_interval_variance]])
         prediction = self.models['heartbeat'].predict(X)[0]
         labels = ['status_normal', 'status_bradycardia', 'status_tachycardia', 'status_irregular']
-        status = labels[prediction]
+        status = labels[prediction] if prediction < len(labels) else labels[0]
         confidence = 0.85
         if hasattr(self.models['heartbeat'], 'predict_proba'):
             proba = self.models['heartbeat'].predict_proba(X)[0]
@@ -299,7 +299,7 @@ class ModelInference:
         X = np.array([[age, bmi, meal_timing, activity_level]])
         prediction = self.models['glucose'].predict(X)[0]
         labels = ['status_low', 'status_normal', 'status_high']
-        range_label = labels[prediction]
+        range_label = labels[prediction] if prediction < len(labels) else labels[1]
         confidence = 0.85
         if hasattr(self.models['glucose'], 'predict_proba'):
             proba = self.models['glucose'].predict_proba(X)[0]
@@ -315,7 +315,7 @@ class ModelInference:
         X = np.array([[breathing_rate, breath_depth, rest_vs_exercise]])
         prediction = self.models['breathing'].predict(X)[0]
         labels = ['status_normal', 'status_shallow_breathing', 'status_irregular', 'status_apnea_risk']
-        status = labels[prediction]
+        status = labels[prediction] if prediction < len(labels) else labels[0]
         return {
             'status': status, 'prediction': int(prediction),
             'confidence': 0.85,
@@ -420,7 +420,7 @@ class ModelInference:
         X = np.array([[text_sentiment, voice_emotion, facial_emotion]])
         prediction = self.models['emotion'].predict(X)[0]
         labels = ['status_happy', 'status_neutral', 'status_stressed', 'status_sad']
-        state = labels[prediction]
+        state = labels[prediction] if prediction < len(labels) else labels[1]
         return {
             'state': state, 'prediction': int(prediction),
             'confidence': 0.85,
@@ -433,7 +433,7 @@ class ModelInference:
         X = np.array([[head_tilt, shoulder_alignment, spine_angle]])
         prediction = self.models['posture'].predict(X)[0]
         labels = ['status_good_posture', 'status_forward_head', 'status_slouched']
-        posture_type = labels[prediction]
+        posture_type = labels[prediction] if prediction < len(labels) else labels[0]
         score = self._calculate_posture_score(head_tilt, shoulder_alignment, spine_angle)
         return {
             'posture': posture_type, 'status': posture_type, 'prediction': int(prediction),
